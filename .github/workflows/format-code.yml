@@ -1,0 +1,14 @@
+on:
+  pull_request:
+    types: [ opened, edited, reopened, synchronize ]
+
+jobs:
+  format-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: ministryofjustice/github-actions/code-formatter@main
+        with:
+          ignore-files: "docker-compose.override.yml,values-dev.yaml,values-test.yaml,values-staging.yaml,values-uat.yaml,values-prod.yaml,ingress.yaml,deployment.yaml,hpa.yaml,networkpolicy.yaml,service.yaml,serviceaccount.yaml,servicemonitor.yaml,test-connection.yaml"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
