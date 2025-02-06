@@ -29,4 +29,10 @@ public class LoginController {
             return "login";
         }
     }
+
+    @GetMapping("/home")
+    public String home() {
+        return "home";
+    }
+
 }
