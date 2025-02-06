@@ -1,5 +1,13 @@
-FROM bitnami/nginx:1.25.1
+FROM openjdk:17
 
-WORKDIR /app
+# Define a volume to safely store temporary files across restarts
+VOLUME /tmp
 
-COPY ./src .
+# Copy the JAR from the build output to the container
+COPY build/libs/laa-portal-stabilisation-prototype.jar application.jar
+
+# Expose the application port
+EXPOSE 8080
+
+# Set the default command to run the application
+CMD java -jar application.jar
