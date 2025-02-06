@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class LoginController {
 
+    @GetMapping("/")
+    public String showIndex() {
+        return "index";
+    }
+
+
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("user", new User());
