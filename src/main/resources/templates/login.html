@@ -5,12 +5,14 @@
 </head>
 <body>
     <h1>Welcome</h1>
-    <form th:action="@{/submitForm}" th:method="post" th:object="${user}">
+    <p th:if="${param.error}" style="color:red;">Invalid username or password</p>
+
+    <form th:action="@{/login}" th:method="post">
         <label>
-            <input type="text" th:field="*{username}">
+            <input type="text" name="username" placeholder="Username">
         </label>
         <label>
-            <input type="password" th:field="*{password}">
+            <input type="password" name="password" placeholder="Password">
         </label>
         <button type="submit">Submit</button>
     </form>
