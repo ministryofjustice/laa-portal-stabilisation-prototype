@@ -1,10 +1,48 @@
+# Environment files
 .env
-.terraform/
-coverage/
 venv/
 env/
-.DS_STORE
-.vscode
-*.code-workspace
-*.sha256
+
+# Terraform
+.terraform/
 terraform.tfstate
+terraform.tfstate.backup
+
+# Java/Gradle
+.gradle/
+build/
+out/
+*.jar
+*.war
+*.ear
+
+# Test coverage
+coverage/
+*.lcov
+
+# System/Temporary Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor settings
+.idea/
+.vscode/
+*.code-workspace
+.vscode
+
+# Logs
+*.log
+logs/
+
+# Build artifacts
+dist/
+target/
+
+# Checksum files
+*.sha256
+
+*.class
+**/bin/**
+.DS_STORE
+

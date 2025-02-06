@@ -1,0 +1,8 @@
+services:
+  app:
+    build:
+      context: .
+    image: laa-portal-stabilisation-prototype:latest
+    container_name: laa-portal-stabilisation-container
+    ports:
+      - "8089:8080"
