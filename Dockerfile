@@ -1,4 +1,4 @@
-FROM bitnami/nginx:1.25.1
+FROM bitnami/nginx:1.27.3
 
 WORKDIR /app
 
