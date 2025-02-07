@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: example-ingress
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: example-ingress-${NAMESPACE}-green
+    external-dns.alpha.kubernetes.io/set-identifier: laa-portal-stabilisation-prototype-ingress-${NAMESPACE}-green
     external-dns.alpha.kubernetes.io/aws-weight: "100"
 spec:
   ingressClassName: default
@@ -18,6 +18,6 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: example-service # this should match the metadata.name in service.yml
+                name: laa-portal-stabilisation-prototype-service # this should match the metadata.name in service.yml
                 port:
                   number: 8080

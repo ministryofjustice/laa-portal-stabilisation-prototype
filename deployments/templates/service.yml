@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: example-service
+  name: laa-portal-stabilisation-prototype-service
 spec:
   selector:
-    app: example # this should match the pod label in deployment.yml
+    app: laa-portal-stabilisation-prototype # this should match the pod label in deployment.yml
   ports:
     - name: https
       port: 8080
