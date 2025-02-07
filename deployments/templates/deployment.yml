@@ -8,7 +8,7 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: laa-portal-stabilisation-prototype  # this should match the selector in service.yml
+      app: laa-portal-stabilisation-prototype # this should match the selector in service.yml
   template:
     metadata:
       labels:
