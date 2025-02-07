@@ -15,7 +15,7 @@ spec:
         app: laa-portal-stabilisation-prototype # this should match the selector in service.yml
     spec:
       containers:
-        - name: example
+        - name: laa-portal-stabilisation-prototype
           image: ${REGISTRY}/${REPOSITORY}:${IMAGE_TAG}
           ports:
             - containerPort: 8080
