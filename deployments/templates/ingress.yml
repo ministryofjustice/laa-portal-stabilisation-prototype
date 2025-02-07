@@ -1,23 +1,23 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: laa-portal-stabilisation-prototype-ingress
+  name: example-ingress
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: laa-portal-stabilisation-prototype-ingress-laa-portal-stabilisation-prototype-dev-green
+    external-dns.alpha.kubernetes.io/set-identifier: example-ingress-${NAMESPACE}-green
     external-dns.alpha.kubernetes.io/aws-weight: "100"
 spec:
   ingressClassName: default
   tls:
     - hosts:
-        - laa-portal-stabilisation-prototype-dev.apps.live.cloud-platform.service.justice.gov.uk
+        - ${NAMESPACE}.apps.live.cloud-platform.service.justice.gov.uk
   rules:
-    - host: laa-portal-stabilisation-prototype-dev.apps.live.cloud-platform.service.justice.gov.uk
+    - host: ${NAMESPACE}.apps.live.cloud-platform.service.justice.gov.uk
       http:
         paths:
           - path: /
             pathType: ImplementationSpecific
             backend:
               service:
-                name: laa-portal-stabilisation-prototype-service # this should match the metadata.name in service.yml
+                name: example-service # this should match the metadata.name in service.yml
                 port:
                   number: 8080
