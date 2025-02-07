@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name:  laa-portal-stabilisation-prototype-ingress
+  name: laa-portal-stabilisation-prototype-ingress
   annotations:
     external-dns.alpha.kubernetes.io/set-identifier: laa-portal-stabilisation-prototype-ingress-laa-portal-stabilisation-prototype-dev-green
     external-dns.alpha.kubernetes.io/aws-weight: "100"
