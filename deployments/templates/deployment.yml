@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: example-deployment
+  name: laa-portal-stabilisation-prototype-deployment
   labels:
-    app: example
+    app: laa-portal-stabilisation-prototype
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: example # this should match the selector in service.yml
+      app: laa-portal-stabilisation-prototype  # this should match the selector in service.yml
   template:
     metadata:
       labels:
-        app: example # this should match the selector in service.yml
+        app: laa-portal-stabilisation-prototype # this should match the selector in service.yml
     spec:
       containers:
         - name: example
