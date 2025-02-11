@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en"
-      th:replace="~{layout :: layout(mainContent=~{::#main-content},
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
       pageCategory=${'login'},
       breadcrumbs=~{::#breadcrumbs})}"
+
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Homepage</title>
