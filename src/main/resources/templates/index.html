@@ -1,21 +1,107 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'login'},
+      breadcrumbs=~{::#breadcrumbs})}"
+
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login Page</title>
+    <title>Homepage</title>
 </head>
 <body>
-<h1>Welcome</h1>
-<p th:if="${param.error}" style="color:red;">Invalid username or password</p>
+<script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+<nav class="govuk-breadcrumbs" aria-label="Breadcrumb" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Home</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Section</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">Subsection</li>
+    </ol>
+</nav>
+<main class="govuk-main-wrapper" id="main-content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">
+                Migrate your account
+            </h1>
+            <form class="form" method="post" action="">
+                <p class="govuk-body">Currently we are moving from the old portal to a new portal and your account has
+                    been selected for migration. the migration process should only take a few minutes and should let you
+                    start using the new portal straight away</p>
+                <p class="govuk-body">To complete your account migration you need to;</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>Have a uniqu work email address if you do not have one you will create a new email address</li>
+                    <li>Verify your account by a code sent to the new registered email address</li>
+                    <li>Set up your display name and password</li>
+                    <li>Activate your multi factor authentication for an added level of security</li>
+                </ul>
 
-<form th:action="@{/login}" th:method="post">
-    <label>
-        <input type="text" name="username" placeholder="Username">
-    </label>
-    <label>
-        <input type="password" name="password" placeholder="Password">
-    </label>
-    <button type="submit">Submit</button>
-</form>
+                <p class="govuk-body"> Once your account migration is confirmed you can start using the new portal</p>
+
+                <div class="govuk-inset-text">
+                    If you need any help you can contact the online support number 0208 3456789 or <a
+                        href="https://www.gov.uk/government/publications/laa-online-portal-help-and-information">Online
+                    portal help</a>
+                </div>
+                <p class="govuk-body">Registering takes around 5 minutes.</p>
+                <button role="button" draggable="false" class="govuk-button govuk-button--start"
+                        data-module="govuk-button" data-govuk-button-init="">
+                    Start now
+                    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19"
+                         viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+                        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+                    </svg>
+                </button>
+            </form>
+            <h2 class="govuk-heading-m">
+                Before you start
+            </h2>
+            <p class="govuk-body">
+                You can also <a href="#">register by post</a>.
+            </p>
+            <p class="govuk-body">
+                The online service is also <a href="#">available in Welsh (ar gael yn Gymraeg)</a>.
+            </p>
+            <p class="govuk-body">
+                You can’t register for this service if you’re in the UK illegally.
+            </p>
+
+        </div>
+
+        <div class="govuk-grid-column-one-third">
+
+            <aside class="govuk-prototype-kit-common-templates-related-items" role="complementary">
+                <h2 class="govuk-heading-m" id="subsection-title">
+                    Subsection
+                </h2>
+                <nav role="navigation" aria-labelledby="subsection-title">
+                    <ul class="govuk-list govuk-!-font-size-16">
+                        <li>
+                            <a href="#">
+                                Related link
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Related link
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="govuk-!-font-weight-bold">
+                                More <span class="govuk-visually-hidden">in Subsection</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+        </div>
+    </div>
+</main>
 </body>
 </html>
-<h1>Hello, cloud-platform!</h1>

@@ -1,0 +1,34 @@
+<html th:fragment="layout" lang="en" class="govuk-template">
+
+<head th:replace="~{partials/head :: head}">
+</head>
+
+<body class="govuk-template__body">
+<script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+
+<a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
+
+<th:block th:replace="~{partials/header :: header}"></th:block>
+
+<div class="govuk-width-container">
+    <div th:if="${breadcrumbs != null}" th:replace="${breadcrumbs}"></div>
+    <main class="govuk-main-wrapper" id="main-content" role="main" style="padding-top: 0;">
+        <th:block th:replace="${mainContent}">Default Main Content</th:block>
+    </main>
+</div>
+<footer th:replace="~{partials/footer :: footer}"></footer>
+<script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous">
+</script>
+<script type="module" th:src="@{/js/govuk-frontend-5.8.0.min.js}"></script>
+<script type="module">
+    import {initAll} from '/js/govuk-frontend-5.8.0.min.js'
+
+    initAll()
+</script>
+
+</body>
+
+</html>

@@ -1,11 +1,30 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'login'},
+      breadcrumbs=~{::#breadcrumbs})}"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Login Page</title>
 </head>
 <body>
+<nav class="govuk-breadcrumbs" aria-label="Breadcrumb" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Home</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Section</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">Subsection</li>
+    </ol>
+</nav>
+<div id="main-content">
     <h1>Welcome</h1>
-    <p th:if="${param.error}" style="color:red;">Invalid username or password</p>
+    <p class="govuk-body" th:if="${param.error}" style="color:red;">Invalid username or password</p>
 
     <form th:action="@{/login}" th:method="post">
         <label>
@@ -16,5 +35,6 @@
         </label>
         <button type="submit">Submit</button>
     </form>
+</div>
 </body>
 </html>
