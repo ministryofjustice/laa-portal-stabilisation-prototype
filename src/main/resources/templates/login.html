@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en"
+      th:replace="~{layout :: layout(mainContent=~{::#main-content},pageCategory=${'login'})}" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Login Page</title>
-    <link th:href="@{/css/govuk-frontend-5.8.0.min.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
+<div id="main-content">
     <h1>Welcome</h1>
-    <p th:if="${param.error}" style="color:red;">Invalid username or password</p>
+    <p class="govuk-body" th:if="${param.error}" style="color:red;">Invalid username or password</p>
 
     <form th:action="@{/login}" th:method="post">
         <label>
@@ -17,6 +19,6 @@
         </label>
         <button type="submit">Submit</button>
     </form>
-
+</div>
 </body>
 </html>

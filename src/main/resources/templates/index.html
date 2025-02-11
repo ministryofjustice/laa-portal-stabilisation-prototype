@@ -1,243 +1,104 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en"
+      th:replace="~{layout :: layout(mainContent=~{::#main-content},
+      pageCategory=${'login'},
+      breadcrumbs=~{::#breadcrumbs})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login Page</title>
-    <link th:href="@{/css/govuk-frontend-5.8.0.min.css}" rel="stylesheet" type="text/css">
-
+    <title>Homepage</title>
 </head>
 <body>
 <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
-<h1>Welcome</h1>
-<p th:if="${param.error}" style="color:red;">Invalid username or password</p>
+<nav class="govuk-breadcrumbs" aria-label="Breadcrumb" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Home</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Section</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">Subsection</li>
+    </ol>
+</nav>
+<main class="govuk-main-wrapper" id="main-content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">
+                Migrate your account
+            </h1>
+            <form class="form" method="post" action="">
+                <p class="govuk-body">Currently we are moving from the old portal to a new portal and your account has
+                    been selected for migration. the migration process should only take a few minutes and should let you
+                    start using the new portal straight away</p>
+                <p class="govuk-body">To complete your account migration you need to;</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>Have a uniqu work email address if you do not have one you will create a new email address</li>
+                    <li>Verify your account by a code sent to the new registered email address</li>
+                    <li>Set up your display name and password</li>
+                    <li>Activate your multi factor authentication for an added level of security</li>
+                </ul>
 
-<!--<form th:action="@{/login}" th:method="post">-->
-<!--    <label>-->
-<!--        <input type="text" name="username" placeholder="Username">-->
-<!--    </label>-->
-<!--    <label>-->
-<!--        <input type="password" name="password" placeholder="Password">-->
-<!--    </label>-->
-<!--    <button type="submit">Submit</button>-->
-<!--</form>-->
-<div class="govuk-width-container">
-    <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
-        <div class="govuk-accordion__section">
-            <div class="govuk-accordion__section-header">
-                <h2 class="govuk-accordion__section-heading">
-        <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
-          Writing well for the web
-        </span>
-                </h2>
-            </div>
-            <div id="accordion-default-content-1" class="govuk-accordion__section-content">
-                <p class="govuk-body">This is the content for Writing well for the web.</p>
-            </div>
+                <p class="govuk-body"> Once your account migration is confirmed you can start using the new portal</p>
+
+                <div class="govuk-inset-text">
+                    If you need any help you can contact the online support number 0208 3456789 or <a
+                        href="https://www.gov.uk/government/publications/laa-online-portal-help-and-information">Online
+                    portal help</a>
+                </div>
+                <p class="govuk-body">Registering takes around 5 minutes.</p>
+                <button role="button" draggable="false" class="govuk-button govuk-button--start"
+                        data-module="govuk-button" data-govuk-button-init="">
+                    Start now
+                    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19"
+                         viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+                        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+                    </svg>
+                </button>
+            </form>
+            <h2 class="govuk-heading-m">
+                Before you start
+            </h2>
+            <p class="govuk-body">
+                You can also <a href="#">register by post</a>.
+            </p>
+            <p class="govuk-body">
+                The online service is also <a href="#">available in Welsh (ar gael yn Gymraeg)</a>.
+            </p>
+            <p class="govuk-body">
+                You can’t register for this service if you’re in the UK illegally.
+            </p>
+
         </div>
-        <div class="govuk-accordion__section">
-            <div class="govuk-accordion__section-header">
-                <h2 class="govuk-accordion__section-heading">
-        <span class="govuk-accordion__section-button" id="accordion-default-heading-2">
-          Writing well for specialists
-        </span>
+
+        <div class="govuk-grid-column-one-third">
+
+            <aside class="govuk-prototype-kit-common-templates-related-items" role="complementary">
+                <h2 class="govuk-heading-m" id="subsection-title">
+                    Subsection
                 </h2>
-            </div>
-            <div id="accordion-default-content-2" class="govuk-accordion__section-content">
-                <p class="govuk-body">This is the content for Writing well for specialists.</p>
-            </div>
-        </div>
-        <div class="govuk-accordion__section">
-            <div class="govuk-accordion__section-header">
-                <h2 class="govuk-accordion__section-heading">
-        <span class="govuk-accordion__section-button" id="accordion-default-heading-3">
-          Know your audience
-        </span>
-                </h2>
-            </div>
-            <div id="accordion-default-content-3" class="govuk-accordion__section-content">
-                <p class="govuk-body">This is the content for Know your audience.</p>
-            </div>
-        </div>
-        <div class="govuk-accordion__section">
-            <div class="govuk-accordion__section-header">
-                <h2 class="govuk-accordion__section-heading">
-        <span class="govuk-accordion__section-button" id="accordion-default-heading-4">
-          How people read
-        </span>
-                </h2>
-            </div>
-            <div id="accordion-default-content-4" class="govuk-accordion__section-content">
-                <p class="govuk-body">This is the content for How people read.</p>
-            </div>
+                <nav role="navigation" aria-labelledby="subsection-title">
+                    <ul class="govuk-list govuk-!-font-size-16">
+                        <li>
+                            <a href="#">
+                                Related link
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Related link
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="govuk-!-font-weight-bold">
+                                More <span class="govuk-visually-hidden">in Subsection</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
         </div>
     </div>
-    <div class="govuk-tabs" data-module="govuk-tabs">
-        <h2 class="govuk-tabs__title">
-            Contents
-        </h2>
-        <ul class="govuk-tabs__list">
-            <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-                <a class="govuk-tabs__tab" href="#past-day">
-                    Past day
-                </a>
-            </li>
-            <li class="govuk-tabs__list-item">
-                <a class="govuk-tabs__tab" href="#past-week">
-                    Past week
-                </a>
-            </li>
-            <li class="govuk-tabs__list-item">
-                <a class="govuk-tabs__tab" href="#past-month">
-                    Past month
-                </a>
-            </li>
-            <li class="govuk-tabs__list-item">
-                <a class="govuk-tabs__tab" href="#past-year">
-                    Past year
-                </a>
-            </li>
-        </ul>
-        <div class="govuk-tabs__panel" id="past-day">
-            <h2 class="govuk-heading-l">Past day</h2>
-            <table class="govuk-table">
-                <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">Case manager</th>
-                    <th scope="col" class="govuk-table__header">Cases opened</th>
-                    <th scope="col" class="govuk-table__header">Cases closed</th>
-                </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">David Francis</td>
-                    <td class="govuk-table__cell">3</td>
-                    <td class="govuk-table__cell">0</td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">Paul Farmer</td>
-                    <td class="govuk-table__cell">1</td>
-                    <td class="govuk-table__cell">0</td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">Rita Patel</td>
-                    <td class="govuk-table__cell">2</td>
-                    <td class="govuk-table__cell">0</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="past-week">
-            <h2 class="govuk-heading-l">Past week</h2>
-            <table class="govuk-table">
-                <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">Case manager</th>
-                    <th scope="col" class="govuk-table__header">Cases opened</th>
-                    <th scope="col" class="govuk-table__header">Cases closed</th>
-                </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">David Francis</td>
-                    <td class="govuk-table__cell">24</td>
-                    <td class="govuk-table__cell">18</td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">Paul Farmer</td>
-                    <td class="govuk-table__cell">16</td>
-                    <td class="govuk-table__cell">20</td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">Rita Patel</td>
-                    <td class="govuk-table__cell">24</td>
-                    <td class="govuk-table__cell">27</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="past-month">
-            <h2 class="govuk-heading-l">Past month</h2>
-            <table class="govuk-table">
-                <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">Case manager</th>
-                    <th scope="col" class="govuk-table__header">Cases opened</th>
-                    <th scope="col" class="govuk-table__header">Cases closed</th>
-                </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">David Francis</td>
-                    <td class="govuk-table__cell">98</td>
-                    <td class="govuk-table__cell">95</td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">Paul Farmer</td>
-                    <td class="govuk-table__cell">122</td>
-                    <td class="govuk-table__cell">131</td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">Rita Patel</td>
-                    <td class="govuk-table__cell">126</td>
-                    <td class="govuk-table__cell">142</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="past-year">
-            <h2 class="govuk-heading-l">Past year</h2>
-            <table class="govuk-table">
-                <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">Case manager</th>
-                    <th scope="col" class="govuk-table__header">Cases opened</th>
-                    <th scope="col" class="govuk-table__header">Cases closed</th>
-                </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">David Francis</td>
-                    <td class="govuk-table__cell">1380</td>
-                    <td class="govuk-table__cell">1472</td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">Paul Farmer</td>
-                    <td class="govuk-table__cell">1129</td>
-                    <td class="govuk-table__cell">1083</td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">Rita Patel</td>
-                    <td class="govuk-table__cell">1539</td>
-                    <td class="govuk-table__cell">1265</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <details class="govuk-details">
-        <summary class="govuk-details__summary">
-    <span class="govuk-details__summary-text">
-      Help with nationality
-    </span>
-        </summary>
-        <div class="govuk-details__text">
-            We need to know your nationality so we can work out which elections you’re entitled to vote in. If you cannot provide your nationality, you’ll have to send copies of identity documents through the post.
-        </div>
-    </details>
-</div>
-
-<script
-        src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-        crossorigin="anonymous">
-</script>
-<script type="module"  th:src="@{/js/govuk-frontend-5.8.0.min.js}"></script>
-<script type="module">
-    import {initAll} from '/js/govuk-frontend-5.8.0.min.js'
-    initAll()
-    console.log('fired')
-</script>
-
+</main>
 </body>
 </html>
-<h1>Hello, cloud-platform!</h1>
