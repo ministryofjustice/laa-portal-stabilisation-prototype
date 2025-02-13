@@ -11,8 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -29,21 +27,20 @@ public class SecurityConfig {
                         .requestMatchers("/", "/login", "/css/**", "/js/**", "/assets/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin((form) -> form
+                .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
                         .permitAll()
                         .defaultSuccessUrl("/home", true)
                 )
                 .logout(LogoutConfigurer::permitAll
-                )
-                .httpBasic(withDefaults());
+                );
         return http.build();
     }
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername("user")
-                .password(passwordEncoder.encode("password"))
+        UserDetails user = User.withUsername("testUser")
+                .password(passwordEncoder.encode("password123"))
                 .roles("USER")
                 .build();
 

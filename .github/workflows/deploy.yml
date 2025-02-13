@@ -17,20 +17,22 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Build JAR
         run: ./gradlew build
 
+      # Assume role in Cloud Platform
       - uses: aws-actions/configure-aws-credentials@v4.0.2
         with:
           role-to-assume: ${{ secrets.ECR_ROLE_TO_ASSUME }}
           aws-region: ${{ vars.ECR_REGION }}
 
+      # Login to container repository
       - uses: aws-actions/amazon-ecr-login@v2
         id: login-ecr
 
-      - name: Build and Push Docker Image
+      - name: Build and Push Docker Image to the container repository
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
@@ -50,7 +52,7 @@ jobs:
           REPOSITORY: ${{ vars.ECR_REPOSITORY }}
           NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
 
-      - name: Deploy to Kubernetes
+      - name: Deploy to Cloud Platform
         run: |
           echo "${{ secrets.KUBE_CERT }}" > ca.crt
           kubectl config set-cluster ${KUBE_CLUSTER} --certificate-authority=./ca.crt --server=https://${KUBE_CLUSTER}
