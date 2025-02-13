@@ -24,9 +24,8 @@ spec:
             runAsNonRoot: true
             allowPrivilegeEscalation: false
             capabilities:
-              drop: [ "ALL" ]
+              drop: ["ALL"]
             seccompProfile:
               type: RuntimeDefault
           ports:
             - containerPort: 8080
-
