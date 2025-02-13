@@ -45,3 +45,4 @@ target/
 **/bin/**
 .DS_STORE
 
+/secrets.gradle
