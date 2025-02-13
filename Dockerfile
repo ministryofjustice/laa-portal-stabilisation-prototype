@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM openjdk:21-slim
 
 # Define a volume to safely store temporary files across restarts
 VOLUME /tmp

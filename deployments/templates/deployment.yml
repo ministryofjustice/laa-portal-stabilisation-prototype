@@ -14,10 +14,16 @@ spec:
       labels:
         app: example # this should match the selector in service.yml
     spec:
-      securityContext:
-        runAsNonRoot: true
       containers:
         - name: example
           image: ${REGISTRY}/${REPOSITORY}:${IMAGE_TAG}
           ports:
             - containerPort: 8080
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            seccompProfile:
+              type: RuntimeDefault
