@@ -21,6 +21,8 @@ jobs:
 
       - name: Build JAR
         run: ./gradlew build
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
       # Assume role in Cloud Platform
       - uses: aws-actions/configure-aws-credentials@v4.0.2
