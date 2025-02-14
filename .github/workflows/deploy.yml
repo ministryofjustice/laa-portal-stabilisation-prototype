@@ -20,8 +20,9 @@ jobs:
           java-version: '21'
 
       - name: Build JAR
-        run: ./gradlew build
-          echo ${{ secrets.REPO_TOKEN }}
+
+        run: echo ${{ secrets.REPO_TOKEN }}
+          ./gradlew builds
         env:
           GITHUB_ACTOR: ${{ secrets.REPO_ACTOR}}
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
