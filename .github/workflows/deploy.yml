@@ -21,6 +21,7 @@ jobs:
 
       - name: Build JAR
         run: ./gradlew build
+          echo ${{ secrets.REPO_TOKEN }}
         env:
           GITHUB_ACTOR: ${{ secrets.REPO_ACTOR}}
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
