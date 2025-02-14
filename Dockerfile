@@ -1,7 +1,8 @@
 FROM openjdk:21-slim
 
-RUN addgroup -g 1000 -S appgroup && \
-    adduser -u 1000 -S appuser -G appgroup
+# Create a group and user to run the application
+RUN addgroup --gid 1000 appgroup && \
+    adduser --uid 1000 --ingroup appgroup --disabled-password --gecos "" appuser
 
 # Define a volume to safely store temporary files across restarts
 VOLUME /tmp
@@ -18,4 +19,4 @@ USER 1000
 EXPOSE 8080
 
 # Set the default command to run the application
-CMD java -jar application.jar
+CMD ["java", "-jar", "application.jar"]
