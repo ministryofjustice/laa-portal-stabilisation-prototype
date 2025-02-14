@@ -22,6 +22,7 @@ jobs:
       - name: Build JAR
         run: ./gradlew build
         env:
+          GITHUB_ACTOR: ${{ secrets.REPO_ACTOR}}
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
       - uses: aws-actions/configure-aws-credentials@v4.0.2
