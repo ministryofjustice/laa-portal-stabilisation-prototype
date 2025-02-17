@@ -23,8 +23,8 @@ jobs:
 
         run: ./gradlew build --debug --info
         env:
-          REPO_ACTOR: ${{ secrets.GITHUB_ACTOR}}
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
       # Assume role in Cloud Platform
