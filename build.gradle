@@ -10,13 +10,6 @@ java {
 }
 
 repositories {
-    maven {
-        url = uri("https://maven.pkg.github.com/ministryofjustice/laa-ccms-spring-boot-common")
-        credentials {
-            username = findProperty("gitPackageUser") ?: System.getenv("GITHUB_ACTOR")
-            password = findProperty("gitPackageKey") ?: System.getenv("GITHUB_TOKEN")
-        }
-    }
     mavenCentral()
 }
 
@@ -32,11 +25,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-graphql'
     implementation 'uk.gov.laa.ccms.springboot:laa-ccms-spring-boot-starter-govuk-dialect'
 
-    implementation 'io.spring.dependency-management:io.spring.dependency-management.gradle.plugin:1.1.7'
 
-    implementation 'com.azure.spring:azure-spring-boot-starter-active-directory:4.0.0'
-
-    runtimeOnly 'com.h2database:h2'
+    implementation 'com.azure.spring:azure-spring-boot-starter-active-directory:3.14.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.graphql:spring-graphql-test'

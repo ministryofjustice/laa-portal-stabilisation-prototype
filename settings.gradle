@@ -13,4 +13,7 @@ pluginManagement {
     }
 }
 
+println "REPO_ACTOR: ${System.getenv("REPO_ACTOR")}"
+
+
 rootProject.name = 'laa-portal-stabilisation-prototype'
