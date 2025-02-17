@@ -21,7 +21,11 @@ jobs:
 
       - name: Build JAR
 
+        env:
+          REPO_ACTOR: ${{ secrets.REPO_ACTOR}}
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: ./gradlew build --debug --info
+
 
       # Assume role in Cloud Platform
       - uses: aws-actions/configure-aws-credentials@v4.0.2
