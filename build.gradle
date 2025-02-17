@@ -11,8 +11,16 @@ java {
 }
 
 repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/ministryofjustice/laa-ccms-spring-boot-common")
+        credentials {
+            username = findProperty("gitPackageUser") ?: System.getenv("GITHUB_ACTOR")
+            password = findProperty("gitPackageKey") ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
     mavenCentral()
 }
+
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -20,7 +28,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.projectlombok:lombok'
+
     annotationProcessor 'org.projectlombok:lombok'
+
     implementation 'org.springframework.boot:spring-boot-starter-graphql'
     implementation 'uk.gov.laa.ccms.springboot:laa-ccms-spring-boot-starter-govuk-dialect'
 
@@ -31,7 +41,6 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.graphql:spring-graphql-test'
-    testImplementation 'org.springframework:spring-webflux'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
