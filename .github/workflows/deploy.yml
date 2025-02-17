@@ -23,8 +23,8 @@ jobs:
 
         run: ./gradlew builds
         env:
-          GITHUB_ACTOR: ${{ secrets.REPO_ACTOR}}
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          REPO_ACTOR: ${{ secrets.REPO_ACTOR}}
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
 
       # Assume role in Cloud Platform
       - uses: aws-actions/configure-aws-credentials@v4.0.2
