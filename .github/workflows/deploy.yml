@@ -21,10 +21,10 @@ jobs:
 
       - name: Build JAR
 
+        run: ./gradlew build --debug --info
         env:
           REPO_ACTOR: ${{ secrets.REPO_ACTOR}}
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-        run: ./gradlew build --debug --info
 
 
       # Assume role in Cloud Platform
