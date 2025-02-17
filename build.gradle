@@ -12,18 +12,13 @@ java {
 repositories {
     mavenCentral()
     // Latest version of saml requires this
-        maven {'https://maven.pkg.github.com/ministryofjustice/laa-ccms-spring-boot-common'
+        maven ("https://maven.pkg.github.com/ministryofjustice/laa-ccms-spring-boot-common") {
             credentials {
                 username = System.getenv("REPO_ACTOR")?.trim() ?: project.findProperty('project.ext.gitPackageUser')
                 password = System.getenv("REPO_TOKEN")?.trim() ?: project.findProperty('project.ext.gitPackageKey')
             }
         }
     }
-
-    // Configure repositories using the defined GitHub config
-    githubRepoConfig('https://maven.pkg.github.com/ministryofjustice/laa-ccms-spring-boot-common')
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
