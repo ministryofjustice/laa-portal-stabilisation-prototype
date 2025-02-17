@@ -21,7 +21,7 @@ jobs:
 
       - name: Build JAR
 
-        run: ./gradlew build --stacktrace
+        run: ./gradlew build --debug --info
         env:
           REPO_ACTOR: ${{ secrets.REPO_ACTOR}}
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
