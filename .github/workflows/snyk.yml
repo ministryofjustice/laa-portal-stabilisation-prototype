@@ -33,7 +33,7 @@ jobs:
       - name: Identify new vulnerabilities
         run: ./snyk/snyk_delta_all_projects.sh --org=$SNYK_ORG --exclude=$SNYK_TEST_EXCLUDE -d
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           MY_GITHUB_ACTOR: ${{ secrets.MY_GITHUB_ACTOR }}
           MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
       - name: Run code test
