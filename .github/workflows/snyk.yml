@@ -12,5 +12,7 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v1
-      - name: Branch name
-        run: echo running on branch ${GITHUB_REF##*/}.
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/gradle-jdk17@v1
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
