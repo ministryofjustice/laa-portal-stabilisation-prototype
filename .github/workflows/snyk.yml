@@ -17,4 +17,4 @@ jobs:
         env:
           MY_GITHUB_ACTOR: ${{ secrets.MY_GITHUB_ACTOR }}
           MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_TOKEN: "60df7900-f45f-4b0f-8640-db13bbbdac00"
