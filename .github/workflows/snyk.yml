@@ -16,4 +16,5 @@ jobs:
         uses: snyk/actions/maven@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          SOMETHING: "ds"
+          GITHUB_ACTOR: "ds"
+          GITHUB_TOKEN: "123"
