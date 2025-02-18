@@ -16,5 +16,5 @@ jobs:
         uses: snyk/actions/maven@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          GITHUB_ACTOR: ${{ secrets.REPO_ACTOR }}
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          MY_GITHUB_ACTOR: ${{ secrets.MY_GITHUB_ACTOR }}
+          MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
