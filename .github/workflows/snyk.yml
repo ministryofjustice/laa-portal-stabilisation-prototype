@@ -10,9 +10,9 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@main
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/maven@v3
+        uses: snyk/actions/maven@main
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
