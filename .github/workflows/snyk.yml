@@ -29,6 +29,7 @@ jobs:
           mkdir -p ~/.local/bin
           export PATH="$HOME/.local/bin/:$PATH"
           npm install -g snyk-delta
+          chmod +x ./snyk/snyk_delta_all_projects.sh
       - name: Identify new vulnerabilities
         run: ./snyk/snyk_delta_all_projects.sh --org=$SNYK_ORG --exclude=$SNYK_TEST_EXCLUDE
         env:
