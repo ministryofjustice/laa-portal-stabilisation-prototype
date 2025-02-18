@@ -12,7 +12,7 @@ jobs:
 
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      SNYK_ORG: legal-aid-agency
+      SNYK_ORG: pliao-hmcts
       SNYK_TEST_EXCLUDE: build,generated
 
     steps:
