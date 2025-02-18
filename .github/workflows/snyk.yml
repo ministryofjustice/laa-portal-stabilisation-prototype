@@ -7,14 +7,34 @@ on:
       - edited
       - synchronize
 jobs:
-  security:
+  vulnerability-scan:
     runs-on: ubuntu-latest
+
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      SNYK_ORG: legal-aid-agency
+      SNYK_TEST_EXCLUDE: build,generated
+
     steps:
-      - name: Git checkout
-        uses: actions/checkout@v4
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/maven@master
+      - uses: actions/checkout@v3
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - uses: snyk/actions/setup@0.4.0
+      - name: Install snyk-delta
+        run: |
+          npm config set prefix '~/.local/'
+          mkdir -p ~/.local/bin
+          export PATH="$HOME/.local/bin/:$PATH"
+          npm install -g snyk-delta
+      - name: Identify new vulnerabilities
+        run: ./snyk/snyk_delta_all_projects.sh --org=$SNYK_ORG --exclude=$SNYK_TEST_EXCLUDE
         env:
-          MY_GITHUB_ACTOR: ${{ secrets.MY_GITHUB_ACTOR }}
-          MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-          SNYK_TOKEN: "60df7900-f45f-4b0f-8640-db13bbbdac00"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run code test
+        uses: snyk/actions/gradle@0.4.0
+        with:
+          command: code test
+          args: --org=${SNYK_ORG}
