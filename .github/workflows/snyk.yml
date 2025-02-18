@@ -12,7 +12,8 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v1
-      - uses: snyk/actions/maven@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven@master
         continue-on-error: true
         env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
