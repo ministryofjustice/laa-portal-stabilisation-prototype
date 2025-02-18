@@ -15,6 +15,6 @@ jobs:
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
         env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           MY_GITHUB_ACTOR: ${{ secrets.MY_GITHUB_ACTOR }}
           MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
