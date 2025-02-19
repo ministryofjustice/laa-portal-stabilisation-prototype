@@ -4,7 +4,10 @@
 
 ## Introduction
 
-The LAA Online Portal (Portal) is the Identity and Access Management (IDAM) solution for the LAA. It controls authentication and authorisation to most LAA web applications. Users of the Portal include both internal LAA staff and external solicitors (providers of legal aid).
+The LAA Online Portal (Portal) is the Identity and Access Management (IDAM) solution for the LAA. 
+It controls authentication and authorisation to most LAA web applications. 
+Users of the Portal include both internal LAA staff and external solicitors (providers of legal aid).
+This is a prototype application developed and maintained by the LAA portal stabilisation dev team. 
 
 ## Running the app locally
 
@@ -12,7 +15,7 @@ The LAA Online Portal (Portal) is the Identity and Access Management (IDAM) solu
 
 - Ensure you have the latest version of the repository pulled from GitHub.
 
-- You need a valid MoJ DEVL External email address for Entra ID authentication. This email will be used for validation.
+- You need a valid **MoJ DEVL External email address** for Entra ID authentication. This email will be used for validation.
   - If you do not have one, reach out to an Entra admin in the #laa-portal-stabilisation-tech Slack channel.
 
 ### Obtaining Client Credentials
@@ -25,11 +28,78 @@ The LAA Online Portal (Portal) is the Identity and Access Management (IDAM) solu
 
 ### Configuring the Application
 
-- The client ID and client secret properties are stored in the application.properties file, like so:
+#### Entra ID Config
 
-  `spring.security.oauth2.client.registration.azure.client-id=${AZURE_CLIENT_ID}`
-  `spring.security.oauth2.client.registration.azure.client-secret=${AZURE_CLIENT_SECRET}`
+- The client ID and client secret properties are stored in the application.properties file under src > main > resources, like so:
+```
+spring.security.oauth2.client.registration.azure.client-id=${AZURE_CLIENT_ID}
+spring.security.oauth2.client.registration.azure.client-secret=${AZURE_CLIENT_SECRET}
+```
 
 - However, the actual values should be set as environment variables within the application configuration.
 
 - _Note: Do not update the application.properties file with the raw client ID and secret._
+
+#### GDS Library setup
+
+In order to use and display the required Government Digital Service (GDS) components we must configure the SpringBoot convention plugin for LAA CCMS projects.
+
+The plugin management is already done and can be viewed in the project's settings.gradle file.
+This tells Gradle where to search for plugins.
+
+##### Provide your repository credentials
+
+Your credentials for the GitHub Packages repository must be defined in your local gradle.properties file. This file is typically located at:
+
+`~/.gradle/gradle.properties
+`
+
+_If the file does not exist, create it._
+
+Steps:
+
+1. Ensure you have created a GitHub Personal Access Token with the following permissions:
+   1. repo
+   2. write:packages
+   3. read:packages
+2. The token must be authorised with (MoJ) SSO.
+3. Add the following parameters to ~/.gradle/gradle.properties:
+```
+project.ext.gitPackageUser = <your GitHub username>
+project.ext.gitPackageKey = <your GitHub access token>
+```
+
+For more detailed instructions, refer to the laa-ccms-spring-boot-common repository [here](https://github.com/ministryofjustice/laa-ccms-spring-boot-common?tab=readme-ov-file).
+
+More information on GDS can be found [here](https://gds-way.digital.cabinet-office.gov.uk/).
+
+### Running the Application
+
+Once the environment variables are set, you can run the application using Gradle:
+
+- **IntelliJ IDEA:**
+
+  1. Open the project in IntelliJ.
+  2. Open the Gradle tool window (`View > Tool Windows > Gradle`).
+  3. Navigate to `Tasks > application` and double-click `bootRun`.
+
+- **Command Line:**
+
+  1. Navigate to the project root directory.
+  2. Run the following command:
+     ```sh
+     ./gradlew bootRun
+     ```
+
+- **VS Code:**
+
+  1. Open a terminal inside VS Code.
+  2. Run:
+     ```sh
+     ./gradlew bootRun
+     ```
+
+Once the application is running steadily, you can access the UI by navigating to:
+```
+http://localhost:8080
+```
