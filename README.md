@@ -4,10 +4,10 @@
 
 ## Introduction
 
-The LAA Online Portal (Portal) is the Identity and Access Management (IDAM) solution for the LAA. 
-It controls authentication and authorisation to most LAA web applications. 
+The LAA Online Portal (Portal) is the Identity and Access Management (IDAM) solution for the LAA.
+It controls authentication and authorisation to most LAA web applications.
 Users of the Portal include both internal LAA staff and external solicitors (providers of legal aid).
-This is a prototype application developed and maintained by the LAA portal stabilisation dev team. 
+This is a prototype application developed and maintained by the LAA portal stabilisation dev team.
 
 ## Running the app locally
 
@@ -31,6 +31,7 @@ This is a prototype application developed and maintained by the LAA portal stabi
 #### Entra ID Config
 
 - The client ID and client secret properties are stored in the application.properties file under src > main > resources, like so:
+
 ```
 spring.security.oauth2.client.registration.azure.client-id=${AZURE_CLIENT_ID}
 spring.security.oauth2.client.registration.azure.client-secret=${AZURE_CLIENT_SECRET}
@@ -64,6 +65,7 @@ Steps:
    3. read:packages
 2. The token must be authorised with (MoJ) SSO.
 3. Add the following parameters to ~/.gradle/gradle.properties:
+
 ```
 project.ext.gitPackageUser = <your GitHub username>
 project.ext.gitPackageKey = <your GitHub access token>
@@ -100,6 +102,7 @@ Once the environment variables are set, you can run the application using Gradle
      ```
 
 Once the application is running steadily, you can access the UI by navigating to:
+
 ```
 http://localhost:8080
 ```
