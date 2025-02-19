@@ -17,12 +17,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
+      - name: Build an image from Dockerfile
+        run: docker build -t docker.io/laa/laa:${{ github.sha }} .
       - name: Run Trivy vulnerability scanner in repo mode
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'fs'
-          scan-ref: '.'
+          image-ref: 'docker.io/laa/laa:${{ github.sha }}'
+          vuln-type: 'os,library'
           ignore-unfixed: true
           format: 'sarif'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
