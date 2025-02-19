@@ -22,8 +22,8 @@ jobs:
       - name: Run Trivy vulnerability scanner in repo mode
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'docker.io/laa/laa:${{ github.sha }}'
-          vuln-type: 'os,library'
+          scan-type: 'fs'
+          vuln-type: 'vuln,secret,config'
           ignore-unfixed: true
           format: 'sarif'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
