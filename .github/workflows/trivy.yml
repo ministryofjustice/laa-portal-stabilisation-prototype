@@ -23,7 +23,6 @@ jobs:
         with:
           scan-type: 'fs'
           scanners: vuln
-          vuln-type: 'os,library'
           ignore-unfixed: true
           format: 'sarif'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
