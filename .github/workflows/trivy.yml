@@ -21,21 +21,14 @@ jobs:
       - name: Run Trivy vulnerability scanner in repo mode
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'fs'
+          scanners: vuln
+          vuln-type: 'os,library'
           ignore-unfixed: true
           format: 'sarif'
-          output: trivy.txt
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
-      - name: Publish Trivy Output to Summary
-        run: |
-          if [[ -s trivy.txt ]]; then
-            {
-              echo "### Security Output"
-              echo "<details><summary>Click to expand</summary>"
-              echo ""
-              echo '```terraform'
-              cat trivy.txt
-              echo '```'
-              echo "</details>"
-            } >> $GITHUB_STEP_SUMMARY
-          fi
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
