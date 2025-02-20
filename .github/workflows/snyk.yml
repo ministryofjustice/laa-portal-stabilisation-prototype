@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      SNYK_ORG: legal-aid-agency
+      SNYK_TOKEN: 658c4f7e-b9a1-420d-8a88-cdadb1a7cfbc
+      SNYK_ORG: 658c4f7e-b9a1-420d-8a88-cdadb1a7cfbc
       SNYK_TEST_EXCLUDE: build,generated
 
     steps:
