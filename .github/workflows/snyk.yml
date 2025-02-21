@@ -16,21 +16,16 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
+
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven-3-jdk-21@master
         continue-on-error: true
+
       - name: Run Snyk code test
         uses: snyk/actions/maven-3-jdk-21@master
         continue-on-error: true
         with:
           command: code test
-#
-#      - name: Build the Docker Image
-#        run: docker build . --file Dockerfile --tag laa/portal:latest
-#
-#      - name: Snyk Container Scanning
-#        run: snyk container test --file=Dockerfile laa/portal:latest
-#        continue-on-error: true
 
       - name: Snyk Infrastructure-as-Code Scanning
         uses: snyk/actions/maven-3-jdk-21@master
