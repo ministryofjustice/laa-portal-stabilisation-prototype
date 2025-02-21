@@ -9,7 +9,7 @@ VOLUME /tmp
 WORKDIR /app
 
 # Copy the JAR from the build output to the container
-COPY  --from=builder --chown=appuser:appgroup /app/build/libs/laa-portal-stabilisation-prototype.jar /app/application.jar
+COPY build/libs/laa-portal-stabilisation-prototype.jar /app/application.jar
 
 # Set the user to run the application
 RUN chown -R appuser:appgroup /app
