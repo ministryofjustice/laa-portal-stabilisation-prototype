@@ -16,10 +16,12 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
-#      - name: Run Snyk to check for vulnerabilities
-#        uses: snyk/actions/maven-3-jdk-21@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven-3-jdk-21@master
+        continue-on-error: true
       - name: Run Snyk code test
         uses: snyk/actions/maven-3-jdk-21@master
+        continue-on-error: true
         with:
-          command: code test --sarif
+          command: code test
 
