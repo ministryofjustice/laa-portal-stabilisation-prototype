@@ -7,47 +7,17 @@ on:
       - edited
       - synchronize
 jobs:
-#  vulnerability-scan:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Git checkout
-#        uses: actions/checkout@v4
-#      - name: Run Snyk to check for vulnerabilities
-#        uses: snyk/actions/maven-3-jdk-21@master
-#        env:
-#          MY_GITHUB_ACTOR: ${{ secrets.MY_GITHUB_ACTOR }}
-#          MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-#          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
-
   vulnerability-scan:
-    runs-on: ubuntu-22.04
-
-    permissions:
-      security-events: write
-
+    runs-on: ubuntu-latest
     env:
+      MY_GITHUB_ACTOR: ${{ secrets.MY_GITHUB_ACTOR }}
+      MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      SNYK_ORG: legal-aid-agency
-      SNYK_TEST_EXCLUDE: build
-      SNYK_TARGET_REFERENCE: main
-      GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-
     steps:
-      - uses: actions/checkout@v3
-      - uses: snyk/actions/setup@0.4.0
-      - name: Install snyk-delta
-        run: |
-          npm config set prefix '~/.local/'
-          mkdir -p ~/.local/bin
-          export PATH="$HOME/.local/bin/:$PATH"
-          npm install -g snyk-delta
-      - name: Identify new vulnerabilities
-        run: ./snyk/snyk_delta_all_projects.sh --org=$SNYK_ORG --exclude=$SNYK_TEST_EXCLUDE --target-reference=$SNYK_TARGET_REFERENCE
-        env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-      - name: Run code test
-        uses: snyk/actions/gradle@0.4.0
-        with:
-          command: code test
-          args: --org=${SNYK_ORG}
+      - name: Git checkout
+        uses: actions/checkout@v4
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven-3-jdk-21@master
+      - name: Run Snyk to check Kubernetes manifest file for issues
+        uses: snyk/actions/iac@master
+
