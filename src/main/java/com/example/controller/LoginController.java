@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
  */
 @Controller
 public class LoginController {
-
-  @GetMapping("/login")
+  @GetMapping("/")
   public String login(Model model) {
     model.addAttribute("user", new User());
-    return "login";
+    return "index";
   }
 
   /**
@@ -26,19 +25,26 @@ public class LoginController {
   public String handleLogin(@ModelAttribute User user, Model model) {
     String validUsername = "user";
     String validPassword = "password";
+    System.out.println(user.getUsername());
+    System.out.println(user.getPassword());
 
     if (validUsername.equals(user.getUsername()) && validPassword.equals(user.getPassword())) {
       model.addAttribute("message", "Welcome " + user.getUsername() + "!");
       return "home";
     } else {
       model.addAttribute("error", "Invalid username or password.");
-      return "login";
+      return "index";
     }
   }
 
   @GetMapping("/home")
   public String home() {
     return "home";
+  }
+
+  @GetMapping("/migrate")
+  public String migrate() {
+    return "migrate";
   }
 
 }
