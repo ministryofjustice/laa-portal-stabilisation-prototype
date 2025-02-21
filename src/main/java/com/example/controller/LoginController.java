@@ -26,8 +26,8 @@ public class LoginController {
    */
   @PostMapping("/login")
   public String handleLogin(@ModelAttribute User user, Model model) {
-    String validUsername = "user";
-    String validPassword = "password";
+    String validUsername = "testUser";
+    String validPassword = "password123";
     System.out.println(user.getUsername());
     System.out.println(user.getPassword());
 
@@ -35,6 +35,7 @@ public class LoginController {
       model.addAttribute("message", "Welcome " + user.getUsername() + "!");
       return "home";
     } else {
+
       model.addAttribute("error", "Invalid username or password.");
       return "index";
     }
@@ -46,13 +47,8 @@ public class LoginController {
       System.out.println("Authentication object is NOT null");
       OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
       OAuth2User principal = oauthToken.getPrincipal();
-      System.out.println(principal);
-
       String name = principal.getAttribute("name");
-      String email = principal.getAttribute("email");
-
       model.addAttribute("name", name);
-      model.addAttribute("email", email);
     } else {
       System.out.println("Authentication object is null");
     }
@@ -66,3 +62,4 @@ public class LoginController {
   }
 
 }
+

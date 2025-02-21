@@ -26,6 +26,7 @@
 <main class="govuk-main-wrapper" id="main-content">
     <div th:if="${#authentication.isAuthenticated()}">
         <p class="govuk-body">Welcome, <span th:text="${name}"></span></p>
+        <p class="govuk-body">Granted Authorities - <span th:text="${#authentication.authorities}"></span></p>
     </div>
 </main>
 </body>
