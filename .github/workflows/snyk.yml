@@ -44,7 +44,7 @@ jobs:
           mv snyk_test.sarif snyk_code_test.sarif snyk_iac_test.sarif sarif_files/
 
       - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: sarif_files
 
