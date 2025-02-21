@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'login'},
+      breadcrumbs=~{::#breadcrumbs})}"
+
+      xmlns:th="http://www.thymeleaf.org"
+>
 <head>
-    <title>Welcome</title>
+    <title>Homepage</title>
 </head>
 <body>
-<h1 th:text="${message}"></h1>
-<a href="/login">Back to Login</a>
+<script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+<nav class="govuk-breadcrumbs" aria-label="Breadcrumb" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Home</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Section</a>
+        </li>
+    </ol>
+</nav>
+<main class="govuk-main-wrapper" id="main-content">
+    <div th:if="${#authentication.isAuthenticated()}">
+        <p class="govuk-body">Welcome, <span th:text="${name}"></span></p>
+    </div>
+</main>
 </body>
 </html>

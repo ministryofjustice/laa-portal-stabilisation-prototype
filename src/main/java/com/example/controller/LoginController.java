@@ -1,6 +1,9 @@
 package com.example.controller;
 
 import com.example.model.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +41,22 @@ public class LoginController {
   }
 
   @GetMapping("/home")
-  public String home() {
+  public String home(Model model, Authentication authentication) {
+    if(authentication != null) {
+      System.out.println("Authentication object is NOT null");
+      OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+      OAuth2User principal = oauthToken.getPrincipal();
+      System.out.println(principal);
+
+      String name = principal.getAttribute("name");
+      String email = principal.getAttribute("email");
+
+      model.addAttribute("name", name);
+      model.addAttribute("email", email);
+    } else {
+      System.out.println("Authentication object is null");
+    }
+
     return "home";
   }
 
