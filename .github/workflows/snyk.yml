@@ -20,16 +20,18 @@ jobs:
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven-3-jdk-21@master
         continue-on-error: true
+        with:
+          command: test --sarif
 
       - name: Run Snyk code test
         uses: snyk/actions/maven-3-jdk-21@master
         continue-on-error: true
         with:
-          command: code test
+          command: code test --sarif
 
       - name: Snyk Infrastructure-as-Code Scanning
         uses: snyk/actions/maven-3-jdk-21@master
         continue-on-error: true
         with:
-          command: iac test
+          command: iac test --sarif
 
