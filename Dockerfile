@@ -8,7 +8,7 @@ RUN addgroup --gid 1000 appgroup && \
 VOLUME /tmp
 WORKDIR /app
 
-RUN dir -s
+RUN sh -c 'find / -name "laa-portal-stabilisation-prototype.jar"'
 # Copy the JAR from the build output to the container
 COPY build/libs/laa-portal-stabilisation-prototype.jar /app/application.jar
 
