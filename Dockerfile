@@ -10,8 +10,6 @@ WORKDIR /app
 
 # Copy the JAR from the build output to the container
 RUN find / -name 'laa-portal-stabilisation-prototype.jar' -exec cp "{}" /app/application.jar  \;
-RUN file="$(find / -name 'laa-portal-stabilisation-prototype.jar')" && echo $file
-RUN echo $(find / -name 'laa-portal-stabilisation-prototype.jar')
 #COPY build/libs/laa-portal-stabilisation-prototype.jar /app/application.jar
 
 # Set the user to run the application
