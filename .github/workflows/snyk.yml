@@ -16,25 +16,20 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
-      - run: |
-          echo ${{ github.workspace }}
-          echo $GITHUB_WORKSPACE
-          cd $GITHUB_WORKSPACE
-          ls
 
-#      - name: Run Snyk to check for vulnerabilities
-#        uses: snyk/actions/maven-3-jdk-21@master
-#        continue-on-error: true
-#
-#      - name: Run Snyk code test
-#        uses: snyk/actions/maven-3-jdk-21@master
-#        continue-on-error: true
-#        with:
-#          command: code test
-#
-#      - name: Snyk Infrastructure-as-Code Scanning
-#        uses: snyk/actions/maven-3-jdk-21@master
-#        continue-on-error: true
-#        with:
-#          command: iac test
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven-3-jdk-21@master
+        continue-on-error: true
+
+      - name: Run Snyk code test
+        uses: snyk/actions/maven-3-jdk-21@master
+        continue-on-error: true
+        with:
+          command: code test
+
+      - name: Snyk Infrastructure-as-Code Scanning
+        uses: snyk/actions/maven-3-jdk-21@master
+        continue-on-error: true
+        with:
+          command: iac test
 
