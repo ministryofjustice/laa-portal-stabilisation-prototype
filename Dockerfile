@@ -8,12 +8,9 @@ RUN addgroup --gid 1000 appgroup && \
 VOLUME /tmp
 WORKDIR /app
 
-WORKDIR /app
-ADD . .
-RUN ./gradlew assemble -Dorg.gradle.daemon=false
-
 # Copy the JAR from the build output to the container
-COPY /app/build/libs/laa-portal-stabilisation-prototype.jar /app/application.jar
+RUN find / -name 'laa-portal-stabilisation-prototype.jar' -exec cp "{}" /app/application.jar  \;
+#COPY build/libs/laa-portal-stabilisation-prototype.jar /app/application.jar
 
 # Set the user to run the application
 RUN chown -R appuser:appgroup /app
