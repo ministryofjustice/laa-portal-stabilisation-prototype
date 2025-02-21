@@ -31,7 +31,7 @@ jobs:
       SNYK_ORG: legal-aid-agency
       SNYK_TEST_EXCLUDE: build
       SNYK_TARGET_REFERENCE: main
-      GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v3
@@ -45,7 +45,7 @@ jobs:
       - name: Identify new vulnerabilities
         run: ./snyk/snyk_delta_all_projects.sh --org=$SNYK_ORG --exclude=$SNYK_TEST_EXCLUDE --target-reference=$SNYK_TARGET_REFERENCE
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
       - name: Run code test
         uses: snyk/actions/gradle@0.4.0
         with:
