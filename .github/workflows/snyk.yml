@@ -24,7 +24,7 @@ jobs:
           command: test --sarif
           args: --sarif-file-output=snyk_test.sarif
 
-      - name: Replace security-severity undefined for license-related findings
+      - name: Replace security-severity undefined
         run:
           sed -i 's/"undefined"/"0"/g' snyk_test.sarif
 
