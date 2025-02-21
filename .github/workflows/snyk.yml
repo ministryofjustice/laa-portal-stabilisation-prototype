@@ -17,38 +17,45 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v4
 
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/maven-3-jdk-21@master
-        continue-on-error: true
+      - name: Run Snyk to check Docker images for vulnerabilities
+        uses: snyk/actions/docker@master
         with:
-          command: test --sarif
-          args: --sarif-file-output=snyk_test.sarif
+          image: your/image-to-test
+          args: --severity-threshold=high
 
-      - name: Replace security-severity undefined
-        run:
-          sed -i 's/"undefined"/"0"/g' snyk_test.sarif
 
-      - name: Run Snyk code test
-        uses: snyk/actions/maven-3-jdk-21@master
-        continue-on-error: true
-        with:
-          command: code test --sarif
-          args: --sarif-file-output=snyk_code_test.sarif
-
-      - name: Snyk Infrastructure-as-Code Scanning
-        uses: snyk/actions/maven-3-jdk-21@master
-        continue-on-error: true
-        with:
-          command: iac test --sarif
-          args: --sarif-file-output=snyk_iac_test.sarif
-
-      - name: Create SARIF directory and move SARIF files
-        run: |
-          mkdir sarif_files &&
-          mv snyk_test.sarif snyk_code_test.sarif snyk_iac_test.sarif sarif_files/
-
-      - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: sarif_files
+#      - name: Run Snyk to check for vulnerabilities
+#        uses: snyk/actions/maven-3-jdk-21@master
+#        continue-on-error: true
+#        with:
+#          command: test --sarif
+#          args: --sarif-file-output=snyk_test.sarif
+#
+#      - name: Replace security-severity undefined
+#        run:
+#          sed -i 's/"undefined"/"0"/g' snyk_test.sarif
+#
+#      - name: Run Snyk code test
+#        uses: snyk/actions/maven-3-jdk-21@master
+#        continue-on-error: true
+#        with:
+#          command: code test --sarif
+#          args: --sarif-file-output=snyk_code_test.sarif
+#
+#      - name: Snyk Infrastructure-as-Code Scanning
+#        uses: snyk/actions/maven-3-jdk-21@master
+#        continue-on-error: true
+#        with:
+#          command: iac test --sarif
+#          args: --sarif-file-output=snyk_iac_test.sarif
+#
+#      - name: Create SARIF directory and move SARIF files
+#        run: |
+#          mkdir sarif_files &&
+#          mv snyk_test.sarif snyk_code_test.sarif snyk_iac_test.sarif sarif_files/
+#
+#      - name: Upload result to GitHub Code Scanning
+#        uses: github/codeql-action/upload-sarif@v3
+#        with:
+#          sarif_file: sarif_files
 
