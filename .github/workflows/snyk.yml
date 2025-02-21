@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Snyk to check Docker images for vulnerabilities
-        run: docker build . --file Dockerfile --tag laa-portal-stabilisation-prototype:latest
+        run: docker build . --file Dockerfile --tag laa-portal-stabilisation-prototype:latest --progress=plain --no-cache
 
 
 #      - name: Run Snyk to check for vulnerabilities
