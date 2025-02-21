@@ -26,7 +26,7 @@ jobs:
 
       - name: Replace security-severity undefined for license-related findings
         run:
-          sed -i 's/undefined/0/g' snyk.sarif
+          sed -i 's/"undefined"/"0"/g' snyk_test.sarif
 
       - name: Run Snyk code test
         uses: snyk/actions/maven-3-jdk-21@master
