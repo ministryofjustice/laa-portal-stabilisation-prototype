@@ -22,24 +22,23 @@ jobs:
         continue-on-error: true
         with:
           command: test --sarif
-          args: --sarif-file-output=snyk_test.sarif
+          args: --sarif-file-output=snyk_test.sarif --severity-threshold=low
 
       - name: Replace security-severity undefined for license-related findings
-        run: sed -i 's/"security-severity": "undefined"/"security-severity": "0"/g' snyk_test.sarif
-
+        run:
       - name: Run Snyk code test
         uses: snyk/actions/maven-3-jdk-21@master
         continue-on-error: true
         with:
           command: code test --sarif
-          args: --sarif-file-output=snyk_code_test.sarif
+          args: --sarif-file-output=snyk_code_test.sarif --severity-threshold=low
 
       - name: Snyk Infrastructure-as-Code Scanning
         uses: snyk/actions/maven-3-jdk-21@master
         continue-on-error: true
         with:
           command: iac test --sarif
-          args: --sarif-file-output=snyk_iac_test.sarif
+          args: --sarif-file-output=snyk_iac_test.sarif --severity-threshold=low
 
       - name: Create SARIF directory and move SARIF files
         run: |
