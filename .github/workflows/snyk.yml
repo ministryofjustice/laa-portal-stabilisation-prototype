@@ -22,21 +22,21 @@ jobs:
         continue-on-error: true
         with:
           command: test --sarif
-          args: --sarif-file-output=snyk_test.sarif --severity-threshold==low|medium|high
+          args: --sarif-file-output=snyk_test.sarif --severity-threshold=low|medium|high
 
       - name: Run Snyk code test
         uses: snyk/actions/maven-3-jdk-21@master
         continue-on-error: true
         with:
           command: code test --sarif
-          args: --sarif-file-output=snyk_code_test.sarif --severity-threshold==low|medium|high
+          args: --sarif-file-output=snyk_code_test.sarif --severity-threshold=low|medium|high
 
       - name: Snyk Infrastructure-as-Code Scanning
         uses: snyk/actions/maven-3-jdk-21@master
         continue-on-error: true
         with:
           command: iac test --sarif
-          args: --sarif-file-output=snyk_iac_test.sarif --severity-threshold==low|medium|high
+          args: --sarif-file-output=snyk_iac_test.sarif --severity-threshold=low|medium|high
 
       - name: Create SARIF directory and move SARIF files
         run: |
