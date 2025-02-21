@@ -24,8 +24,6 @@ jobs:
           command: test --sarif
           args: --sarif-file-output=snyk_test.sarif --severity-threshold=low
 
-      - name: Replace security-severity undefined for license-related findings
-        run:
       - name: Run Snyk code test
         uses: snyk/actions/maven-3-jdk-21@master
         continue-on-error: true
