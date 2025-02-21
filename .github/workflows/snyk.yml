@@ -25,3 +25,14 @@ jobs:
         with:
           command: code test
 
+      - name: Build the Docker Image
+        run: docker build . --file Dockerfile --tag laa/portal:latest
+
+      - name: Snyk Container Scanning
+        run: snyk container test --file=Dockerfile laa/portal:latest
+        continue-on-error: true
+
+      - name: Snyk Infrastructure-as-Code Scanning
+        run: snyk iac test
+        continue-on-error: true
+
