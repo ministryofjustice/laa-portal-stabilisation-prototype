@@ -19,7 +19,10 @@ jobs:
 
       - name: Run Snyk to check Docker images for vulnerabilities
         run: docker build . --file Dockerfile --tag laa-portal-stabilisation-prototype:latest --progress=plain --no-cache
-
+      - name: Docker Vulnerabilities
+        uses: snyk/actions/docker@master
+        with:
+          image: stabilisation-prototype:latest
 
 #      - name: Run Snyk to check for vulnerabilities
 #        uses: snyk/actions/maven-3-jdk-21@master
