@@ -14,4 +14,4 @@ jobs:
         with:
           ignore-files: "docker-compose.override.yml,values-dev.yaml,values-test.yaml,values-staging.yaml,values-uat.yaml,values-prod.yaml,ingress.yaml,deployment.yaml,hpa.yaml,networkpolicy.yaml,service.yaml,serviceaccount.yaml,servicemonitor.yaml,test-connection.yaml"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
