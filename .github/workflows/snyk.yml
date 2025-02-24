@@ -25,7 +25,11 @@ jobs:
         continue-on-error: true
         with:
           image: laa-portal-stabilisation-prototype:latest
-          args: --sarif-file-output=docker_test.sarif --sarif
+          args: --sarif-file-output=snyk_docker_test.sarif --sarif
+
+      - name: Replace security-severity null
+        run:
+          sed -i 's/"null"/"0"/g' snyk_docker_test.sarif
 
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven-3-jdk-21@master
@@ -55,7 +59,7 @@ jobs:
       - name: Create SARIF directory and move SARIF files
         run: |
           mkdir sarif_files &&
-          mv snyk_test.sarif snyk_code_test.sarif snyk_iac_test.sarif docker_test.sarif sarif_files/
+          mv snyk_test.sarif snyk_code_test.sarif snyk_iac_test.sarif snyk_docker_test.sarif sarif_files/
 
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
