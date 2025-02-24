@@ -27,31 +27,31 @@ jobs:
           image: laa-portal-stabilisation-prototype:latest
           args: --sarif-file-output=docker_test.sarif --sarif
 
-#      - name: Run Snyk to check for vulnerabilities
-#        uses: snyk/actions/maven-3-jdk-21@master
-#        continue-on-error: true
-#        with:
-#          command: test --sarif
-#          args: --sarif-file-output=snyk_test.sarif
-#
-#      - name: Replace security-severity undefined
-#        run:
-#          sed -i 's/"undefined"/"0"/g' snyk_test.sarif
-#
-#      - name: Run Snyk code test
-#        uses: snyk/actions/maven-3-jdk-21@master
-#        continue-on-error: true
-#        with:
-#          command: code test --sarif
-#          args: --sarif-file-output=snyk_code_test.sarif
-#
-#      - name: Snyk Infrastructure-as-Code Scanning
-#        uses: snyk/actions/maven-3-jdk-21@master
-#        continue-on-error: true
-#        with:
-#          command: iac test --sarif
-#          args: --sarif-file-output=snyk_iac_test.sarif
-#
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven-3-jdk-21@master
+        continue-on-error: true
+        with:
+          command: test --sarif
+          args: --sarif-file-output=snyk_test.sarif
+
+      - name: Replace security-severity undefined
+        run:
+          sed -i 's/"undefined"/"0"/g' snyk_test.sarif
+
+      - name: Run Snyk code test
+        uses: snyk/actions/maven-3-jdk-21@master
+        continue-on-error: true
+        with:
+          command: code test --sarif
+          args: --sarif-file-output=snyk_code_test.sarif
+
+      - name: Snyk Infrastructure-as-Code Scanning
+        uses: snyk/actions/maven-3-jdk-21@master
+        continue-on-error: true
+        with:
+          command: iac test --sarif
+          args: --sarif-file-output=snyk_iac_test.sarif
+
       - name: Create SARIF directory and move SARIF files
         run: |
           mkdir sarif_files &&
