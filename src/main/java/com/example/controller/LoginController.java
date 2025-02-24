@@ -28,14 +28,11 @@ public class LoginController {
   public String handleLogin(@ModelAttribute User user, Model model) {
     String validUsername = "testUser";
     String validPassword = "password123";
-    System.out.println(user.getUsername());
-    System.out.println(user.getPassword());
 
     if (validUsername.equals(user.getUsername()) && validPassword.equals(user.getPassword())) {
       model.addAttribute("message", "Welcome " + user.getUsername() + "!");
       return "home";
     } else {
-
       model.addAttribute("error", "Invalid username or password.");
       return "index";
     }
@@ -44,13 +41,10 @@ public class LoginController {
   @GetMapping("/home")
   public String home(Model model, Authentication authentication) {
     if(authentication != null) {
-      System.out.println("Authentication object is NOT null");
       OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
       OAuth2User principal = oauthToken.getPrincipal();
       String name = principal.getAttribute("name");
       model.addAttribute("name", name);
-    } else {
-      System.out.println("Authentication object is null");
     }
 
     return "home";

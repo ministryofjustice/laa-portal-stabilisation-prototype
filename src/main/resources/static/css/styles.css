@@ -1,0 +1,11 @@
+.logout {
+    float: right;
+    text-decoration: none;
+    position: absolute;
+    right: 0;
+    top: 20px;
+}
+.logout a {
+    color: white;
+    text-decoration: none;
+}
