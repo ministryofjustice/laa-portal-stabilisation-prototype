@@ -33,5 +33,5 @@ jobs:
       - name: Run Checkstyle
         run: ./gradlew checkstyleMain checkstyleTest
         env:
-          GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR}}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ secrets.MY_GITHUB_ACTOR}}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

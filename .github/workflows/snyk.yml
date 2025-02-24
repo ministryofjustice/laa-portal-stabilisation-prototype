@@ -1,0 +1,68 @@
+name: workflow for Maven using Snyk security scan
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+jobs:
+  vulnerability-scan:
+    runs-on: ubuntu-latest
+    env:
+      MY_GITHUB_ACTOR: ${{ secrets.MY_GITHUB_ACTOR }}
+      MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+
+      - name: Run Snyk to check Docker images for vulnerabilities
+        run: docker build . --file Dockerfile-WorkFlow --tag laa-portal-stabilisation-prototype:latest --progress=plain --no-cache
+
+      - name: Docker Vulnerabilities
+        uses: snyk/actions/docker@master
+        continue-on-error: true
+        with:
+          image: laa-portal-stabilisation-prototype:latest
+          args: --sarif-file-output=snyk_docker_test.sarif --sarif
+
+      - name: Replace security-severity null
+        run:
+          sed -i 's/"null"/"0"/g' snyk_docker_test.sarif
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven-3-jdk-21@master
+        continue-on-error: true
+        with:
+          command: test --sarif
+          args: --sarif-file-output=snyk_test.sarif
+
+      - name: Replace security-severity undefined
+        run:
+          sed -i 's/"undefined"/"0"/g' snyk_test.sarif
+
+      - name: Run Snyk code test
+        uses: snyk/actions/maven-3-jdk-21@master
+        continue-on-error: true
+        with:
+          command: code test --sarif
+          args: --sarif-file-output=snyk_code_test.sarif
+
+      - name: Snyk Infrastructure-as-Code Scanning
+        uses: snyk/actions/maven-3-jdk-21@master
+        continue-on-error: true
+        with:
+          command: iac test --sarif
+          args: --sarif-file-output=snyk_iac_test.sarif
+
+      - name: Create SARIF directory and move SARIF files
+        run: |
+          mkdir sarif_files &&
+          mv snyk_test.sarif snyk_code_test.sarif snyk_iac_test.sarif snyk_docker_test.sarif sarif_files/
+
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: sarif_files
+
