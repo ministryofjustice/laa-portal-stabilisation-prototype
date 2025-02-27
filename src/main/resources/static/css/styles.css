@@ -11,6 +11,7 @@
     color: white;
     font-size: 1em;
     font-weight: bold;
+    cursor:pointer;
 }
 .application {
     background: #f3f2f1;
