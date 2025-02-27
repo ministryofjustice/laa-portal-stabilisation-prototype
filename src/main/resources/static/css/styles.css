@@ -9,3 +9,18 @@
     color: white;
     text-decoration: none;
 }
+.application {
+    background: #f3f2f1;
+    padding: 1em;
+    margin-bottom: 1em;
+    width: 80%;
+}
+.application a.govuk-link {
+    margin-bottom: 1em;
+    display: inline-block;
+    color: #1d70b8;
+    text-decoration: underline;
+    width: auto;
+    font-weight: bold;
+    font-size: 1.2em;
+}
