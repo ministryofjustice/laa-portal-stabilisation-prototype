@@ -52,7 +52,6 @@ public class SecurityConfig {
         )
         .logout(logout -> logout
             .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
-//            .logoutSuccessHandler(oidcLogoutSuccessHandler()) // where to go after logout
             .logoutSuccessUrl("/")
             .clearAuthentication(true)
             .deleteCookies("JSESSIONID") // clear the session cookie
@@ -62,16 +61,6 @@ public class SecurityConfig {
 
 
     return http.build();
-  }
-
-
-  @Bean
-  public OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler() {
-    OidcClientInitiatedLogoutSuccessHandler successHandler = new OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository);
-    String postLogoutRedirectUri = UriComponentsBuilder.fromUriString("http://localhost:8080/logoutSuccess").build().toString();
-    successHandler.setPostLogoutRedirectUri(postLogoutRedirectUri);
-    System.out.println("postLogoutRedirectUri: " + postLogoutRedirectUri);
-    return successHandler;
   }
 
   /**
