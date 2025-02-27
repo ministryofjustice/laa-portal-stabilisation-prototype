@@ -5,7 +5,10 @@
     right: 0;
     top: 20px;
 }
-.logout a {
+.logout button {
+    background: none;
+    box-shadow: none;
     color: white;
-    text-decoration: none;
+    border: none;
+    cursor: pointer;
 }

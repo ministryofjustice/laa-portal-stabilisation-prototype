@@ -25,12 +25,19 @@ public class LoginController {
    * Javadoc comment.
    */
   @PostMapping("/login")
-  public String handleLogin(@ModelAttribute User user, Model model) {
+  public String handleLogin(@ModelAttribute User user, Model model, Authentication authentication) {
     String validUsername = "testUser";
     String validPassword = "password123";
 
     if (validUsername.equals(user.getUsername()) && validPassword.equals(user.getPassword())) {
       model.addAttribute("message", "Welcome " + user.getUsername() + "!");
+      if(authentication != null) {
+        OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+        OAuth2User principal = oauthToken.getPrincipal();
+        String name = principal.getAttribute("name");
+        model.addAttribute("name", name);
+      }
+
       return "home";
     } else {
       model.addAttribute("error", "Invalid username or password.");
@@ -53,6 +60,12 @@ public class LoginController {
   @GetMapping("/migrate")
   public String migrate() {
     return "migrate";
+  }
+
+  @GetMapping("/logoutSuccess")
+  public String logoutSuccess() {
+    System.out.println("logout success");
+    return "logoutSuccess";
   }
 
 }
