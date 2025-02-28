@@ -56,7 +56,6 @@ public class SecurityConfig {
             .clearAuthentication(true)
             .deleteCookies("JSESSIONID") // clear the session cookie
             .invalidateHttpSession(true)
-            .clearAuthentication(true)
             .permitAll());
 
 
