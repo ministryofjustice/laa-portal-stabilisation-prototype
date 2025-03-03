@@ -9,6 +9,11 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
+checkstyle {
+    toolVersion = '10.21.2'
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+}
+
 repositories {
     mavenCentral()
 }
@@ -21,10 +26,22 @@ dependencies {
     implementation 'org.projectlombok:lombok'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
+
     annotationProcessor 'org.projectlombok:lombok'
 
     implementation 'org.springframework.boot:spring-boot-starter-graphql'
     implementation 'uk.gov.laa.ccms.springboot:laa-ccms-spring-boot-starter-govuk-dialect'
+
+    // Microsoft Graph SDK dependencies
+    implementation 'com.microsoft.graph:microsoft-graph:6.30.0'
+    implementation 'com.microsoft.graph:microsoft-graph-core:3.6.1'
+
+    // MSAL for authentication
+    implementation 'com.microsoft.azure:msal4j:1.19.0'
+
+    // Azure Identity SDK for OAuth2 and token management
+    implementation 'com.azure:azure-identity:1.15.0'
 
     implementation 'com.azure.spring:azure-spring-boot-starter-active-directory:3.14.0'
 
