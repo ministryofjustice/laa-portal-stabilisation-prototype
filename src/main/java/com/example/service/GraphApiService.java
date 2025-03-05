@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.graph.models.AppRole;
 import com.microsoft.graph.models.AppRoleAssignment;
 import com.microsoft.graph.models.User;
-import com.microsoft.graph.serviceclient.GraphServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -27,11 +26,7 @@ import java.util.List;
 @Service
 public class GraphApiService {
 
-    private static final String AZURE_CLIENT_ID = System.getenv("AZURE_CLIENT_ID");
-    private static final String AZURE_TENANT_ID = System.getenv("AZURE_TENANT_ID");
-    private static final String AZURE_CLIENT_SECRET = System.getenv("AZURE_CLIENT_SECRET");
     private static final String GRAPH_URL = "https://graph.microsoft.com/v1.0";
-    private static GraphServiceClient graphClient;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -70,13 +65,13 @@ public class GraphApiService {
     public User getUserProfile(String accessToken) {
         String url = GRAPH_URL + "/me";
         try {
-            String responseBody = callGraphApi(accessToken, url);
+            String jsonResponse = callGraphApi(accessToken, url);
             ObjectMapper objectMapper = new ObjectMapper();
 
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 
-            return objectMapper.readValue(responseBody, User.class);
+            return objectMapper.readValue(jsonResponse, User.class);
         } catch (Exception e) {
             logger.error("Unexpected error processing user profile", e);
         }

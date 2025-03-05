@@ -72,13 +72,14 @@ public class LoginService {
 
         OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
         OAuth2User principal = oauthToken.getPrincipal();
-        String name = principal.getAttribute("name");
 
         OAuth2AccessToken accessToken = authorizedClient.getAccessToken();
         if (accessToken == null) {
             logger.info("Access token is null");
             return null;
         }
+
+        String name = principal.getAttribute("name");
 
         String tokenValue = accessToken.getTokenValue();
         session.setAttribute("accessToken", tokenValue);
