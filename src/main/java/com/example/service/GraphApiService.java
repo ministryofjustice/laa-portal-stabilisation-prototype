@@ -1,13 +1,11 @@
 package com.example.service;
 
-import com.azure.identity.ClientSecretCredential;
-import com.azure.identity.ClientSecretCredentialBuilder;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.graph.models.AppRole;
 import com.microsoft.graph.models.AppRoleAssignment;
 import com.microsoft.graph.models.User;
-import com.microsoft.graph.models.UserCollectionResponse;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,40 +34,6 @@ public class GraphApiService {
     private static GraphServiceClient graphClient;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    /**
-     * Returns all Users from Entra.
-     *
-     * @return {@code List<User>}
-     */
-    public static UserCollectionResponse getUsers() {
-        GraphServiceClient graphClient = getGraphClient();
-
-        return graphClient.users().get();
-    }
-
-    /**
-     * Get Authenticated Graph Client for API usage.
-     *
-     * @return Usable and authenticated Graph Client
-     */
-    private static GraphServiceClient getGraphClient() {
-        if (graphClient == null) {
-
-            // Create secret
-            final ClientSecretCredential credential = new ClientSecretCredentialBuilder()
-                    .clientId(AZURE_CLIENT_ID)
-                    .tenantId(AZURE_TENANT_ID)
-                    .clientSecret(AZURE_CLIENT_SECRET)
-                    .build();
-
-            final String[] scopes = new String[]{"https://graph.microsoft.com/.default"};
-
-            graphClient = new GraphServiceClient(credential, scopes);
-        }
-
-        return graphClient;
-    }
 
     /**
      * Get App Role Assignments of User
@@ -107,6 +73,9 @@ public class GraphApiService {
             String responseBody = callGraphApi(accessToken, url);
             ObjectMapper objectMapper = new ObjectMapper();
 
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+
             return objectMapper.readValue(responseBody, User.class);
         } catch (Exception e) {
             logger.error("Unexpected error processing user profile", e);
@@ -120,7 +89,7 @@ public class GraphApiService {
      * @param accessToken The OAuth2 access token required to authenticate the request.
      * @return Last sign-in timestamp as a {@link String}, or {@code null} if not available.
      */
-    public String getLastSignInTime(String accessToken) {
+    public LocalDateTime getLastSignInTime(String accessToken) {
         String url = GRAPH_URL + "/me?$select=signInActivity";
 
         String jsonResponse = callGraphApi(accessToken, url);
@@ -131,7 +100,10 @@ public class GraphApiService {
             JsonNode signInActivity = root.path("signInActivity");
 
             if (!signInActivity.isMissingNode()) {
-                return signInActivity.path("lastSignInDateTime").asText(null);
+                String lastSignInString = signInActivity.path("lastSignInDateTime").asText(null);
+                if (lastSignInString != null) {
+                    return LocalDateTime.parse(lastSignInString, DateTimeFormatter.ISO_DATE_TIME);
+                }
             }
         } catch (Exception e) {
             logger.error("Unexpected error retrieving last sign-in time", e);

@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -87,9 +89,15 @@ public class LoginService {
 
         User user = graphApiService.getUserProfile(tokenValue);
 
-        String lastLogin = graphApiService.getLastSignInTime(tokenValue);
+        LocalDateTime lastLogin = graphApiService.getLastSignInTime(tokenValue);
+        String formattedLastLogin = "N/A";
+
+        if (lastLogin != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            formattedLastLogin = lastLogin.format(formatter);
+        }
 
         return new UserSessionData(name, tokenValue, appRoleAssignments,
-                userAppRoleAssignments, user, lastLogin);
+                userAppRoleAssignments, user, formattedLastLogin);
     }
 }
