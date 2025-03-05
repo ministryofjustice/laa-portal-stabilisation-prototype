@@ -5,6 +5,9 @@ import com.example.service.UserService;
 import com.microsoft.graph.models.UserCollectionResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * User Controller
+ */
 public class UserController {
 
     private final UserService userService;
