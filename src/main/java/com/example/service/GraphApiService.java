@@ -4,9 +4,7 @@ import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microsoft.graph.models.AppRole;
-import com.microsoft.graph.models.AppRoleAssignment;
-import com.microsoft.graph.models.UserCollectionResponse;
+import com.microsoft.graph.models.*;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +29,26 @@ public class GraphApiService {
     private static GraphServiceClient graphClient;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    /**
+     * create User at Entra
+     *
+     * @return {@code User}
+     */
+    public static User createUser(String username, String password) {
+        GraphServiceClient graphClient = getGraphClient();
+
+        User user = new User();
+        user.setAccountEnabled(true);
+        user.setDisplayName(username);
+        user.setMailNickname(username);
+        user.setUserPrincipalName(username);
+        PasswordProfile passwordProfile = new PasswordProfile();
+        passwordProfile.setForceChangePasswordNextSignIn(true);
+        passwordProfile.setPassword(password);
+        user.setPasswordProfile(passwordProfile);
+        return graphClient.users().post(user);
+    }
 
     /**
      * Returns all Users from Entra

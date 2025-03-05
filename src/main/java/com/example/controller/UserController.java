@@ -2,9 +2,14 @@ package com.example.controller;
 
 import com.example.service.GraphApiService;
 import com.example.service.UserService;
+import com.microsoft.graph.models.User;
 import com.microsoft.graph.models.UserCollectionResponse;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+@Controller
 public class UserController {
 
     private final UserService userService;
@@ -21,5 +26,22 @@ public class UserController {
     @GetMapping("/users")
     public UserCollectionResponse getUsersFromGraph() throws Exception {
         return GraphApiService.getUsers();
+    }
+
+    /**
+     * Add new user via Microsoft Graph API.
+     */
+    @PostMapping("/register")
+    public User addUserToGraph(@RequestParam("username") String username,
+                               @RequestParam("password") String password) throws Exception {
+        return GraphApiService.createUser(username, password);
+    }
+
+    /**
+     * Retrieves a list of users from Microsoft Graph API.
+     */
+    @GetMapping("/register")
+    public String register() throws Exception {
+        return "register";
     }
 }
