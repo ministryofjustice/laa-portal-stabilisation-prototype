@@ -3,7 +3,6 @@ package com.example.controller;
 import com.example.model.User;
 import com.example.model.UserSessionData;
 import com.example.service.LoginService;
-import com.microsoft.graph.models.AppRole;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +35,10 @@ public class LoginController {
         return "index";
     }
 
+    /**
+     * @param email input by user
+     * @return home view if successful, else login view
+     */
     @PostMapping("/login")
     public RedirectView handleLogin(@RequestParam("email") String email) {
         try {
@@ -47,20 +50,31 @@ public class LoginController {
         }
     }
 
+    /**
+     * Handles GET requests to the "/home" endpoint.
+     *
+     * @param model          the model to be populated with user session data
+     * @param authentication the authentication object containing user credentials
+     * @param session        the current HTTP session
+     * @param authClient     the OAuth2 authorized client for Azure
+     * @return the view for home
+     */
     @GetMapping("/home")
     public String home(Model model, Authentication authentication, HttpSession session,
-                       @RegisteredOAuth2AuthorizedClient("azure") OAuth2AuthorizedClient authorizedClient) {
+                       @RegisteredOAuth2AuthorizedClient("azure")
+                       OAuth2AuthorizedClient authClient) {
         try {
-            UserSessionData userSessionData = loginService.processUserSession(authentication, authorizedClient, session);
+            UserSessionData userSessionData = loginService.processUserSession(
+                    authentication, authClient, session);
 
             if (userSessionData != null) {
                 model.addAttribute("name", userSessionData.getName());
                 model.addAttribute("appRoleAssignments", userSessionData.getAppRoleAssignments());
+                model.addAttribute("appRole", userSessionData.getUserAppRoles());
+                model.addAttribute("user", userSessionData.getUser());
+                model.addAttribute("lastLogin", userSessionData.getLastLogin());
 
-                for (AppRole role : userSessionData.getUserAppRoles()) {
-                    logger.info("Display Name: {}", role.getDisplayName());
-                    logger.info("Description: {}", role.getDescription());
-                }
+                System.out.println("LAST LOGIN:: " + userSessionData.getLastLogin());
             } else {
                 logger.info("No access token found");
             }

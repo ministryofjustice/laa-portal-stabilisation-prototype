@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.model.UserSessionData;
 import com.microsoft.graph.models.AppRole;
 import com.microsoft.graph.models.AppRoleAssignment;
+import com.microsoft.graph.models.User;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,12 +54,16 @@ public class LoginService {
     }
 
     /**
+     * Will fetch user session data
+     *
      * @param authentication   The authentication object containing user details.
      * @param authorizedClient The authorized OAuth2 client providing the access token.
      * @param session          The HTTP session used to store the access token.
      * @return A {@link UserSessionData} object containing the user data
      */
-    public UserSessionData processUserSession(Authentication authentication, OAuth2AuthorizedClient authorizedClient, HttpSession session) {
+    public UserSessionData processUserSession(Authentication authentication,
+                                              OAuth2AuthorizedClient authorizedClient,
+                                              HttpSession session) {
         if (authentication == null) {
             return null;
         }
@@ -76,9 +81,15 @@ public class LoginService {
         String tokenValue = accessToken.getTokenValue();
         session.setAttribute("accessToken", tokenValue);
 
-        List<AppRoleAssignment> appRoleAssignments = graphApiService.getAppRoleAssignments(tokenValue);
+        List<AppRoleAssignment> appRoleAssignments =
+                graphApiService.getAppRoleAssignments(tokenValue);
         List<AppRole> userAppRoleAssignments = graphApiService.getUserAssignedApps(tokenValue);
 
-        return new UserSessionData(name, tokenValue, appRoleAssignments, userAppRoleAssignments);
+        User user = graphApiService.getUserProfile(tokenValue);
+
+        String lastLogin = graphApiService.getLastSignInTime(tokenValue);
+
+        return new UserSessionData(name, tokenValue, appRoleAssignments,
+                userAppRoleAssignments, user, lastLogin);
     }
 }
