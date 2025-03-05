@@ -21,25 +21,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/", "/login", "/migrate", "/css/**", "/js/**",
-                                "/assets/**")
-                        .permitAll()
-                        .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/oauth2/authorization/azure")
-                        .defaultSuccessUrl("/home", true)
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/")
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .deleteCookies("JSESSIONID")
-                        .permitAll()
-                );
+        http.authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/", "/login", "/migrate", "/css/**", "/js/**", "/assets/**")
+                .permitAll()
+                .anyRequest().authenticated()
+        ).oauth2Login(oauth2 -> oauth2
+                .loginPage("/oauth2/authorization/azure")
+                .defaultSuccessUrl("/home", true)
+                .permitAll()
+        ).logout(logout -> logout
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll());
         return http.build();
     }
 }
