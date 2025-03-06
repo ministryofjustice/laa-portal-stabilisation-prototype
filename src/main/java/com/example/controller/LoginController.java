@@ -24,58 +24,72 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class LoginController {
 
-  private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-  private final LoginService loginService;
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private final LoginService loginService;
 
-  public LoginController(LoginService loginService) {
-    this.loginService = loginService;
-  }
-
-  @GetMapping("/")
-  public String login(Model model) {
-    model.addAttribute("user", new User());
-    return "index";
-  }
-
-  @PostMapping("/login")
-  public RedirectView handleLogin(@RequestParam("email") String email, RedirectAttributes redirectAttributes) {
-    if (email == null || email.trim().isEmpty()) {
-      redirectAttributes.addFlashAttribute("errorMessage", "An incorrect Username or Password was specified");
-      return new RedirectView("/");
+    public LoginController(LoginService loginService) {
+        this.loginService = loginService;
     }
-    try {
-      String azureLoginUrl = loginService.buildAzureLoginUrl(email);
-      return new RedirectView(azureLoginUrl);
-    } catch (Exception e) {
-      logger.error("Error logging in: {}", e.getMessage());
-      return new RedirectView("/");
+
+    @GetMapping("/")
+    public String login(Model model) {
+        model.addAttribute("user", new User());
+        return "index";
     }
-  }
 
-  @GetMapping("/home")
-  public String home(Model model, Authentication authentication, HttpSession session,
-                     @RegisteredOAuth2AuthorizedClient("azure") OAuth2AuthorizedClient authorizedClient) {
-    try {
-      UserSessionData userSessionData = loginService.processUserSession(authentication, authorizedClient, session);
-
-      if (userSessionData != null) {
-        model.addAttribute("name", userSessionData.getName());
-        model.addAttribute("appRoleAssignments", userSessionData.getAppRoleAssignments());
-        for (AppRole role : userSessionData.getUserAppRoles()) {
-          logger.info("Display Name: {}", role.getDisplayName());
-          logger.info("Description: {}", role.getDescription());
+    /**
+     * @param email input by user
+     * @return home view if successful, else login view
+     */
+    @PostMapping("/login")
+    public RedirectView handleLogin(@RequestParam("email") String email, RedirectAttributes redirectAttributes) {
+        if (email == null || email.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "An incorrect Username or Password was specified");
+            return new RedirectView("/");
         }
-      } else {
-        logger.info("No access token found");
-      }
-    } catch (Exception e) {
-      logger.error("Error getting user list: {}", e.getMessage());
+        try {
+            String azureLoginUrl = loginService.buildAzureLoginUrl(email);
+            return new RedirectView(azureLoginUrl);
+        } catch (Exception e) {
+            logger.error("Error logging in: {}", e.getMessage());
+            return new RedirectView("/");
+        }
     }
-    return "home";
-  }
 
-  @GetMapping("/migrate")
-  public String migrate() {
-    return "migrate";
-  }
+    /**
+     * Handles GET requests to the "/home" endpoint.
+     *
+     * @param model          the model to be populated with user session data
+     * @param authentication the authentication object containing user credentials
+     * @param session        the current HTTP session
+     * @param authClient     the OAuth2 authorized client for Azure
+     * @return the view for home
+     */
+    @GetMapping("/home")
+    public String home(Model model, Authentication authentication, HttpSession session,
+                       @RegisteredOAuth2AuthorizedClient("azure")
+                       OAuth2AuthorizedClient authClient) {
+        try {
+            UserSessionData userSessionData = loginService.processUserSession(
+                authentication, authClient, session);
+
+            if (userSessionData != null) {
+                model.addAttribute("name", userSessionData.getName());
+                model.addAttribute("appRoleAssignments", userSessionData.getAppRoleAssignments());
+                model.addAttribute("appRole", userSessionData.getUserAppRoles());
+                model.addAttribute("user", userSessionData.getUser());
+                model.addAttribute("lastLogin", userSessionData.getLastLogin());
+            } else {
+                logger.info("No access token found");
+            }
+        } catch (Exception e) {
+            logger.error("Error getting user list: {}", e.getMessage());
+        }
+        return "home";
+    }
+
+    @GetMapping("/migrate")
+    public String migrate() {
+        return "migrate";
+    }
 }

@@ -21,26 +21,22 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/", "/login", "/migrate", "/css/**", "/js/**", "/assets/**")
-                        .permitAll()
-                        .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/oauth2/authorization/azure")
-                        .defaultSuccessUrl("/home", true)
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
-                    .logoutSuccessUrl("/")
-                    .clearAuthentication(true)
-                    .deleteCookies("JSESSIONID") // clear the session cookie
-                    .invalidateHttpSession(true)
-                    .permitAll());
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/", "/login", "/migrate", "/css/**", "/js/**", "/assets/**")
+                .permitAll()
+                .anyRequest().authenticated()
+        ).oauth2Login(oauth2 -> oauth2
+                .loginPage("/oauth2/authorization/azure")
+                .defaultSuccessUrl("/home", true)
+                .permitAll()
+        ).logout(logout -> logout
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
+                .logoutSuccessUrl("/")
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID") // clear the session cookie
+                .invalidateHttpSession(true)
+                .permitAll());
         return http.build();
     }
 }
-
