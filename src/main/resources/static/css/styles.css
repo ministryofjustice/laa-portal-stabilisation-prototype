@@ -28,3 +28,11 @@
     font-weight: bold;
     font-size: 1.2em;
 }
+.error-message {
+    color: #d4351c;
+    margin-bottom: 5px;
+}
+
+.error-input {
+    border: 1px solid #d4351c;
+}

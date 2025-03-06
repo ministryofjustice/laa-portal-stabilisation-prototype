@@ -25,9 +25,7 @@
     </ol>
 </nav>
 <main class="govuk-main-wrapper" id="main-content">
-    <div style="color:red;" th:if="${error}">
-        <p th:text="${error}"></p>
-    </div>
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-xl">LAA Online Portal</h1>
@@ -48,10 +46,22 @@
             </div>
             <form th:action="@{/login}" th:method="post">
                 <div class="govuk-form-group">
-                    <label class="govuk-label">
-                        Username:
-                    </label>
-                    <input class="govuk-input govuk-input--width-10" name="email" type="email">
+
+                    <div th:if="${errorMessage != null}">
+                        <p th:text="${errorMessage}" class="error-message govuk-body"></p>
+
+                        <label class="govuk-label" for="email">
+                            Username:
+                        </label>
+                        <input class="govuk-input govuk-input--width-10" name="email" type="email"
+                               id="email">
+                    </div>
+                    <div th:if="${errorMessage == null}">
+                        <label class="govuk-label" for="email2">
+                            Username:
+                        </label>
+                        <input class="govuk-input govuk-input--width-10" name="email" type="email" id="email2">
+                    </div>
                 </div>
 
                 <button class="govuk-button govuk-button--start" data-govuk-button-init="" data-module="govuk-button"
@@ -80,7 +90,7 @@
                 </li>
 
                 <li>
-                    <a class="govuk-link" href="new-laa-sign-in.html">New portal</a>
+                    <a class="govuk-link" href="#">New portal</a>
                 </li>
 
                 <li>
