@@ -3,7 +3,6 @@ package com.example.controller;
 import com.example.model.User;
 import com.example.model.UserSessionData;
 import com.example.service.LoginService;
-import com.microsoft.graph.models.AppRole;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +43,8 @@ public class LoginController {
     @PostMapping("/login")
     public RedirectView handleLogin(@RequestParam("email") String email, RedirectAttributes redirectAttributes) {
         if (email == null || email.trim().isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "An incorrect Username or Password was specified");
+            redirectAttributes.addFlashAttribute("errorMessage",
+                "An incorrect Username or Password was specified");
             return new RedirectView("/");
         }
         try {
@@ -66,12 +66,9 @@ public class LoginController {
      * @return the view for home
      */
     @GetMapping("/home")
-    public String home(Model model, Authentication authentication, HttpSession session,
-                       @RegisteredOAuth2AuthorizedClient("azure")
-                       OAuth2AuthorizedClient authClient) {
+    public String home(Model model, Authentication authentication, HttpSession session, @RegisteredOAuth2AuthorizedClient("azure") OAuth2AuthorizedClient authClient) {
         try {
-            UserSessionData userSessionData = loginService.processUserSession(
-                authentication, authClient, session);
+            UserSessionData userSessionData = loginService.processUserSession(authentication, authClient, session);
 
             if (userSessionData != null) {
                 model.addAttribute("name", userSessionData.getName());
