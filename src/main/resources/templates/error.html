@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{layout :: layout(title=~{::title},mainContent=~{::#main-content},breadcrumbs=~{::#breadcrumbs})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ERROR</title>
+</head>
+<body>
+<div id="breadcrumbs" style="padding-top: 40px;"></div>
+<div id="main-content">
+    <div class="govuk-grid-row" th:unless="${error == 'Not Found'}">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">
+                <span class="govuk-caption-l govuk-!-font-weight-bold" th:text="${error}"></span>
+            </h1>
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+          <p class="govuk-body">
+                To enable the LAA to investigate the issue, please can you contact our online support team.
+            </p>
+        </div>
+    </div>
+    <div class="govuk-grid-row" th:if="${error == 'Not Found'}">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">
+                Page not found
+            </h1>
+            <p class="govuk-body" >
+                If you typed the web address, check it is correct.
+            </p>
+            <p class="govuk-body" >
+                If you pasted the web address, check you copied the entire address.
+            </p>
+            <p class="govuk-body" >
+                If the web address is correct, or you selected a link or button, contact our online support team if you need to speak to someone.
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

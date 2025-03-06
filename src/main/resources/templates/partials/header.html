@@ -14,5 +14,8 @@
                 Legal Aid Agency Portal
             </a>
         </div>
+        <div class="logout" th:if="${#authentication.isAuthenticated()}">
+            <a th:href="@{/logout}">Log out</a>
+        </div>
     </div>
 </header>
