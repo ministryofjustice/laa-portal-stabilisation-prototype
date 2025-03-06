@@ -34,7 +34,8 @@ public class UserController {
     @PostMapping("/register")
     public User addUserToGraph(@RequestParam("username") String username,
                                @RequestParam("password") String password) throws Exception {
-        return GraphApiService.createUser(username, password);
+        User user = GraphApiService.createUser(username, password);
+        return user;
     }
 
     /**
