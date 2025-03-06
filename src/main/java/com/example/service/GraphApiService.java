@@ -35,6 +35,20 @@ public class GraphApiService {
      *
      * @return {@code User}
      */
+    public static Invitation inviteUser(String email) {
+        GraphServiceClient graphClient = getGraphClient();
+
+        Invitation invitation = new Invitation();
+        invitation.setInvitedUserEmailAddress(email);
+        invitation.setInviteRedirectUrl("http://localhost:8080");
+        return  graphClient.invitations().post(invitation);
+    }
+
+    /**
+     * create User at Entra
+     *
+     * @return {@code User}
+     */
     public static User createUser(String username, String password) {
         GraphServiceClient graphClient = getGraphClient();
 

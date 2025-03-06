@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.service.GraphApiService;
 import com.example.service.UserService;
+import com.microsoft.graph.models.Invitation;
 import com.microsoft.graph.models.User;
 import com.microsoft.graph.models.UserCollectionResponse;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,15 @@ public class UserController {
                                @RequestParam("password") String password) throws Exception {
         User user = GraphApiService.createUser(username, password);
         return user;
+    }
+
+    /**
+     * Add new user via Microsoft Graph API.
+     */
+    @PostMapping("/register")
+    public Invitation addUserToGraph(@RequestParam("email") String email) throws Exception {
+        Invitation result = GraphApiService.inviteUser(email);
+        return result;
     }
 
     /**
