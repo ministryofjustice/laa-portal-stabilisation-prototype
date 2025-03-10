@@ -54,14 +54,11 @@ public class GraphApiService {
 
         User user = new User();
         user.setAccountEnabled(true);
-        //Another object with the same value for property userPrincipalName already exists.
         user.setDisplayName(username);
-        //less than 65 characters and do not contain spaces
         user.setMailNickname("someone");
         user.setUserPrincipalName(username+"@mojodevlexternal.onmicrosoft.com");
         PasswordProfile passwordProfile = new PasswordProfile();
         passwordProfile.setForceChangePasswordNextSignIn(true);
-        //The specified password does not comply with password complexity requirements. Please provide a different password.
         passwordProfile.setPassword(password);
         user.setPasswordProfile(passwordProfile);
         return graphClient.users().post(user);
