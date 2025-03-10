@@ -25,7 +25,7 @@
 <div id="main-content">
     <h1>Welcome</h1>
     <p class="govuk-body" th:if="${param.error}" style="color:red;">Invalid username or password</p>
-
+    <a th:if="${redeemUrl}" th:href="${redeemUrl}">Click here ...</a>
     <form th:action="@{/invite}" th:method="post">
         <label>
             <input type="text" name="email" placeholder="email">

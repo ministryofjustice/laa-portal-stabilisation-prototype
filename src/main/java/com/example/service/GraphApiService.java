@@ -41,6 +41,7 @@ public class GraphApiService {
         Invitation invitation = new Invitation();
         invitation.setInvitedUserEmailAddress(email);
         invitation.setInviteRedirectUrl("http://localhost:8080");
+        invitation.setSendInvitationMessage(true);
         return  graphClient.invitations().post(invitation);
     }
 
