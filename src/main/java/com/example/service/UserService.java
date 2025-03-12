@@ -29,12 +29,12 @@ public class UserService {
      * @return {@code User}
      */
     public static Invitation inviteUser(String email) {
-        GraphServiceClient graphClient = getGraphClient();
 
         Invitation invitation = new Invitation();
         invitation.setInvitedUserEmailAddress(email);
         invitation.setInviteRedirectUrl("http://localhost:8080");
         invitation.setSendInvitationMessage(true);
+        GraphServiceClient graphClient = getGraphClient();
         return  graphClient.invitations().post(invitation);
     }
 
@@ -44,17 +44,17 @@ public class UserService {
      * @return {@code User}
      */
     public static User createUser(String username, String password) {
-        GraphServiceClient graphClient = getGraphClient();
 
         User user = new User();
         user.setAccountEnabled(true);
         user.setDisplayName(username);
         user.setMailNickname("someone");
-        user.setUserPrincipalName(username+"@mojodevlexternal.onmicrosoft.com");
+        user.setUserPrincipalName(username + "@mojodevlexternal.onmicrosoft.com");
         PasswordProfile passwordProfile = new PasswordProfile();
         passwordProfile.setForceChangePasswordNextSignIn(true);
         passwordProfile.setPassword(password);
         user.setPasswordProfile(passwordProfile);
+        GraphServiceClient graphClient = getGraphClient();
         return graphClient.users().post(user);
     }
 
