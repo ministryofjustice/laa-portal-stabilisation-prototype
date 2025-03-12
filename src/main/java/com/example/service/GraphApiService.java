@@ -31,9 +31,9 @@ public class GraphApiService {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
-     * create User at Entra
+     * invite User at Entra
      *
-     * @return {@code User}
+     * @return {@code Invitation}
      */
     public static Invitation inviteUser(String email) {
         GraphServiceClient graphClient = getGraphClient();

@@ -55,7 +55,6 @@ public class UserController {
     public Invitation invite(@RequestParam("email") String email, Model model) throws Exception {
         Invitation result = GraphApiService.inviteUser(email);
         model.addAttribute("redeemUrl", result.getInviteRedeemUrl());
-        //The invited user already exists in the directory as object ID: dc8b9eaa-68c0-4781-aa4f-be3a015c90f0, but the account is blocked from signing in. If the account is unblocked, they can use that account to sign in to shared apps and resources.
         return result;
     }
 
