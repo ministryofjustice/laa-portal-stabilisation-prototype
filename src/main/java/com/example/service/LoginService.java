@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.model.UserSessionData;
 import com.microsoft.graph.models.AppRole;
 import com.microsoft.graph.models.AppRoleAssignment;
+import com.microsoft.graph.models.User;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -53,19 +56,22 @@ public class LoginService {
     }
 
     /**
+     * Will fetch user session data
+     *
      * @param authentication   The authentication object containing user details.
      * @param authorizedClient The authorized OAuth2 client providing the access token.
      * @param session          The HTTP session used to store the access token.
      * @return A {@link UserSessionData} object containing the user data
      */
-    public UserSessionData processUserSession(Authentication authentication, OAuth2AuthorizedClient authorizedClient, HttpSession session) {
+    public UserSessionData processUserSession(Authentication authentication,
+                                              OAuth2AuthorizedClient authorizedClient,
+                                              HttpSession session) {
         if (authentication == null) {
             return null;
         }
 
         OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
         OAuth2User principal = oauthToken.getPrincipal();
-        String name = principal.getAttribute("name");
 
         OAuth2AccessToken accessToken = authorizedClient.getAccessToken();
         if (accessToken == null) {
@@ -73,12 +79,26 @@ public class LoginService {
             return null;
         }
 
+        String name = principal.getAttribute("name");
+
         String tokenValue = accessToken.getTokenValue();
         session.setAttribute("accessToken", tokenValue);
 
-        List<AppRoleAssignment> appRoleAssignments = graphApiService.getAppRoleAssignments(tokenValue);
+        List<AppRoleAssignment> appRoleAssignments =
+                graphApiService.getAppRoleAssignments(tokenValue);
         List<AppRole> userAppRoleAssignments = graphApiService.getUserAssignedApps(tokenValue);
 
-        return new UserSessionData(name, tokenValue, appRoleAssignments, userAppRoleAssignments);
+        User user = graphApiService.getUserProfile(tokenValue);
+
+        LocalDateTime lastLogin = graphApiService.getLastSignInTime(tokenValue);
+        String formattedLastLogin = "N/A";
+
+        if (lastLogin != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            formattedLastLogin = lastLogin.format(formatter);
+        }
+
+        return new UserSessionData(name, tokenValue, appRoleAssignments,
+                userAppRoleAssignments, user, formattedLastLogin);
     }
 }

@@ -14,7 +14,6 @@
     <div th:if="${breadcrumbs != null}" th:replace="${breadcrumbs}"></div>
     <main class="govuk-main-wrapper" id="main-content" role="main" style="padding-top: 0;">
         <th:block th:replace="${mainContent}">Default Main Content</th:block>
-
     </main>
 </div>
 <footer th:replace="~{partials/footer :: footer}"></footer>
