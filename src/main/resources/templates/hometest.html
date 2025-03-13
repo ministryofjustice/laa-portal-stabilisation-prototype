@@ -9,6 +9,11 @@
 >
 <head>
   <title>Homepage TEST</title>
+  <style>
+    table, th, td {
+      padding: 15px;
+    }
+  </style>
 </head>
 <body>
 <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
@@ -76,9 +81,9 @@
 <!--      </div>-->
 <!--    </table>-->
     <h2 class="govuk-heading-l">
-      Services (4)
+      Services<!---->
     </h2>
-    <table class="govuk-table" >
+    <table class="govuk-table" style="border-spacing: 10px;">
       <tr>
         <td style="background-color:lightgray;">
           <h3 class="govuk-heading-m">
@@ -93,7 +98,7 @@
         <td style="background-color:lightgray;">
           <h3 class="govuk-heading-m">
             <a class="govuk-link" th:href="@{/home}">
-            Eforms
+            CCMS
             </a>
           </h3>
           <p>
@@ -105,7 +110,7 @@
         <td style="background-color:lightgray;">
           <h3 class="govuk-heading-m">
             <a class="govuk-link" th:href="@{/home}">
-              Eforms
+              Submit a CWA Claim
             </a>
           </h3>
           <p>
