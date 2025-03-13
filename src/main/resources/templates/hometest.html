@@ -25,77 +25,101 @@
 <main class="govuk-main-wrapper" id="main-content">
   <div th:if="${#authentication.isAuthenticated()}">
     <p class="govuk-body">This is a test, <span th:text="${name}"></span></p>
-    <p class="govuk-body">Granted Authorities - <span th:text="${#authentication.authorities}"></span></p>
+<!--    <p class="govuk-body">Granted Authorities - <span th:text="${#authentication.authorities}"></span></p>-->
     <table class="govuk-table">
       <tr>
         <td>
-          Box one
-          Contract Work and Administration
+          <h2>
+            <a class="govuk-link" th:href="@{/home}">
+            Contract Work and Administration
+            </a>
+          </h2>
+          <p>
+            Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since...
+          </p>
         </td>
         <td>
-          Box two
-          Eforms
+          <h2 class="govuk-heading-xl">
+            <a class="govuk-link" th:href="@{/home}">
+            Eforms
+            </a>
+          </h2>
+          <p>
+            Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since...
+          </p>
         </td>
       </tr>
       <tr>
         <td>
-          Box three
-          Eforms
+          <h2 class="govuk-heading-xl">
+            <a class="govuk-link" th:href="@{/home}">
+              Eforms
+            </a>
+          </h2>
+          <p>
+            Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since...
+          </p>
         </td>
         <td>
-          Box four
-          Courts and Fees
+          <h2 class="govuk-heading-xl">
+            <a class="govuk-link" th:href="@{/home}">
+              Courts and Fees
+            </a>
+          </h2>
+          <p>
+            Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since...
+          </p>
         </td>
       </tr>
     </table>
-    <table class="govuk-table">
-      <thead>
-      <tr>
-        <th class="govuk-table__header">Attribute</th>
-        <th class="govuk-table__header">Value</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td class="govuk-table__cell"><strong>Name</strong></td>
-        <td class="govuk-table__cell" th:text="${name}"></td>
-      </tr>
+<!--    <table class="govuk-table">-->
+<!--      <thead>-->
+<!--      <tr>-->
+<!--        <th class="govuk-table__header">Attribute</th>-->
+<!--        <th class="govuk-table__header">Value</th>-->
+<!--      </tr>-->
+<!--      </thead>-->
+<!--      <tbody>-->
+<!--      <tr>-->
+<!--        <td class="govuk-table__cell"><strong>Name</strong></td>-->
+<!--        <td class="govuk-table__cell" th:text="${name}"></td>-->
+<!--      </tr>-->
 
-      <tr>
-        <td class="govuk-table__cell"><strong>App Role Assignments</strong></td>
-        <td class="govuk-table__cell">
-          <ul>
-            <li th:each="role : ${appRoleAssignments}" th:text="${role.resourceDisplayName}"></li>
-          </ul>
-        </td>
-      </tr>
+<!--      <tr>-->
+<!--        <td class="govuk-table__cell"><strong>App Role Assignments</strong></td>-->
+<!--        <td class="govuk-table__cell">-->
+<!--          <ul>-->
+<!--            <li th:each="role : ${appRoleAssignments}" th:text="${role.resourceDisplayName}"></li>-->
+<!--          </ul>-->
+<!--        </td>-->
+<!--      </tr>-->
 
-      <tr>
-        <td class="govuk-table__cell"><strong>User App Roles</strong></td>
-        <td class="govuk-table__cell">
-          <ul>
-            <li th:each="role : ${appRole}" th:text="${role.displayName}"></li>
-          </ul>
-        </td>
-      </tr>
+<!--      <tr>-->
+<!--        <td class="govuk-table__cell"><strong>User App Roles</strong></td>-->
+<!--        <td class="govuk-table__cell">-->
+<!--          <ul>-->
+<!--            <li th:each="role : ${appRole}" th:text="${role.displayName}"></li>-->
+<!--          </ul>-->
+<!--        </td>-->
+<!--      </tr>-->
 
-      <tr>
-        <td class="govuk-table__cell"><strong>User</strong></td>
-        <td class="govuk-table__cell">
-          <strong>Display Name:</strong> <span th:text="${user.displayName}"></span>
-          <strong>Email:</strong> <span th:text="${user.userPrincipalName}"></span>
-          <strong>Job Title:</strong> <span th:text="${user.jobTitle}"></span>
-        </td>
-      </tr>
+<!--      <tr>-->
+<!--        <td class="govuk-table__cell"><strong>User</strong></td>-->
+<!--        <td class="govuk-table__cell">-->
+<!--          <strong>Display Name:</strong> <span th:text="${user.displayName}"></span>-->
+<!--          <strong>Email:</strong> <span th:text="${user.userPrincipalName}"></span>-->
+<!--          <strong>Job Title:</strong> <span th:text="${user.jobTitle}"></span>-->
+<!--        </td>-->
+<!--      </tr>-->
 
-      <tr>
-        <td class="govuk-table__cell"><strong>Last Login</strong></td>
-        <td class="govuk-table__cell">
-          <span th:text="${lastLogin}"></span>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+<!--      <tr>-->
+<!--        <td class="govuk-table__cell"><strong>Last Login</strong></td>-->
+<!--        <td class="govuk-table__cell">-->
+<!--          <span th:text="${lastLogin}"></span>-->
+<!--        </td>-->
+<!--      </tr>-->
+<!--      </tbody>-->
+<!--    </table>-->
   </div>
 </main>
 </body>
