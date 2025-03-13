@@ -10,6 +10,11 @@
 <head>
   <title>Homepage TEST</title>
 </head>
+<style>
+  table, th, td {
+    border-spacing: 30px;
+  }
+</style>
 <body>
 <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
 <nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
@@ -25,45 +30,77 @@
 <main class="govuk-main-wrapper" id="main-content">
   <div th:if="${#authentication.isAuthenticated()}">
     <p class="govuk-body">This is a test, <span th:text="${name}"></span></p>
+    <h1 class="govuk-heading-xl">LAA Portal</h1>
+    <p class="govuk-body">Welcome to the Legal Aid Agency portal.</p>
 <!--    <p class="govuk-body">Granted Authorities - <span th:text="${#authentication.authorities}"></span></p>-->
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-half">
-        <p>govuk-grid-column-one-half</p>
-      </div>
-    </div>
+<!--    <div class="govuk-grid-row">-->
+<!--      <div class="govuk-grid-column-one-half">-->
+<!--        <p>govuk-grid-column-one-half</p>-->
+<!--      </div>-->
+<!--    </div>-->
 <!--    <table class="govuk-table">-->
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-          <p>govuk-grid-column-two-thirds</p>
-          <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-half">
-              <p>govuk-grid-column-one-half</p>
-            </div>
-            <div class="govuk-grid-column-one-half">
-              <p>govuk-grid-column-one-half</p>
-            </div>
-          </div>
-        </div>
-      </div>
+<!--      <div class="govuk-grid-row">-->
+<!--        <div class="govuk-grid-column-two-thirds">-->
+<!--          <p>govuk-grid-column-two-thirds</p>-->
+<!--          <div class="govuk-grid-row">-->
+<!--            <div class="govuk-grid-column-one-half">-->
+<!--              <p>govuk-grid-column-one-half</p>-->
+<!--            </div>-->
+<!--            <div class="govuk-grid-column-one-half">-->
+<!--              <p>govuk-grid-column-one-half</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 <!--    </table>-->
+<!--    <table class="govuk-table">-->
+<!--      <div class="govuk-grid-row">-->
+<!--        <div class="govuk-grid-column-two-thirds">-->
+<!--          <p>govuk-grid-column-two-thirds</p>-->
+<!--          <div class="govuk-grid-row">-->
+<!--            <h2>-->
+<!--              <a class="govuk-link" th:href="@{/home}">-->
+<!--                Contract Work and Administration-->
+<!--              </a>-->
+<!--            </h2>-->
+<!--            <p>-->
+<!--              Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since...-->
+<!--            </p>-->
+<!--            <div class="govuk-grid-column-one-half">-->
+<!--              <h2>-->
+<!--                <a class="govuk-link" th:href="@{/home}">-->
+<!--                  Contract Work and Administration-->
+<!--                </a>-->
+<!--              </h2>-->
+<!--              <p>-->
+<!--                Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since...-->
+<!--              </p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </table>-->
+    <h2 class="govuk-heading-l">
+      Services (4)
+    </h2>
     <table class="govuk-table" >
       <tr>
         <td style="background-color:lightgray;">
-          <h2>
+          <h3 class="govuk-heading-m">
             <a class="govuk-link" th:href="@{/home}">
             Contract Work and Administration
             </a>
-          </h2>
+          </h3>
           <p>
             Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since...
           </p>
         </td>
         <td style="background-color:lightgray;">
-          <h2 class="govuk-heading-xl">
+          <h3 class="govuk-heading-m">
             <a class="govuk-link" th:href="@{/home}">
             Eforms
             </a>
-          </h2>
+          </h3>
           <p>
             Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since...
           </p>
@@ -71,21 +108,21 @@
       </tr>
       <tr>
         <td style="background-color:lightgray;">
-          <h2 class="govuk-heading-xl">
+          <h3 class="govuk-heading-m">
             <a class="govuk-link" th:href="@{/home}">
               Eforms
             </a>
-          </h2>
+          </h3>
           <p>
             Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since...
           </p>
         </td>
         <td style="background-color:lightgray;">
-          <h2 class="govuk-heading-xl">
+          <h3 class="govuk-heading-m">
             <a class="govuk-link" th:href="@{/home}">
               Courts and Fees
             </a>
-          </h2>
+          </h3>
           <p>
             Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since...
           </p>
