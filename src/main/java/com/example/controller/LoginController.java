@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /***
  * Controller for handling login-related requests.
@@ -40,7 +41,12 @@ public class LoginController {
      * @return home view if successful, else login view
      */
     @PostMapping("/login")
-    public RedirectView handleLogin(@RequestParam("email") String email) {
+    public RedirectView handleLogin(@RequestParam("email") String email, RedirectAttributes redirectAttributes) {
+        if (email == null || email.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                "An incorrect Username or Password was specified");
+            return new RedirectView("/");
+        }
         try {
             String azureLoginUrl = loginService.buildAzureLoginUrl(email);
             return new RedirectView(azureLoginUrl);
@@ -60,12 +66,9 @@ public class LoginController {
      * @return the view for home
      */
     @GetMapping("/home")
-    public String home(Model model, Authentication authentication, HttpSession session,
-                       @RegisteredOAuth2AuthorizedClient("azure")
-                       OAuth2AuthorizedClient authClient) {
+    public String home(Model model, Authentication authentication, HttpSession session, @RegisteredOAuth2AuthorizedClient("azure") OAuth2AuthorizedClient authClient) {
         try {
-            UserSessionData userSessionData = loginService.processUserSession(
-                    authentication, authClient, session);
+            UserSessionData userSessionData = loginService.processUserSession(authentication, authClient, session);
 
             if (userSessionData != null) {
                 model.addAttribute("name", userSessionData.getName());

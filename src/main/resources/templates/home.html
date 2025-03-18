@@ -24,15 +24,7 @@
 </nav>
 <main class="govuk-main-wrapper" id="main-content">
     <div th:if="${#authentication.isAuthenticated()}">
-        <p class="govuk-body">Welcome, <span th:text="${name}"></span></p>
-        <p class="govuk-body">Granted Authorities - <span th:text="${#authentication.authorities}"></span></p>
         <table class="govuk-table">
-            <thead>
-            <tr>
-                <th class="govuk-table__header">Attribute</th>
-                <th class="govuk-table__header">Value</th>
-            </tr>
-            </thead>
             <tbody>
             <tr>
                 <td class="govuk-table__cell"><strong>Name</strong></td>
@@ -40,7 +32,7 @@
             </tr>
 
             <tr>
-                <td class="govuk-table__cell"><strong>App Role Assignments</strong></td>
+                <td class="govuk-table__cell"><strong>Applications</strong></td>
                 <td class="govuk-table__cell">
                     <ul>
                         <li th:each="role : ${appRoleAssignments}" th:text="${role.resourceDisplayName}"></li>
@@ -60,12 +52,17 @@
             <tr>
                 <td class="govuk-table__cell"><strong>User</strong></td>
                 <td class="govuk-table__cell">
-                    <strong>Display Name:</strong> <span th:text="${user.displayName}"></span>
-                    <strong>Email:</strong> <span th:text="${user.userPrincipalName}"></span>
-                    <strong>Job Title:</strong> <span th:text="${user.jobTitle}"></span>
+                    <strong>Display Name:</strong> <span th:text="${user.displayName}"></span><br/>
+                    <strong>Email:</strong> <span th:text="${user.userPrincipalName}"></span><br/>
+                    <strong>Job Title:</strong> <span th:text="${user.jobTitle}"></span><br/>
                 </td>
             </tr>
-
+            <tr>
+                <td class="govuk-table__cell"><strong>Granted Authorities:</strong></td>
+                <td class="govuk-table__cell">
+                  <span th:text="${#authentication.authorities}"></span><br/>
+                </td>
+            </tr>
             <tr>
                 <td class="govuk-table__cell"><strong>Last Login</strong></td>
                 <td class="govuk-table__cell">
