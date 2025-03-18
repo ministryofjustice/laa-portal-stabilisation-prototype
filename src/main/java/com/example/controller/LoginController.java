@@ -82,7 +82,7 @@ public class LoginController {
         } catch (Exception e) {
             logger.error("Error getting user list: {}", e.getMessage());
         }
-        return "home";
+        return "hometest";
     }
 
     @GetMapping("/hometest")
