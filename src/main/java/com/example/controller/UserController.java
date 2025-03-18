@@ -1,7 +1,9 @@
 package com.example.controller;
 
+import com.example.service.EmailService;
 import com.example.service.GraphApiService;
 import com.example.service.UserService;
+import com.example.utils.RandomPasswordGenerator;
 import com.microsoft.graph.models.Invitation;
 import com.microsoft.graph.models.User;
 import org.springframework.stereotype.Controller;
@@ -21,8 +23,11 @@ public class UserController {
      */
     @PostMapping("/register")
     public User addUserToGraph(@RequestParam("username") String username,
-                               @RequestParam("password") String password) throws Exception {
-        User user = UserService.createUser(username, password);
+                               @RequestParam("email") String email) throws Exception {
+        String password = RandomPasswordGenerator.generateRandomPassword(8);
+        User user = UserService.createUser(username, email, password);
+        String welcomeMsg = EmailService.getWelcomeMessage(username, password);
+        EmailService.sendMail(email, "Welcome", welcomeMsg);
         return user;
     }
 

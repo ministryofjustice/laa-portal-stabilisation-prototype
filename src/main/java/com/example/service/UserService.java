@@ -2,27 +2,16 @@ package com.example.service;
 
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
-import com.microsoft.graph.models.AppRole;
-import com.microsoft.graph.models.AppRoleAssignment;
-import com.microsoft.graph.models.DirectoryRole;
-import com.microsoft.graph.models.Invitation;
-import com.microsoft.graph.models.PasswordProfile;
-import com.microsoft.graph.models.ServicePrincipal;
-import com.microsoft.graph.models.User;
-import com.microsoft.graph.models.UserCollectionResponse;
+import com.example.utils.RandomPasswordGenerator;
+import com.microsoft.graph.models.*;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import com.microsoft.kiota.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -58,20 +47,30 @@ public class UserService {
      *
      * @return {@code User}
      */
-    public static User createUser(String username, String password) {
+    public static User createUser(String username, String email, String password) {
 
         User user = new User();
         user.setAccountEnabled(true);
         user.setDisplayName(username);
-        user.setMailNickname("someone");
-        user.setUserPrincipalName(username + "@mojodevlexternal.onmicrosoft.com");
+        user.setMail(email);
+        LinkedList<ObjectIdentity> identities = new LinkedList<ObjectIdentity>();
+        ObjectIdentity objectIdentity = new ObjectIdentity();
+        objectIdentity.setSignInType("emailAddress");
+        //read from login user
+        objectIdentity.setIssuer("mojodevlexternal.onmicrosoft.com");
+        //read from login user
+        objectIdentity.setIssuerAssignedId(email);
+        identities.add(objectIdentity);
+        user.setIdentities(identities);
         PasswordProfile passwordProfile = new PasswordProfile();
-        passwordProfile.setForceChangePasswordNextSignIn(true);
+        passwordProfile.setForceChangePasswordNextSignInWithMfa(true);
         passwordProfile.setPassword(password);
         user.setPasswordProfile(passwordProfile);
         GraphServiceClient graphClient = getGraphClient();
         return graphClient.users().post(user);
     }
+
+
 
     /**
      * Get Authenticated Graph Client for API usage
