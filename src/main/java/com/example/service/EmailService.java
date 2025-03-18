@@ -14,6 +14,7 @@ public class EmailService {
     private static final String AZURE_CLIENT_ID = System.getenv("AZURE_CLIENT_ID");
     private static final String AZURE_TENANT_ID = System.getenv("AZURE_TENANT_ID");
     private static final String AZURE_CLIENT_SECRET = System.getenv("AZURE_CLIENT_SECRET");
+    private static final String USER = "d59460b7-75f6-41e9-acfb-2c87fa5a9e3f";//pijian.liao1@mojodevlexternal.onmicrosoft.com
     private static GraphServiceClient graphClient;
 
     /**
@@ -21,7 +22,7 @@ public class EmailService {
      *
      */
     public static void sendMail(String email, String subject, String content) {
-        com.microsoft.graph.users.item.sendmail.SendMailPostRequestBody sendMailPostRequestBody = new com.microsoft.graph.users.item.sendmail.SendMailPostRequestBody();
+        /*com.microsoft.graph.users.item.sendmail.SendMailPostRequestBody sendMailPostRequestBody = new com.microsoft.graph.users.item.sendmail.SendMailPostRequestBody();
         Message message = new Message();
         message.setSubject(subject);
         ItemBody body = new ItemBody();
@@ -38,7 +39,10 @@ public class EmailService {
         sendMailPostRequestBody.setMessage(message);
         sendMailPostRequestBody.setSaveToSentItems(false);
         GraphServiceClient graphClient = getGraphClient();
-        graphClient.me().sendMail().post(sendMailPostRequestBody);
+        UserCollectionResponse c = graphClient.users().get();
+        graphClient.users()
+                .byUserId(USER).sendMail().post(sendMailPostRequestBody);*/
+        System.out.println(content);
     }
 
     public static String getWelcomeMessage(String userName, String password) {
