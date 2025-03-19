@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'login'},
+      breadcrumbs=~{::#breadcrumbs})}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>Create User</title>
+</head>
+<body>
+<script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+<nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="/">< Back</a>
+        </li>
+    </ol>
+</nav>
+<main class="govuk-main-wrapper" id="main-content">
+    <h1 class="govuk-heading-m">Create a User</h1>
+    <p class="govuk-body">Enter all the details about the user you are creating</p>
+    <form th:action="@{/create-user}" th:method="post" th:object="${userData}">
+        <div class="govuk-form-group">
+            <label class="govuk-label" for="email">
+                Email Address:
+            </label>
+            <input class="govuk-input govuk-input--width-10" name="email" type="email" th:field="*{email}"
+                   id="email"/>
+        </div>
+        <div class="govuk-form-group">
+            <label class="govuk-label" for="fullName">
+                Full Name:
+            </label>
+            <input class="govuk-input govuk-input--width-10" name="fullName" type="text" th:field="*{fullName}"
+                   id="fullName"/>
+        </div>
+        <div class="govuk-form-group">
+            <label class="govuk-label" for="jobTitle">
+                Job Title:
+            </label>
+            <input class="govuk-input govuk-input--width-10" name="jobTitle" type="text" th:field="*{jobTitle}"
+                   id="jobTitle"/>
+        </div>
+        <div class="govuk-form-group">
+            <label class="govuk-label" for="phone">
+                Phone Number:
+            </label>
+            <input class="govuk-input govuk-input--width-10" name="phone" type="number" th:field="*{phone}"
+                   id="phone"/>
+        </div>
+        <div class="govuk-form-group">
+            <label class="govuk-label" for="extension">
+                Extension:
+            </label>
+            <input class="govuk-input govuk-input--width-10" name="extension" type="text" th:field="*{extension}"
+                   id="extension"/>
+        </div>
+        <button type="submit" class="govuk-button">Save and continue</button>
+        <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+            Save as draft
+        </button>
+    </form>
+</main>
+</body>
+</html>

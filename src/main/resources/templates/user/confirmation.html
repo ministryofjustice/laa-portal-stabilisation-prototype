@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'login'},
+      breadcrumbs=~{::#breadcrumbs})}" xmlns:govuk="http://www.gov.uk">
+<head>
+    <title>Offices</title>
+</head>
+<body>
+<script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+<nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
+</nav>
+<main class="govuk-main-wrapper" id="main-content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-panel govuk-panel--confirmation">
+                <h1 class="govuk-panel__title">
+                    User Created
+                </h1>
+                <div class="govuk-panel__body">
+                    John Smith
+                </div>
+            </div>
+            <h2 class="govuk-heading-m">
+                What happens next
+            </h2>
+            <p class="govuk-body">You can now return to the dashboard <a href="#" class="govuk-link">LAA Online
+                Portal</a>.</p>
+
+            <govuk:button th:text="'Continue'" href="/" id="'button-id'"
+                          classes="'custom-class'"/>
+        </div>
+    </div>
+</main>
+</body>
+</html>
