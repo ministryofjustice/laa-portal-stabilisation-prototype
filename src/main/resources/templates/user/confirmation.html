@@ -5,7 +5,7 @@
       title=~{::title},
       mainContent=~{::#main-content},
       pageCategory=${'login'},
-      breadcrumbs=~{::#breadcrumbs})}" xmlns:govuk="http://www.gov.uk">
+      breadcrumbs=~{::#breadcrumbs})}">
 <head>
     <title>Offices</title>
 </head>
@@ -21,17 +21,15 @@
                     User Created
                 </h1>
                 <div class="govuk-panel__body">
-                    John Smith
+                    <span th:text="${userData.fullName}"></span>
+                    <span th:text="${userData.email}"></span>
                 </div>
             </div>
             <h2 class="govuk-heading-m">
                 What happens next
             </h2>
-            <p class="govuk-body">You can now return to the dashboard <a href="#" class="govuk-link">LAA Online
-                Portal</a>.</p>
-
-            <govuk:button th:text="'Continue'" href="/" id="'button-id'"
-                          classes="'custom-class'"/>
+            <p class="govuk-body">We have sent <span th:text="${userData.fullName}"></span> an email and temporary password to set up their account.</p>
+            <p class="govuk-body"> <a href="#" class="govuk-link">Return to dashboard</a>.</p>
         </div>
     </div>
 </main>

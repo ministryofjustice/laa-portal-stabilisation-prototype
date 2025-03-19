@@ -78,18 +78,16 @@ public class UserController {
     @PostMapping("/create-user")
     public RedirectView postUser(HttpSession session, @ModelAttribute UserData userData) {
         session.setAttribute("userData", userData);
-
-        return new RedirectView("/offices");
+        String password = RandomPasswordGenerator.generateRandomPassword(8);
+        UserService.createUser(userData.getFullName(), userData.getEmail(), password);
+        String welcomeMsg = EmailService.getWelcomeMessage(userData.getFullName(), password);
+        EmailService.sendMail(userData.getEmail(), "Welcome", welcomeMsg);
+        return new RedirectView("/confirmation");
     }
 
     @GetMapping("/offices")
     public String offices(HttpSession session, Model model) {
         OfficeData officeData = (OfficeData) session.getAttribute("officeData");
-        if (officeData != null && officeData.getSelectedOffices() != null) {
-            System.out.println(officeData.getSelectedOffices());
-        } else {
-            System.out.println("no selected options in session");
-        }
         if (officeData == null) {
             officeData = new OfficeData();
         }
@@ -109,11 +107,6 @@ public class UserController {
     @GetMapping("/permissions")
     public String permissions(HttpSession session, Model model) {
         PermissionsData permissionData = (PermissionsData) session.getAttribute("permissionData");
-        if (permissionData != null && permissionData.getSelectedPermissions() != null) {
-            System.out.println(permissionData.getSelectedPermissions());
-        } else {
-            System.out.println("no selected permissions in session");
-        }
         if (permissionData == null) {
             permissionData = new PermissionsData();
         }
@@ -142,7 +135,9 @@ public class UserController {
     }
 
     @GetMapping("/confirmation")
-    public String confirmation(Model model) {
+    public String confirmation(HttpSession session, Model model) {
+        UserData userData = (UserData) session.getAttribute("userData");
+        model.addAttribute("userData", userData);
         return "user/confirmation";
     }
 
