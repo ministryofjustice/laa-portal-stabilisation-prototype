@@ -15,15 +15,24 @@
 <nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
         <li class="govuk-breadcrumbs__list-item">
-            <a class="govuk-breadcrumbs__link" href="/offices">Back</a>
+            <a class="govuk-breadcrumbs__link" href="/permissions">< Back</a>
         </li>
     </ol>
 </nav>
 <main class="govuk-main-wrapper" id="main-content">
     <h1 class="govuk-heading-m">Check your answers</h1>
-   <div th:if="${officeData != null}">
-    <p> <span th:text="${officeData.selectedOffices}"></span></p>
-   </div>
+
+    <div th:if="${officeData != null}">
+        <p class="govuk-body"><span th:text="${userData.email}"></span></p>
+        <p class="govuk-body"><span th:text="${userData.fullName}"></span></p>
+        <p class="govuk-body"><span th:text="${userData.jobTitle}"></span></p>
+    </div>
+    <div th:if="${officeData != null}">
+        <p class="govuk-body"><span th:text="${officeData.selectedOffices}"></span></p>
+    </div>
+    <div th:if="${permissionData != null}">
+        <p class="govuk-body"><span th:text="${permissionData.selectedPermissions}"></span></p>
+    </div>
 </main>
 </body>
 </html>

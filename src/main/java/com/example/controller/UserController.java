@@ -1,15 +1,18 @@
 package com.example.controller;
 
+import com.example.service.EmailService;
 import com.example.dto.OfficeData;
 import com.example.dto.PermissionsData;
-import com.example.service.GraphApiService;
 import com.example.service.UserService;
+import com.example.utils.RandomPasswordGenerator;
+import com.microsoft.graph.models.Invitation;
+import com.microsoft.graph.models.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.view.RedirectView;
 import jakarta.servlet.http.HttpSession;
 import com.example.dto.UserData;
@@ -19,22 +22,46 @@ import java.util.List;
 /**
  * User Controller
  */
-
 @Controller
 public class UserController {
 
-    private final UserService userService;
-    private final GraphApiService graphApiService;
+    /**
+     * Add new user via Microsoft Graph API.
+     */
+    @PostMapping("/register")
+    public User addUserToGraph(@RequestParam("username") String username,
+                               @RequestParam("email") String email) throws Exception {
+        String password = RandomPasswordGenerator.generateRandomPassword(8);
+        User user = UserService.createUser(username, email, password);
+        String welcomeMsg = EmailService.getWelcomeMessage(username, password);
+        EmailService.sendMail(email, "Welcome", welcomeMsg);
+        return user;
+    }
 
     /**
-     * UserController handles requests related to user operations.
-     *
-     * @param userService     the service used to manage user-related operations
-     * @param graphApiService the service used to interact with the Graph API
+     * Retrieves a list of users from Microsoft Graph API.
      */
-    public UserController(UserService userService, GraphApiService graphApiService) {
-        this.userService = userService;
-        this.graphApiService = graphApiService;
+    @GetMapping("/register")
+    public String register() throws Exception {
+        return "register";
+    }
+
+    /**
+     * invite new user via Microsoft Graph API.
+     */
+    @PostMapping("/invite")
+    public Invitation invite(@RequestParam("email") String email, Model model) throws Exception {
+        Invitation result = UserService.inviteUser(email);
+        model.addAttribute("redeemUrl", result.getInviteRedeemUrl());
+        return result;
+    }
+
+    /**
+     * Retrieves a list of users from Microsoft Graph API.
+     */
+    @GetMapping("/invite")
+    public String inviteUserToGraph() throws Exception {
+        return "invite";
     }
 
     @GetMapping("/create-user")
@@ -85,7 +112,7 @@ public class UserController {
         if (permissionData != null && permissionData.getSelectedPermissions() != null) {
             System.out.println(permissionData.getSelectedPermissions());
         } else {
-            System.out.println("no selected options in session");
+            System.out.println("no selected permissions in session");
         }
         if (permissionData == null) {
             permissionData = new PermissionsData();
