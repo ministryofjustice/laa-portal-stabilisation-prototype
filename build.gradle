@@ -1,13 +1,17 @@
 plugins {
     id 'org.springframework.boot' version '3.2.0'
-    id 'io.spring.dependency-management' version '1.1.3'
+    id 'io.spring.dependency-management' version '1.1.7'
     id 'java'
     id 'uk.gov.laa.ccms.springboot.laa-ccms-spring-boot-gradle-plugin' version '0.0.25'
-
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
+}
+
+checkstyle {
+    toolVersion = '10.21.2'
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
 }
 
 repositories {
@@ -20,18 +24,31 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.projectlombok:lombok'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
+
     annotationProcessor 'org.projectlombok:lombok'
+
     implementation 'org.springframework.boot:spring-boot-starter-graphql'
     implementation 'uk.gov.laa.ccms.springboot:laa-ccms-spring-boot-starter-govuk-dialect'
 
+    // Microsoft Graph SDK dependencies
+    implementation 'com.microsoft.graph:microsoft-graph:6.30.0'
+    implementation 'com.microsoft.graph:microsoft-graph-core:3.6.1'
 
-    implementation 'com.azure.spring:azure-spring-boot-starter-active-directory:4.0.0'
+    // MSAL for authentication
+    implementation 'com.microsoft.azure:msal4j:1.19.0'
 
-    runtimeOnly 'com.h2database:h2'
+    // Azure Identity SDK for OAuth2 and token management
+    implementation 'com.azure:azure-identity:1.15.0'
+
+    implementation 'com.azure.spring:azure-spring-boot-starter-active-directory:3.14.0'
+
+    implementation 'com.h2database:h2'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.graphql:spring-graphql-test'
-    testImplementation 'org.springframework:spring-webflux'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 

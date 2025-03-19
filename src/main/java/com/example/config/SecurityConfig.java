@@ -4,13 +4,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+/**
+ * Javadoc comment.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -21,29 +21,22 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/", "/login", "/css/**", "/js/**", "/assets/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login")
-                        .permitAll()
-                        .defaultSuccessUrl("/home", true)
-                )
-                .logout(LogoutConfigurer::permitAll
-                );
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/", "/login", "/migrate", "/register", "/invite", "/css/**", "/js/**", "/assets/**")
+                .permitAll()
+                .anyRequest().authenticated()
+        ).oauth2Login(oauth2 -> oauth2
+                .loginPage("/oauth2/authorization/azure")
+                .defaultSuccessUrl("/home", true)
+                .permitAll()
+        ).logout(logout -> logout
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
+                .logoutSuccessUrl("/")
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID") // clear the session cookie
+                .invalidateHttpSession(true)
+                .permitAll());
         return http.build();
-    }
-
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername("testUser")
-                .password(passwordEncoder.encode("password123"))
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(user);
     }
 }

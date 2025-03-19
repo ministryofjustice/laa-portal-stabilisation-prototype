@@ -6,14 +6,13 @@
       pageCategory=${'login'},
       breadcrumbs=~{::#breadcrumbs})}"
 
-      xmlns:th="http://www.thymeleaf.org"
->
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Homepage</title>
 </head>
 <body>
 <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
-<nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
+<nav class="govuk-breadcrumbs" aria-label="Breadcrumb" id="breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
         <li class="govuk-breadcrumbs__list-item">
             <a class="govuk-breadcrumbs__link" href="#">Home</a>
@@ -21,7 +20,7 @@
         <li class="govuk-breadcrumbs__list-item">
             <a class="govuk-breadcrumbs__link" href="#">Section</a>
         </li>
-        <li aria-current="page" class="govuk-breadcrumbs__list-item">Subsection</li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">Subsection</li>
     </ol>
 </nav>
 <main class="govuk-main-wrapper" id="main-content">
@@ -32,44 +31,44 @@
         </div>
 
         <div class="govuk-grid-column-two-thirds">
-            <p class="govuk-body">To sign in to the Online Portal please enter your username and
-                password.</p>
+            <p class="govuk-body">To sign in to the Online Portal please enter your username and password.</p>
             <p class="govuk-body">By logging into this Portal you accept the
-                <a href="https://www.gov.uk/government/publications/laa-online-portal-help-and-information"
-                   target="_blank">Terms
+                <a target="_blank"
+                   href="https://www.gov.uk/government/publications/laa-online-portal-help-and-information">Terms
                     and Conditions</a>.</p>
-            <!--            <div class="govuk-inset-text">-->
-            <!--                <p>If you have registered your account. You can now start using the <a-->
-            <!--                        href="https://www.gov.uk/government/publications/laa-online-portal-help-and-information"-->
-            <!--                        target="_blank">new-->
-            <!--                    portal-->
-            <!--                </a>.</p>-->
-            <!--            </div>-->
-            <form th:action="@{/login}" th:method="post">
+            <div class="govuk-inset-text">
+                <p>If you have registered your account. You can now start using the <a target="_blank" href="https://www.gov.uk/government/publications/laa-online-portal-help-and-information">new
+                    portal
+                </a>.</p>
+            </div>
+            <form th:action="@{/login}" th:method="post" >
                 <div class="govuk-form-group">
-
-                    <div th:if="${errorMessage != null}">
-                        <p th:text="${errorMessage}" class="error-message govuk-body"></p>
-                    </div>
-                     <label class="govuk-label" for="email">
-                    Username:
-                </label>
-                    <input class="govuk-input govuk-input--width-10" name="email" type="email"
-                           id="email">
+                    <label class="govuk-label">
+                        Username:
+                    </label>
+                    <input class="govuk-input govuk-input--width-10" name="user_id" type="text">
+                </div>
+                <div class="govuk-form-group">
+                    <label class="govuk-label">
+                        Password:
+                    </label>
+                    <input type="password" class="govuk-input govuk-input--width-10" name="password">
                 </div>
 
-                <button class="govuk-button govuk-button--start" data-govuk-button-init=""
-                        data-module="govuk-button"
-                        draggable="false"
-                        role="button" type="submit">
+                <button type="submit" role="button" draggable="false" class="govuk-button govuk-button--start"
+                        data-module="govuk-button" data-govuk-button-init="">
                     Sign in
-                    <svg aria-hidden="true" class="govuk-button__start-icon" focusable="false"
-                         height="19"
-                         viewBox="0 0 33 40" width="17.5" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 0h13l20 20-20 20H0l20-20z" fill="currentColor"></path>
+                    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19"
+                         viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+                        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
                     </svg>
                 </button>
             </form>
+
+            <p class="govuk-body">
+                <a href="https://portal.legalservices.gov.uk/identity/faces/forgotpassword?backUrl=https%3A%2F%2Fportal.legalservices.gov.uk%2FLAAPortal%2Fpages%2Fhome.jsp&amp;checksum=D3CAED8379B33F45BD805DA6E2B69142B531E50C8C8E2ECD7E9BD13EB6C8AF62&amp;_afrLoop=85180125031651860&amp;_afrWindowMode=0&amp;_afrWindowId=null&amp;_adf.ctrl-state=euzfsfnwk_1"
+                   class="govuk-link">Forgotten password</a>.
+            </p>
         </div>
 
         <div class="govuk-grid-column-one-third">
@@ -86,7 +85,7 @@
                 </li>
 
                 <li>
-                    <a class="govuk-link" href="#">New portal</a>
+                    <a class="govuk-link" href="new-laa-sign-in.html">New portal</a>
                 </li>
 
                 <li>

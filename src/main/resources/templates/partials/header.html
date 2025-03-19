@@ -1,3 +1,8 @@
+
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <header class="govuk-header" data-module="govuk-header" data-govuk-header-init="">
     <div class="govuk-header__container govuk-width-container">
         <div class="govuk-header__logo">
@@ -14,5 +19,9 @@
                 Legal Aid Agency Portal
             </a>
         </div>
+        <div sec:authorize="isAuthenticated()" class="logout">
+            <form th:action="@{/logout}" method="post"><button type="submit">Log out</button></form>
+        </div>
     </div>
 </header>
+</html>

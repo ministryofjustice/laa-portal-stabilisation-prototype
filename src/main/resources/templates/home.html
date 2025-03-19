@@ -1,10 +1,77 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'login'},
+      breadcrumbs=~{::#breadcrumbs})}"
+      xmlns:th="http://www.thymeleaf.org"
+>
 <head>
-    <title>Welcome</title>
+    <title>Homepage</title>
 </head>
 <body>
-<h1 th:text="${message}"></h1>
-<a href="/login">Back to Login</a>
+<script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+<nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Home</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Section</a>
+        </li>
+    </ol>
+</nav>
+<main class="govuk-main-wrapper" id="main-content">
+    <div th:if="${#authentication.isAuthenticated()}">
+        <table class="govuk-table">
+            <tbody>
+            <tr>
+                <td class="govuk-table__cell"><strong>Name</strong></td>
+                <td class="govuk-table__cell" th:text="${name}"></td>
+            </tr>
+
+            <tr>
+                <td class="govuk-table__cell"><strong>Applications</strong></td>
+                <td class="govuk-table__cell">
+                    <ul>
+                        <li th:each="role : ${appRoleAssignments}" th:text="${role.resourceDisplayName}"></li>
+                    </ul>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="govuk-table__cell"><strong>User App Roles</strong></td>
+                <td class="govuk-table__cell">
+                    <ul>
+                        <li th:each="role : ${appRole}" th:text="${role.displayName}"></li>
+                    </ul>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="govuk-table__cell"><strong>User</strong></td>
+                <td class="govuk-table__cell">
+                    <strong>Display Name:</strong> <span th:text="${user.displayName}"></span><br/>
+                    <strong>Email:</strong> <span th:text="${user.userPrincipalName}"></span><br/>
+                    <strong>Job Title:</strong> <span th:text="${user.jobTitle}"></span><br/>
+                </td>
+            </tr>
+            <tr>
+                <td class="govuk-table__cell"><strong>Granted Authorities:</strong></td>
+                <td class="govuk-table__cell">
+                  <span th:text="${#authentication.authorities}"></span><br/>
+                </td>
+            </tr>
+            <tr>
+                <td class="govuk-table__cell"><strong>Last Login</strong></td>
+                <td class="govuk-table__cell">
+                    <span th:text="${lastLogin}"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
 </body>
 </html>
