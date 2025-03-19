@@ -6,6 +6,8 @@ import com.example.service.UserService;
 import com.example.utils.RandomPasswordGenerator;
 import com.microsoft.graph.models.Invitation;
 import com.microsoft.graph.models.User;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
 
     /**
-     * Add new user via Microsoft Graph API.
+     * Add new user via Microsoft Graph A
      */
     @PostMapping("/register")
+    @PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
     public User addUserToGraph(@RequestParam("username") String username,
                                @RequestParam("email") String email) throws Exception {
         String password = RandomPasswordGenerator.generateRandomPassword(8);
