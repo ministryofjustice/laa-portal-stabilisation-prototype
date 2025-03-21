@@ -82,10 +82,10 @@ public class LoginController {
         } catch (Exception e) {
             logger.error("Error getting user list: {}", e.getMessage());
         }
-        return "hometest";
+        return "home";
     }
 
-    @GetMapping("/hometest")
+    @GetMapping("/oldhome")
     public String homeTest(Model model, Authentication authentication, HttpSession session,
                        @RegisteredOAuth2AuthorizedClient("azure")
                        OAuth2AuthorizedClient authClient) {
@@ -105,7 +105,7 @@ public class LoginController {
         } catch (Exception e) {
             logger.error("Error getting user list: {}", e.getMessage());
         }
-        return "hometest";
+        return "oldHome";
     }
 
     @GetMapping("/migrate")
