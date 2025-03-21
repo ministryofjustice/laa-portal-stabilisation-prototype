@@ -14,8 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 /***
  * Controller for handling login-related requests.
@@ -44,7 +44,7 @@ public class LoginController {
     public RedirectView handleLogin(@RequestParam("email") String email, RedirectAttributes redirectAttributes) {
         if (email == null || email.trim().isEmpty()) {
             redirectAttributes.addFlashAttribute("errorMessage",
-                "An incorrect Username or Password was specified");
+                    "An incorrect Username or Password was specified");
             return new RedirectView("/");
         }
         try {
@@ -83,29 +83,6 @@ public class LoginController {
             logger.error("Error getting user list: {}", e.getMessage());
         }
         return "home";
-    }
-
-    @GetMapping("/oldhome")
-    public String homeTest(Model model, Authentication authentication, HttpSession session,
-                       @RegisteredOAuth2AuthorizedClient("azure")
-                       OAuth2AuthorizedClient authClient) {
-        try {
-            UserSessionData userSessionData = loginService.processUserSession(
-                    authentication, authClient, session);
-
-            if (userSessionData != null) {
-                model.addAttribute("name", userSessionData.getName());
-                model.addAttribute("appRoleAssignments", userSessionData.getAppRoleAssignments());
-                model.addAttribute("appRole", userSessionData.getUserAppRoles());
-                model.addAttribute("user", userSessionData.getUser());
-                model.addAttribute("lastLogin", userSessionData.getLastLogin());
-            } else {
-                logger.info("No access token found");
-            }
-        } catch (Exception e) {
-            logger.error("Error getting user list: {}", e.getMessage());
-        }
-        return "oldHome";
     }
 
     @GetMapping("/migrate")
