@@ -37,6 +37,9 @@ public class UserService {
         Invitation invitation = new Invitation();
         invitation.setInvitedUserEmailAddress(email);
         invitation.setInviteRedirectUrl("http://localhost:8080");
+        InvitedUserMessageInfo invitedUserMessageInfo = new InvitedUserMessageInfo();
+        invitedUserMessageInfo.setCustomizedMessageBody("Welcome to LAA");
+        invitation.setInvitedUserMessageInfo(invitedUserMessageInfo);
         invitation.setSendInvitationMessage(true);
         GraphServiceClient graphClient = getGraphClient();
         return graphClient.invitations().post(invitation);
