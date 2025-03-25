@@ -23,6 +23,7 @@ public class UserService {
     private static final String AZURE_CLIENT_ID = System.getenv("AZURE_CLIENT_ID");
     private static final String AZURE_TENANT_ID = System.getenv("AZURE_TENANT_ID");
     private static final String AZURE_CLIENT_SECRET = System.getenv("AZURE_CLIENT_SECRET");
+    private static final String USER = "d59460b7-75f6-41e9-acfb-2c87fa5a9e3f";//pijian.liao1@mojodevlexternal.onmicrosoft.com
     private static GraphServiceClient graphClient;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -32,7 +33,7 @@ public class UserService {
      *
      * @return {@code User}
      */
-    public static Invitation inviteUser(String email) {
+    public static Invitation inviteUser(String email, String application, String role, String office) {
 
         Invitation invitation = new Invitation();
         invitation.setInvitedUserEmailAddress(email);
@@ -42,7 +43,44 @@ public class UserService {
         invitation.setInvitedUserMessageInfo(invitedUserMessageInfo);
         invitation.setSendInvitationMessage(true);
         GraphServiceClient graphClient = getGraphClient();
-        return graphClient.invitations().post(invitation);
+        Invitation result = graphClient.invitations().post(invitation);
+        if (Objects.nonNull(result) && Objects.nonNull(result.getInvitedUser())) {
+            User user = result.getInvitedUser();
+            user.setOfficeLocation(office);
+            graphClient.users()
+                    .byUserId(user.getId()).patch(user);
+
+            ServicePrincipalCollectionResponse principalCollection = graphClient.servicePrincipals().get();
+            String resourceId = null;
+            UUID roleId = null;
+            for (ServicePrincipal servicePrincipal : principalCollection.getValue()) {
+                if (application.equals(servicePrincipal.getDisplayName())) {
+                    for (AppRole appRole : servicePrincipal.getAppRoles()) {
+                        if (role.equals(appRole.getDisplayName())) {
+                            resourceId = servicePrincipal.getId();
+                            roleId = appRole.getId();
+                        }
+                    }
+                }
+//                servicePrincipal.getAppRoles().forEach(role -> {System.out.println("role: " + role.getDisplayName()); System.out.println("id: " + role.getId());});
+//                System.out.println("pName: " + servicePrincipal.getDisplayName());
+//                System.out.println("appId: " + servicePrincipal.getAppId());
+            }
+            System.out.println("resourceId: " + resourceId);
+            System.out.println("roleId: " + roleId);
+            if (Objects.nonNull(resourceId) && Objects.nonNull(roleId)) {
+                AppRoleAssignment appRoleAssignment = new AppRoleAssignment();
+                appRoleAssignment.setPrincipalId(UUID.fromString(user.getId()));
+                appRoleAssignment.setResourceId(UUID.fromString(resourceId));
+                appRoleAssignment.setAppRoleId(roleId);
+                graphClient.users().byUserId(user.getId()).appRoleAssignments().post(appRoleAssignment);
+            } else{
+                //throw error
+            }
+        } else {
+            //throw error
+        }
+        return result;
     }
 
     /**

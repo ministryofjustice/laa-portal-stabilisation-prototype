@@ -46,9 +46,9 @@ public class UserController {
      * invite new user via Microsoft Graph API.
      */
     @PostMapping("/invite")
-    @PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All') and hasAuthority('SCOPE_User.Invite.All')")
-    public Invitation invite(@RequestParam("email") String email, Model model) throws Exception {
-        Invitation result = UserService.inviteUser(email);
+    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All') and hasAuthority('SCOPE_User.Invite.All')")
+    public Invitation invite(@RequestParam("email") String email, String application, String role, String office, Model model) throws Exception {
+        Invitation result = UserService.inviteUser(email, application, role, office);
         model.addAttribute("redeemUrl", result.getInviteRedeemUrl());
         return result;
     }
