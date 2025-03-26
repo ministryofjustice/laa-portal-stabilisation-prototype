@@ -24,11 +24,14 @@ public class UserController {
      * Add new user via Microsoft Graph A
      */
     @PostMapping("/register")
-    @PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
+    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
     public User addUserToGraph(@RequestParam("username") String username,
-                               @RequestParam("email") String email) throws Exception {
+                               @RequestParam("email") String email,
+                               @RequestParam("application") String application,
+                               @RequestParam("role") String role,
+                               @RequestParam("office") String office) throws Exception {
         String password = RandomPasswordGenerator.generateRandomPassword(8);
-        User user = UserService.createUser(username, email, password);
+        User user = UserService.createUser(username, email, password, application, role, office);
         String welcomeMsg = EmailService.getWelcomeMessage(username, password);
         EmailService.sendMail(email, "Welcome", welcomeMsg);
         return user;
