@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'users'},
+      breadcrumbs=~{::#breadcrumbs})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Users</title>
+</head>
+<body>
+<script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+
+<nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Home</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Users</a>
+        </li>
+    </ol>
+</nav>
+
+<main class="govuk-main-wrapper" id="main-content">
+    <div th:if="${#authentication.isAuthenticated()}">
+        <h1 class="govuk-heading-l">User List</h1>
+
+        <table class="govuk-table">
+            <thead>
+            <tr>
+                <th class="govuk-table__header">Name</th>
+                <th class="govuk-table__header">Email</th>
+                <th class="govuk-table__header">Job Title</th>
+                <th class="govuk-table__header">Assigned Roles</th>
+                <th class="govuk-table__header"></th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${usersWithRoles}">
+                <td class="govuk-table__cell" th:text="${user.displayName}"></td>
+                <td class="govuk-table__cell" th:text="${user.email}"></td>
+                <td class="govuk-table__cell" th:text="${user.jobTitle}"></td>
+                <td class="govuk-table__cell">
+                    <div th:each="role : ${user.roles}">
+                        <span th:text="${role.appName}"></span> -
+                        <span th:text="${role.roleName}"></span>
+                    </div>
+                </td>
+                <td class="govuk-table__cell">
+                    <a class="govuk-button govuk-button--secondary" role="button"
+                       th:href="@{/users/edit/{id}(id=${user.id})}">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

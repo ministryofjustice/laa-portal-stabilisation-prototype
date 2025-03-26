@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
+import com.example.model.PaginatedUsers;
 import com.microsoft.graph.models.AppRole;
 import com.microsoft.graph.models.AppRoleAssignment;
 import com.microsoft.graph.models.DirectoryRole;
@@ -139,6 +140,56 @@ public class UserService {
         return response != null ? response.getValue() : Collections.emptyList();
     }
 
+    public PaginatedUsers getAllUsersPaginated(int pageSize, String nextPageLink) {
+        GraphServiceClient graphClient = getGraphClient();
+        UserCollectionResponse response;
+
+        if (nextPageLink == null || nextPageLink.isEmpty()) {
+            response = graphClient.users()
+                    .get(requestConfig -> {
+                        assert requestConfig.queryParameters != null;
+                        requestConfig.queryParameters.top = pageSize;
+                        requestConfig.queryParameters.select = new String[]{"displayName", "userPrincipalName", "signInActivity"};
+
+                    });
+        } else {
+            response = graphClient.users()
+                    .withUrl(nextPageLink)
+                    .get();
+        }
+
+        List<User> users = response != null ? response.getValue() : Collections.emptyList();
+
+        assert users != null;
+        List<com.example.model.User> customUsers = users.stream().map(graphUser -> {
+            com.example.model.User customUser = new com.example.model.User();
+            customUser.setId(graphUser.getId());
+            customUser.setEmail(graphUser.getUserPrincipalName());
+            customUser.setFullName(graphUser.getDisplayName());
+            System.out.println("Graph User Data: " + graphUser);
+
+            if (graphUser.getSignInActivity() != null) {
+                customUser.setLastLoggedIn(graphUser.getSignInActivity().getLastSignInDateTime());
+            } else {
+                customUser.setLastLoggedIn(null);
+            }
+
+            return customUser;
+        }).collect(Collectors.toList());
+
+        PaginatedUsers paginatedUsers = new PaginatedUsers();
+        paginatedUsers.setUsers(customUsers);
+        paginatedUsers.setNextPageLink(response != null && response.getOdataNextLink() != null ? response.getOdataNextLink() : null);
+
+        int totalUsers = response != null ? response.getAdditionalData().size() : 0;
+        int totalPages = (int) Math.ceil((double) totalUsers / pageSize);
+        paginatedUsers.setTotalUsers(totalUsers);
+        paginatedUsers.setTotalPages(totalPages);
+
+        return paginatedUsers;
+    }
+
+
     public List<DirectoryRole> getDirectoryRolesByUserId(String userId) {
         return Objects.requireNonNull(getGraphClient().users().byUserId(userId).memberOf().get())
                 .getValue()
@@ -199,6 +250,17 @@ public class UserService {
             System.out.println("App role successfully removed from user.");
         } catch (Exception e) {
             System.err.println("Failed to remove app role: " + e.getMessage());
+        }
+    }
+
+    public User getUserById(String userId) {
+        GraphServiceClient graphClient = getGraphClient();
+
+        try {
+            return graphClient.users().byUserId(userId).get();
+        } catch (Exception e) {
+            logger.error("Error fetching user with ID: {}", userId, e);
+            return null;
         }
     }
 }
