@@ -19,6 +19,9 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+        env:
+          SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AZURE_REDIRECT_URI: ${{ secrets.AZURE_REDIRECT_URI }}
+
       - name: Build JAR
 
         run: ./gradlew build
@@ -67,4 +70,3 @@ jobs:
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
           KUBE_CLUSTER: ${{ secrets.KUBE_CLUSTER }}
-          SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AZURE_REDIRECT_URI: ${{ vars.AZURE_REDIRECT_URI }}
