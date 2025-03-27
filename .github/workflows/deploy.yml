@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
 
+
 jobs:
   ecr:
     runs-on: ubuntu-latest
@@ -13,14 +14,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Print env variables
+        run: |
+          echo "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AZURE_REDIRECT_URI"
+        env:
+          SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AZURE_REDIRECT_URI: ${{ secrets.AZURE_REDIRECT_URI }}
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
-
-        env:
-          SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AZURE_REDIRECT_URI: ${{ secrets.AZURE_REDIRECT_URI }}
 
       - name: Build JAR
 
