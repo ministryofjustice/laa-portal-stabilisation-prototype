@@ -16,9 +16,9 @@ jobs:
 
       - name: Print env variables
         run: |
-          echo "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AZURE_REDIRECT_URI"
+          echo "SECURITY_OAUTH2_CLIENT_REGISTRATION_AZURE_REDIRECT_URI"
         env:
-          SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AZURE_REDIRECT_URI: ${{ secrets.AZURE_REDIRECT_URI }}
+          SECURITY_OAUTH2_CLIENT_REGISTRATION_AZURE_REDIRECT_URI: ${{ secrets.AZURE_REDIRECT_URI }}
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
