@@ -26,6 +26,9 @@ jobs:
           GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set redirect URI from env vars
+        run: |
+          echo "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AZURE_REDIRECT_URI=${{ vars.AZURE_REDIRECT_URI }}" >> $GITHUB_ENV
 
       # Assume role in Cloud Platform
       - uses: aws-actions/configure-aws-credentials@v4.0.2
