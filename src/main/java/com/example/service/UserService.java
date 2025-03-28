@@ -3,6 +3,7 @@ package com.example.service;
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
 import com.example.model.PaginatedUsers;
+import com.example.model.UserModel;
 import com.microsoft.graph.models.AppRole;
 import com.microsoft.graph.models.AppRoleAssignment;
 import com.microsoft.graph.models.DirectoryRole;
@@ -13,16 +14,22 @@ import com.microsoft.graph.models.User;
 import com.microsoft.graph.models.UserCollectionResponse;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import com.microsoft.kiota.ApiException;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Stack;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -140,51 +147,30 @@ public class UserService {
         return response != null ? response.getValue() : Collections.emptyList();
     }
 
-    public PaginatedUsers getAllUsersPaginated(int pageSize, String nextPageLink) {
-        GraphServiceClient graphClient = getGraphClient();
-        UserCollectionResponse response;
+    @SuppressWarnings("unchecked")
+    public Stack<String> getPageHistory(HttpSession session) {
+        Stack<String> pageHistory = (Stack<String>) session.getAttribute("pageHistory");
+        if (pageHistory == null) {
+            pageHistory = new Stack<>();
+            session.setAttribute("pageHistory", pageHistory);
+        }
+        return pageHistory;
+    }
 
-        if (nextPageLink == null || nextPageLink.isEmpty()) {
-            response = graphClient.users()
-                    .get(requestConfig -> {
-                        assert requestConfig.queryParameters != null;
-                        requestConfig.queryParameters.top = pageSize;
-                        requestConfig.queryParameters.select = new String[]{"displayName", "userPrincipalName", "signInActivity"};
+    // Retrieves paginated users and manages the page history for next and previous navigation
+    // Not working as expected for previous page stream
+    public PaginatedUsers getPaginatedUsersWithHistory(Stack<String> pageHistory, int size, String nextPageLink) {
+        String previousPageLink = null;
 
-                    });
-        } else {
-            response = graphClient.users()
-                    .withUrl(nextPageLink)
-                    .get();
+        if (nextPageLink != null) {
+            if (!pageHistory.isEmpty()) {
+                previousPageLink = pageHistory.pop();
+            }
+            pageHistory.push(nextPageLink);
         }
 
-        List<User> users = response != null ? response.getValue() : Collections.emptyList();
-
-        assert users != null;
-        List<com.example.model.User> customUsers = users.stream().map(graphUser -> {
-            com.example.model.User customUser = new com.example.model.User();
-            customUser.setId(graphUser.getId());
-            customUser.setEmail(graphUser.getUserPrincipalName());
-            customUser.setFullName(graphUser.getDisplayName());
-            System.out.println("Graph User Data: " + graphUser);
-
-            if (graphUser.getSignInActivity() != null) {
-                customUser.setLastLoggedIn(graphUser.getSignInActivity().getLastSignInDateTime());
-            } else {
-                customUser.setLastLoggedIn(null);
-            }
-
-            return customUser;
-        }).collect(Collectors.toList());
-
-        PaginatedUsers paginatedUsers = new PaginatedUsers();
-        paginatedUsers.setUsers(customUsers);
-        paginatedUsers.setNextPageLink(response != null && response.getOdataNextLink() != null ? response.getOdataNextLink() : null);
-
-        int totalUsers = response != null ? response.getAdditionalData().size() : 0;
-        int totalPages = (int) Math.ceil((double) totalUsers / pageSize);
-        paginatedUsers.setTotalUsers(totalUsers);
-        paginatedUsers.setTotalPages(totalPages);
+        PaginatedUsers paginatedUsers = getAllUsersPaginated(size, nextPageLink, previousPageLink);
+        paginatedUsers.setPreviousPageLink(previousPageLink);
 
         return paginatedUsers;
     }
@@ -262,5 +248,66 @@ public class UserService {
             logger.error("Error fetching user with ID: {}", userId, e);
             return null;
         }
+    }
+
+    public String formatLastSignInDateTime(OffsetDateTime dateTime) {
+        if (dateTime == null) {
+            return "N/A";
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy, HH:mm", Locale.ENGLISH);
+
+        return dateTime.format(formatter);
+    }
+
+    private PaginatedUsers getAllUsersPaginated(int pageSize, String nextPageLink, String previousPageLink) {
+        GraphServiceClient graphClient = getGraphClient();
+        UserCollectionResponse response;
+
+        if (nextPageLink == null || nextPageLink.isEmpty()) {
+            response = graphClient.users()
+                    .get(requestConfig -> {
+                        assert requestConfig.queryParameters != null;
+                        requestConfig.queryParameters.top = pageSize;
+                        requestConfig.queryParameters.select = new String[]{"displayName", "userPrincipalName", "signInActivity"};
+                        requestConfig.queryParameters.count = true;
+                    });
+        } else {
+            response = graphClient.users()
+                    .withUrl(previousPageLink)
+                    .get();
+        }
+
+        List<User> graphUsers = response != null ? response.getValue() : Collections.emptyList();
+        List<UserModel> users = List.of();
+
+        if (graphUsers != null && !graphUsers.isEmpty()) {
+            users = graphUsers.stream().map(graphUser -> {
+                UserModel user = new UserModel();
+                user.setId(graphUser.getId());
+                user.setEmail(graphUser.getUserPrincipalName());
+                user.setFullName(graphUser.getDisplayName());
+
+                if (graphUser.getSignInActivity() != null) {
+                    user.setLastLoggedIn(formatLastSignInDateTime(graphUser.getSignInActivity().getLastSignInDateTime()));
+                } else {
+                    user.setLastLoggedIn("NA");
+                }
+
+                return user;
+            }).collect(Collectors.toList());
+        }
+
+        PaginatedUsers paginatedUsers = new PaginatedUsers();
+        paginatedUsers.setUsers(users);
+        paginatedUsers.setNextPageLink(response != null && response.getOdataNextLink() != null ? response.getOdataNextLink() : null);
+
+        int totalUsers = Optional.ofNullable(graphClient.users()
+                        .count()
+                        .get(requestConfig -> requestConfig.headers.add("ConsistencyLevel", "eventual")))
+                .orElse(0);
+
+        paginatedUsers.setTotalUsers(totalUsers);
+
+        return paginatedUsers;
     }
 }

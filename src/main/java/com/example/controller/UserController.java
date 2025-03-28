@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 /**
  * User Controller
@@ -68,29 +67,21 @@ public class UserController {
     @GetMapping("/users")
     public String displayAllUsers(@RequestParam(defaultValue = "10") int size,
                                   @RequestParam(required = false) String nextPageLink,
-                                  Model model,
-                                  HttpSession session) {
+                                  Model model, HttpSession session) {
 
-        PaginatedUsers paginatedUsers = userService.getAllUsersPaginated(size, nextPageLink);
+        // Retrieve page history stack from session
+        // Retrieve page history stack from session
+        Stack<String> pageHistory = userService.getPageHistory(session);
 
-        int totalUsers = paginatedUsers.getTotalUsers();
-        int totalPages = (int) Math.ceil((double) totalUsers / size);
+        // Fetch paginated users and handle previous page
+        PaginatedUsers paginatedUsers = userService.getPaginatedUsersWithHistory(pageHistory, size, nextPageLink);
 
-        List<Integer> pageNumbers = new ArrayList<>();
-        for (int i = 1; i <= totalPages; i++) {
-            pageNumbers.add(i);
-        }
-
-        String nextPage = paginatedUsers.getNextPageLink();
-        String previousPage = (String) session.getAttribute("previousPageLink");
-
-        session.setAttribute("previousPageLink", nextPageLink);
-
-        model.addAttribute("previousPageLink", previousPage);
-        model.addAttribute("nextPageLink", nextPage);
-        model.addAttribute("pageSize", size);
-        model.addAttribute("pageNumbers", pageNumbers);
+        // Add attributes for template rendering
         model.addAttribute("users", paginatedUsers.getUsers());
+        model.addAttribute("nextPageLink", paginatedUsers.getNextPageLink());
+        model.addAttribute("previousPageLink", paginatedUsers.getPreviousPageLink());
+        model.addAttribute("pageSize", size);
+        model.addAttribute("pageHistory", pageHistory);
 
         return "users";
     }

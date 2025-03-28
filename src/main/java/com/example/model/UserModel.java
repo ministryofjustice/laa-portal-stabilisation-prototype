@@ -7,14 +7,12 @@ import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.OffsetDateTime;
-
 /**
  * Javadoc comment.
  */
 @Data
 @NoArgsConstructor
-public class User {
+public class UserModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +27,6 @@ public class User {
     @Column(nullable = false)
     private String fullName;
 
-    private OffsetDateTime lastLoggedIn;
+    private String lastLoggedIn;
 
 }

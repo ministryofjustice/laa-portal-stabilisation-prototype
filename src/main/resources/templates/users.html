@@ -36,56 +36,47 @@
                 <th class="govuk-table__header">Last logged in</th>
                 <th class="govuk-table__header">Status</th>
                 <th class="govuk-table__header"></th>
-
             </tr>
             </thead>
             <tbody>
             <tr th:each="user : ${users}">
-                <td class="govuk-table__cell" th:text="${user.fullName}"></td>
-                <td class="govuk-table__cell" th:text="${user.email}"></td>
-                <td class="govuk-table__cell" th:text="${user.lastLoggedIn}"></td>
-                <td class="govuk-table__cell"></td>
-
                 <td class="govuk-table__cell">
-                    <a class="govuk-button govuk-button--secondary" role="button"
-                       th:href="@{/users/edit/{id}(id=${user.id})}">
-                        Edit
-                    </a>
+                    <a class="govuk-link"
+                       th:href="@{/users/edit/{id}(id=${user.id})}"
+                       th:text="${user.fullName}"></a>
                 </td>
+                <td class="govuk-table__cell" th:text="${user.email}"></td>
+                <td class="govuk-table__cell">
+                    <span style="white-space: nowrap;" th:text="${user.lastLoggedIn}"></span>
+                </td>
+                <td class="govuk-table__cell"></td>
             </tr>
             </tbody>
         </table>
+
         <div aria-label="Pagination" class="govuk-pagination">
             <div class="govuk-pagination__prev" th:if="${previousPageLink}">
                 <a class="govuk-link govuk-pagination__link"
-                   rel="prev" th:href="@{/users(size=${pageSize}, nextPageLink=${previousPageLink})}">
+                   rel="prev"
+                   th:href="@{/users(size=${pageSize}, previousPageLink=${previousPageLink})}">
                     <svg aria-hidden="true" class="govuk-pagination__icon govuk-pagination__icon--prev"
                          focusable="false" height="13" viewBox="0 0 15 13" width="15"
                          xmlns="http://www.w3.org/2000/svg">
                         <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
                     </svg>
                     <span class="govuk-pagination__link-title">
-                Previous<span class="govuk-visually-hidden"> page</span>
-            </span>
+                        Previous<span class="govuk-visually-hidden"> page</span>
+                    </span>
                 </a>
             </div>
 
-            <ul class="govuk-pagination__list">
-                <li class="govuk-pagination__item" th:each="page : ${pageNumbers}">
-                    <a aria-label="Page {page}"
-                       class="govuk-link govuk-pagination__link"
-                       th:href="@{/users(size=${pageSize}, nextPageLink=${page})}">
-                        <span th:text="${page}"></span>
-                    </a>
-                </li>
-            </ul>
-
             <div class="govuk-pagination__next" th:if="${nextPageLink}">
                 <a class="govuk-link govuk-pagination__link"
-                   rel="next" th:href="@{/users(size=${pageSize}, nextPageLink=${nextPageLink})}">
-            <span class="govuk-pagination__link-title">
-                Next<span class="govuk-visually-hidden"> page</span>
-            </span>
+                   rel="next"
+                   th:href="@{/users(size=${pageSize}, nextPageLink=${nextPageLink})}">
+                    <span class="govuk-pagination__link-title">
+                        Next<span class="govuk-visually-hidden"> page</span>
+                    </span>
                     <svg aria-hidden="true" class="govuk-pagination__icon govuk-pagination__icon--next"
                          focusable="false" height="13" viewBox="0 0 15 13" width="15"
                          xmlns="http://www.w3.org/2000/svg">

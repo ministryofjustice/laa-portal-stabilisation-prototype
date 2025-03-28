@@ -6,8 +6,8 @@ import java.util.List;
 
 @Data
 public class PaginatedUsers {
-    private List<User> users;
+    private List<UserModel> users;
+    private String previousPageLink;
     private String nextPageLink;
     private int totalUsers;
-    private int totalPages;
 }

@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.model.User;
+import com.example.model.UserModel;
 import com.example.model.UserSessionData;
 import com.example.service.LoginService;
 import jakarta.servlet.http.HttpSession;
@@ -32,7 +32,7 @@ public class LoginController {
 
     @GetMapping("/")
     public String login(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new UserModel());
         return "index";
     }
 
