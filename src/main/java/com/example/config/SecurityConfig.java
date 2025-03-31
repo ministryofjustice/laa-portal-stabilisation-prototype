@@ -38,9 +38,8 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID") // clear the session cookie
                 .invalidateHttpSession(true)
                 .permitAll()
-        )
-        .csrf(csrf -> csrf
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        ).csrf(csrf -> csrf
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         );
         return http.build();
     }
