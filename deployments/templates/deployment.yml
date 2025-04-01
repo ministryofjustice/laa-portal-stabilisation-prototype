@@ -44,4 +44,4 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: laa-portal-stabilisation-prototype-azure-tenant-secret-k8s
-                  key: AZURE_TENANT_SECRET
+                  key: AZURE_TENANT_ID
