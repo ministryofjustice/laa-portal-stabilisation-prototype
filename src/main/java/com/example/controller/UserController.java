@@ -68,15 +68,11 @@ public class UserController {
     public String displayAllUsers(@RequestParam(defaultValue = "10") int size,
                                   @RequestParam(required = false) String nextPageLink,
                                   Model model, HttpSession session) {
-
-        // Retrieve page history stack from session
-        // Retrieve page history stack from session
+        
         Stack<String> pageHistory = userService.getPageHistory(session);
 
-        // Fetch paginated users and handle previous page
         PaginatedUsers paginatedUsers = userService.getPaginatedUsersWithHistory(pageHistory, size, nextPageLink);
 
-        // Add attributes for template rendering
         model.addAttribute("users", paginatedUsers.getUsers());
         model.addAttribute("nextPageLink", paginatedUsers.getNextPageLink());
         model.addAttribute("previousPageLink", paginatedUsers.getPreviousPageLink());
