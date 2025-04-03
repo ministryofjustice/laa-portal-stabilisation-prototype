@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'users'},
+      breadcrumbs=~{::#breadcrumbs})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Users</title>
+</head>
+<body>
+<script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+
+<nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Home</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Users</a>
+        </li>
+    </ol>
+</nav>
+
+<main class="govuk-main-wrapper" id="main-content">
+    <div th:if="${#authentication.isAuthenticated()}">
+        <h1 class="govuk-heading-l">User Dashboard</h1>
+
+        <table class="govuk-table">
+            <thead>
+            <tr>
+                <th class="govuk-table__header">User</th>
+                <th class="govuk-table__header">Email</th>
+                <th class="govuk-table__header">Last logged in</th>
+                <th class="govuk-table__header">Status</th>
+                <th class="govuk-table__header"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td class="govuk-table__cell">
+                    <a class="govuk-link"
+                       th:href="@{/users/edit/{id}(id=${user.id})}"
+                       th:text="${user.fullName}"></a>
+                </td>
+                <td class="govuk-table__cell" th:text="${user.email}"></td>
+                <td class="govuk-table__cell">
+                    <span style="white-space: nowrap;" th:text="${user.lastLoggedIn}"></span>
+                </td>
+                <td class="govuk-table__cell"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div aria-label="Pagination" class="govuk-pagination">
+            <div class="govuk-pagination__prev" th:if="${previousPageLink}">
+                <a class="govuk-link govuk-pagination__link"
+                   rel="prev"
+                   th:href="@{/users(size=${pageSize}, previousPageLink=${previousPageLink})}">
+                    <svg aria-hidden="true" class="govuk-pagination__icon govuk-pagination__icon--prev"
+                         focusable="false" height="13" viewBox="0 0 15 13" width="15"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+                    </svg>
+                    <span class="govuk-pagination__link-title">
+                        Previous<span class="govuk-visually-hidden"> page</span>
+                    </span>
+                </a>
+            </div>
+
+            <div class="govuk-pagination__next" th:if="${nextPageLink}">
+                <a class="govuk-link govuk-pagination__link"
+                   rel="next"
+                   th:href="@{/users(size=${pageSize}, nextPageLink=${nextPageLink})}">
+                    <span class="govuk-pagination__link-title">
+                        Next<span class="govuk-visually-hidden"> page</span>
+                    </span>
+                    <svg aria-hidden="true" class="govuk-pagination__icon govuk-pagination__icon--next"
+                         focusable="false" height="13" viewBox="0 0 15 13" width="15"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
