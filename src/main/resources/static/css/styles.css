@@ -3,7 +3,8 @@
     text-decoration: none;
     position: absolute;
     right: 0;
-    top: 20px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 .logout button {
     background: none;
@@ -35,4 +36,22 @@
 
 .error-input {
     border: 1px solid #d4351c;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 0 auto;
+}
+.grid-item {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+.green {
+    background-color: #00703c;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 0.4em;
 }
