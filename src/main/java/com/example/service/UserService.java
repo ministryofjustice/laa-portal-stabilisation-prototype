@@ -2,15 +2,17 @@ package com.example.service;
 
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
-import com.microsoft.graph.models.*;
 import com.example.model.PaginatedUsers;
 import com.example.model.UserModel;
 import com.microsoft.graph.models.AppRole;
 import com.microsoft.graph.models.AppRoleAssignment;
 import com.microsoft.graph.models.DirectoryRole;
 import com.microsoft.graph.models.Invitation;
+import com.microsoft.graph.models.InvitedUserMessageInfo;
+import com.microsoft.graph.models.ObjectIdentity;
 import com.microsoft.graph.models.PasswordProfile;
 import com.microsoft.graph.models.ServicePrincipal;
+import com.microsoft.graph.models.ServicePrincipalCollectionResponse;
 import com.microsoft.graph.models.User;
 import com.microsoft.graph.models.UserCollectionResponse;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
@@ -20,20 +22,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Stack;
-import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.UUID;
 
 /**
  * userService
@@ -44,7 +46,6 @@ public class UserService {
     private static final String AZURE_CLIENT_ID = System.getenv("AZURE_CLIENT_ID");
     private static final String AZURE_TENANT_ID = System.getenv("AZURE_TENANT_ID");
     private static final String AZURE_CLIENT_SECRET = System.getenv("AZURE_CLIENT_SECRET");
-    private static final String USER = "d59460b7-75f6-41e9-acfb-2c87fa5a9e3f";//pijian.liao1@mojodevlexternal.onmicrosoft.com
     private static GraphServiceClient graphClient;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -83,9 +84,9 @@ public class UserService {
                         }
                     }
                 }
-//                servicePrincipal.getAppRoles().forEach(role -> {System.out.println("role: " + role.getDisplayName()); System.out.println("id: " + role.getId());});
-//                System.out.println("pName: " + servicePrincipal.getDisplayName());
-//                System.out.println("appId: " + servicePrincipal.getAppId());
+                //servicePrincipal.getAppRoles().forEach(role -> {System.out.println("role: " + role.getDisplayName()); System.out.println("id: " + role.getId());});
+                //System.out.println("pName: " + servicePrincipal.getDisplayName());
+                //System.out.println("appId: " + servicePrincipal.getAppId());
             }
             System.out.println("resourceId: " + resourceId);
             System.out.println("roleId: " + roleId);
@@ -95,11 +96,13 @@ public class UserService {
                 appRoleAssignment.setResourceId(UUID.fromString(resourceId));
                 appRoleAssignment.setAppRoleId(roleId);
                 graphClient.users().byUserId(user.getId()).appRoleAssignments().post(appRoleAssignment);
-            } else{
+            } else {
                 //throw error
+                System.out.println("throw error: " + email);
             }
         } else {
             //throw error
+            System.out.println("throw error: " + email);
         }
         return result;
     }
@@ -116,13 +119,13 @@ public class UserService {
         user.setDisplayName(username);
         user.setMail(email);
         user.setOfficeLocation(office);
-        LinkedList<ObjectIdentity> identities = new LinkedList<ObjectIdentity>();
         ObjectIdentity objectIdentity = new ObjectIdentity();
         objectIdentity.setSignInType("emailAddress");
         //read from login user
         objectIdentity.setIssuer("mojodevlexternal.onmicrosoft.com");
         //read from login user
         objectIdentity.setIssuerAssignedId(email);
+        LinkedList<ObjectIdentity> identities = new LinkedList<ObjectIdentity>();
         identities.add(objectIdentity);
         user.setIdentities(identities);
         PasswordProfile passwordProfile = new PasswordProfile();
@@ -143,9 +146,9 @@ public class UserService {
                     }
                 }
             }
-//                servicePrincipal.getAppRoles().forEach(role -> {System.out.println("role: " + role.getDisplayName()); System.out.println("id: " + role.getId());});
-//                System.out.println("pName: " + servicePrincipal.getDisplayName());
-//                System.out.println("appId: " + servicePrincipal.getAppId());
+            //servicePrincipal.getAppRoles().forEach(role -> {System.out.println("role: " + role.getDisplayName()); System.out.println("id: " + role.getId());});
+            //System.out.println("pName: " + servicePrincipal.getDisplayName());
+            //System.out.println("appId: " + servicePrincipal.getAppId());
         }
         System.out.println("resourceId: " + resourceId);
         System.out.println("roleId: " + roleId);
@@ -155,8 +158,9 @@ public class UserService {
             appRoleAssignment.setResourceId(UUID.fromString(resourceId));
             appRoleAssignment.setAppRoleId(roleId);
             graphClient.users().byUserId(user.getId()).appRoleAssignments().post(appRoleAssignment);
-        } else{
+        } else {
             //throw error
+            System.out.println("throw error: " + resourceId);
         }
         return user;
     }
