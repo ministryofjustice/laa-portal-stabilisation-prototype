@@ -42,7 +42,7 @@
             <tr th:each="user : ${users}">
                 <td class="govuk-table__cell">
                     <a class="govuk-link"
-                       th:href="@{/users/edit/{id}(id=${user.id})}"
+                       th:href="@{/users/edit/{id}/roles(id=${user.id})}"
                        th:text="${user.fullName}"></a>
                 </td>
                 <td class="govuk-table__cell" th:text="${user.email}"></td>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'users'},
+      breadcrumbs=~{::#breadcrumbs})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Edit User Roles</title>
+</head>
+<body>
+<script>
+    document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
+</script>
+
+<nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="/">Home</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="/users">Users</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            Edit Roles for <span th:text="${user.displayName}"></span>
+        </li>
+    </ol>
+</nav>
+
+<main class="govuk-main-wrapper" id="main-content">
+    <div th:if="${#authentication.isAuthenticated()}">
+        <a class="govuk-back-link govuk-!-margin-bottom-3" th:href="@{/users}">
+            Back
+        </a>
+
+        <span class="govuk-caption-m govuk-!-margin-top-3">Permissions and roles</span>
+
+        <h1 class="govuk-heading-l">Add permissions for <span th:text="${user.displayName}"></span></h1>
+
+        <form method="post" th:action="@{/users/edit/{id}/roles(id=${user.id})}">
+            <fieldset class="govuk-fieldset">
+                <p class="govuk-hint govuk-!-margin-bottom-3">
+                    Select all that apply you will be adding all the roles based off what has been selected
+                </p>
+                <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                    <div class="govuk-checkboxes__item" th:each="role : ${availableRoles}">
+                        <input class="govuk-checkboxes__input" id="role-[[${role.appRoleId}]]" name="selectedRoles"
+                               th:checked="${userAssignedRoles.contains(role.appRoleId)}"
+                               th:value="${role.appRoleId}"
+                               type="checkbox">
+                        <label class="govuk-label govuk-checkboxes__label"
+                               th:for="'role-' + ${role.appRoleId}">
+                            <span th:text="${role.appName}"></span> - <span th:text="${role.roleName}"></span>
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <button class="govuk-button govuk-!-margin-top-3" data-module="govuk-button" type="submit">
+                Save and continue
+            </button>
+
+            <button class="govuk-button govuk-button--secondary govuk-!-margin-top-3 govuk-!-margin-left-2"
+                    data-module="govuk-button"
+                    type="submit">
+                Save as draft
+            </button>
+        </form>
+    </div>
+</main>
+</body>
+</html>
