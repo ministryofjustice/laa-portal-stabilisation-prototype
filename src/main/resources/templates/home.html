@@ -8,8 +8,9 @@
       xmlns:th="http://www.thymeleaf.org"
 >
 <head>
-    <title>Homepage</title>
+    <title>Homepage TEST</title>
 </head>
+
 <body>
 <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
 <nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
@@ -18,59 +19,103 @@
             <a class="govuk-breadcrumbs__link" href="#">Home</a>
         </li>
         <li class="govuk-breadcrumbs__list-item">
-            <a class="govuk-breadcrumbs__link" href="#">Section</a>
+            <a class="govuk-breadcrumbs__link" href="#">Portal</a>
         </li>
     </ol>
 </nav>
 <main class="govuk-main-wrapper" id="main-content">
     <div th:if="${#authentication.isAuthenticated()}">
-        <table class="govuk-table">
-            <tbody>
-            <tr>
-                <td class="govuk-table__cell"><strong>Name</strong></td>
-                <td class="govuk-table__cell" th:text="${name}"></td>
-            </tr>
+    </div>
+    <p class="govuk-body">You are logged in as <span th:text="${name}"></span></p>
+    <h1 class="govuk-heading-xl">LAA Portal</h1>
+    <p class="govuk-inset-text">Welcome to the Legal Aid Agency Portal. Here you can access a range of tools and
+        resources
+        to manage your legal aid services.</p>
+    <h2 class="govuk-heading-l">
+        Services
+    </h2>
+    <div class="grid-container">
+        <div class="grid-item">
+            <h3 class="govuk-heading-m">
+                <a class="govuk-link" th:href="@{/home}">
+                    Contracted Work and Administration
+                </a>
+            </h3>
+            <p class="govuk-body">
+                Manage contracted casework and related administrative tasks.
+            </p>
+            <p class="govuk-body">
+                (Placeholder text)
+            </p>
+            <div>
+                <p class="govuk-phase-banner__content">
+            <span class="govuk-phase-banner__text green">
+                The service is good
+              </span>
+                </p>
+            </div>
 
-            <tr>
-                <td class="govuk-table__cell"><strong>Applications</strong></td>
-                <td class="govuk-table__cell">
-                    <ul>
-                        <li th:each="role : ${appRoleAssignments}" th:text="${role.resourceDisplayName}"></li>
-                    </ul>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="govuk-table__cell"><strong>User App Roles</strong></td>
-                <td class="govuk-table__cell">
-                    <ul>
-                        <li th:each="role : ${appRole}" th:text="${role.displayName}"></li>
-                    </ul>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="govuk-table__cell"><strong>User</strong></td>
-                <td class="govuk-table__cell">
-                    <strong>Display Name:</strong> <span th:text="${user.displayName}"></span><br/>
-                    <strong>Email:</strong> <span th:text="${user.userPrincipalName}"></span><br/>
-                    <strong>Job Title:</strong> <span th:text="${user.jobTitle}"></span><br/>
-                </td>
-            </tr>
-            <tr>
-                <td class="govuk-table__cell"><strong>Granted Authorities:</strong></td>
-                <td class="govuk-table__cell">
-                  <span th:text="${#authentication.authorities}"></span><br/>
-                </td>
-            </tr>
-            <tr>
-                <td class="govuk-table__cell"><strong>Last Login</strong></td>
-                <td class="govuk-table__cell">
-                    <span th:text="${lastLogin}"></span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        </div>
+        <div class="grid-item">
+            <h3 class="govuk-heading-m">
+                <a class="govuk-link" th:href="@{/home}">
+                    CCMS
+                </a>
+            </h3>
+            <p class="govuk-body">
+                Maintain up-to-date client details and financial records.
+            </p>
+            <p class="govuk-body">
+                (Placeholder text)
+            </p>
+            <div>
+                <p class="govuk-phase-banner__content">
+            <span class="govuk-phase-banner__text green">
+                The service is good
+              </span>
+                </p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <h3 class="govuk-heading-m">
+                <a class="govuk-link" th:href="@{/home}">
+                    Submit a CWA Claim
+                </a>
+            </h3>
+            <p class="govuk-body">
+                Submit Claims and Warranties for Administration securely and efficiently.
+            </p>
+            <p class="govuk-body">
+                (Placeholder text)
+            </p>
+            <div>
+                <p class="govuk-phase-banner__content">
+            <span class="govuk-phase-banner__text green">
+                The service is good
+              </span>
+                </p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <h3 class="govuk-heading-m">
+                <a class="govuk-link" th:href="@{/home}">
+                    Courts and Fees
+                </a>
+            </h3>
+            <p class="govuk-body">
+                Access detailed information on court fees, procedural guidelines, and filing requirements.
+            </p>
+            <p class="govuk-body">
+                (Placeholder text)
+            </p>
+            <div>
+                <p class="govuk-phase-banner__content">
+            <span class="govuk-phase-banner__text green">
+                The service is good
+              </span>
+                </p>
+            </div>
+        </div>
     </div>
 </main>
 </body>
