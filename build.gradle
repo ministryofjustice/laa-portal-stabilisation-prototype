@@ -47,6 +47,8 @@ dependencies {
 
     implementation 'com.h2database:h2'
 
+    implementation group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '5.2.1-RELEASE'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.graphql:spring-graphql-test'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
