@@ -4,6 +4,7 @@ import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
 import com.example.model.PaginatedUsers;
 import com.example.model.UserModel;
+import com.example.model.UserRole;
 import com.microsoft.graph.models.AppRole;
 import com.microsoft.graph.models.AppRoleAssignment;
 import com.microsoft.graph.models.DirectoryRole;
@@ -18,17 +19,18 @@ import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.Stack;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -42,8 +44,8 @@ public class UserService {
     private static final String AZURE_CLIENT_ID = System.getenv("AZURE_CLIENT_ID");
     private static final String AZURE_TENANT_ID = System.getenv("AZURE_TENANT_ID");
     private static final String AZURE_CLIENT_SECRET = System.getenv("AZURE_CLIENT_SECRET");
+    private static final String APPLICATION_ID = "0ca5b38b-6c4f-404e-b1d0-d0e8d4e0bfd5";
     private static GraphServiceClient graphClient;
-
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -101,39 +103,6 @@ public class UserService {
         return graphClient;
     }
 
-    public List<Map<String, Object>> getUserAppRolesByUserId(String userId) {
-        List<AppRoleAssignment> userAppRoles = getUserAppRoleAssignmentByUserId(userId);
-        List<Map<String, Object>> roleDetails = new ArrayList<>();
-
-        for (AppRoleAssignment appRole : userAppRoles) {
-            ServicePrincipal servicePrincipal = getGraphClient()
-                    .servicePrincipals()
-                    .byServicePrincipalId(String.valueOf(appRole.getResourceId()))
-                    .get();
-
-            Map<String, Object> roleInfo = new HashMap<>();
-            roleInfo.put("appId", appRole.getResourceId());
-
-            if (servicePrincipal == null) {
-                roleInfo.put("appName", "UNKNOWN");
-                roleInfo.put("roleName", "UNKNOWN");
-            } else {
-                roleInfo.put("appName", servicePrincipal.getDisplayName());
-
-                // Find the actual role name based on appRoleId
-                String roleName = servicePrincipal.getAppRoles().stream()
-                        .filter(role -> role.getId().equals(appRole.getAppRoleId()))
-                        .map(AppRole::getDisplayName)
-                        .findFirst()
-                        .orElse("UNKNOWN");
-
-                roleInfo.put("roleName", roleName);
-            }
-            roleDetails.add(roleInfo);
-        }
-        return roleDetails;
-    }
-
     /**
      * Returns all Users from Entra
      * <p>
@@ -185,6 +154,41 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public List<UserRole> getUserAppRolesByUserId(String userId) {
+        List<AppRoleAssignment> userAppRoles = getUserAppRoleAssignmentByUserId(userId);
+        List<UserRole> userRoles = new ArrayList<>();
+        UserRole userRole = new UserRole();
+
+        for (AppRoleAssignment appRole : userAppRoles) {
+            ServicePrincipal servicePrincipal = getGraphClient()
+                    .servicePrincipals()
+                    .byServicePrincipalId(Objects.requireNonNull(appRole.getResourceId()).toString())
+                    .get();
+
+            if (servicePrincipal != null) {
+                userRole.setAppId(String.valueOf(appRole.getResourceId()));
+                userRole.setAppRoleId(String.valueOf(appRole.getAppRoleId()));
+                userRole.setAssignmentId(appRole.getId());
+                userRole.setAppName(servicePrincipal.getDisplayName());
+
+                String roleName = Objects.requireNonNull(servicePrincipal.getAppRoles()).stream()
+                        .filter(role -> Objects.equals(role.getId(), appRole.getAppRoleId()))
+                        .map(AppRole::getDisplayName)
+                        .findFirst()
+                        .orElse("UNKNOWN");
+
+                userRole.setRoleName(roleName);
+            } else {
+                userRole.setAppName("UNKNOWN");
+                userRole.setRoleName("UNKNOWN");
+            }
+
+            userRoles.add(userRole);
+        }
+
+        return userRoles;
+    }
+
     /**
      * Get App Role Assignments to User by User ID
      *
@@ -193,15 +197,40 @@ public class UserService {
      */
     public List<AppRoleAssignment> getUserAppRoleAssignmentByUserId(String userId) {
         try {
-            return getGraphClient()
-                    .users()
-                    .byUserId(userId)
-                    .appRoleAssignments()
-                    .get()
+            return Objects.requireNonNull(getGraphClient()
+                            .users()
+                            .byUserId(userId)
+                            .appRoleAssignments()
+                            .get())
                     .getValue();
         } catch (ApiException e) {
-            System.err.println("Error fetching roles: " + e.getMessage());
+            logger.error("Error fetching roles: {}", e.getMessage());
             return List.of();
+        }
+    }
+
+    public void updateUserRoles(String userId, List<String> selectedRoles) {
+        List<UserRole> existingRoles = getUserAppRolesByUserId(userId);
+
+        Set<String> currentRoleIds = existingRoles.stream()
+                .map(UserRole::getAppRoleId)
+                .collect(Collectors.toSet());
+
+        Set<String> selectedRoleIds = new HashSet<>(selectedRoles != null ? selectedRoles : List.of());
+
+        List<UserRole> availableRoles = getAllAvailableRoles();
+
+        for (String roleId : selectedRoleIds) {
+            if (!currentRoleIds.contains(roleId)) {
+                String appId = findAppIdForRole(roleId, availableRoles);
+                assignAppRoleToUser(userId, appId, roleId);
+            }
+        }
+
+        for (UserRole role : existingRoles) {
+            if (!selectedRoleIds.contains(role.getAppRoleId())) {
+                removeAppRoleFromUser(userId, role.getAssignmentId());
+            }
         }
     }
 
@@ -233,9 +262,9 @@ public class UserService {
                     .byAppRoleAssignmentId(appRoleAssignmentId)
                     .delete();
 
-            System.out.println("App role successfully removed from user.");
+            logger.info("App role successfully removed from user.");
         } catch (Exception e) {
-            System.err.println("Failed to remove app role: " + e.getMessage());
+            logger.error("Failed to remove app role: {}", e.getMessage());
         }
     }
 
@@ -257,6 +286,46 @@ public class UserService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy, HH:mm", Locale.ENGLISH);
 
         return dateTime.format(formatter);
+    }
+
+    public List<UserRole> getAllAvailableRoles() {
+        List<ServicePrincipal> servicePrincipals = Objects.requireNonNull(getGraphClient()
+                        .servicePrincipals()
+                        .get())
+                .getValue();
+
+        List<UserRole> roles = new ArrayList<>();
+        if (!ObjectUtils.isEmpty(servicePrincipals)) {
+            for (ServicePrincipal sp : servicePrincipals) {
+                if (Objects.equals(sp.getAppId(), APPLICATION_ID)) {
+                    for (AppRole role : Objects.requireNonNull(sp.getAppRoles())) {
+                        UserRole roleInfo = new UserRole(
+                                sp.getId(),
+                                sp.getDisplayName(),
+                                Objects.requireNonNull(role.getId()).toString(),
+                                role.getDisplayName(),
+                                null,
+                                role.getDisplayName(),
+                                null
+                        );
+                        roles.add(roleInfo);
+                    }
+                }
+            }
+        }
+        return roles;
+    }
+
+    private String findAppIdForRole(String roleId, List<UserRole> existingRoles) throws IllegalArgumentException {
+        Optional<UserRole> userRole = existingRoles.stream()
+                .filter(role -> role.getAppRoleId().equals(roleId))
+                .findFirst();
+
+        if (userRole.isPresent()) {
+            return userRole.get().getAppId();
+        } else {
+            throw new IllegalArgumentException("App ID not found for role ID: " + roleId);
+        }
     }
 
     private PaginatedUsers getAllUsersPaginated(int pageSize, String nextPageLink, String previousPageLink) {

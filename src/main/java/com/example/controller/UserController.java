@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.model.PaginatedUsers;
+import com.example.model.UserRole;
 import com.example.service.UserService;
 import com.microsoft.graph.models.Invitation;
 import com.microsoft.graph.models.User;
@@ -12,7 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 /**
  * User Controller
@@ -68,7 +72,7 @@ public class UserController {
     public String displayAllUsers(@RequestParam(defaultValue = "10") int size,
                                   @RequestParam(required = false) String nextPageLink,
                                   Model model, HttpSession session) {
-        
+
         Stack<String> pageHistory = userService.getPageHistory(session);
 
         PaginatedUsers paginatedUsers = userService.getPaginatedUsersWithHistory(pageHistory, size, nextPageLink);
@@ -82,10 +86,35 @@ public class UserController {
         return "users";
     }
 
-    @GetMapping("/users/edit/{id}")
-    public String editUser(@PathVariable String id, Model model) {
+    /**
+     * Retrieves available user roles for user
+     */
+    @GetMapping("/users/edit/{id}/roles")
+    public String editUserRoles(@PathVariable String id, Model model) {
         User user = userService.getUserById(id);
+        List<UserRole> userRoles = userService.getUserAppRolesByUserId(id);
+        List<UserRole> availableRoles = userService.getAllAvailableRoles();
+
+        Set<String> userAssignedRoleIds = userRoles.stream()
+                .map(UserRole::getAppRoleId)
+                .collect(Collectors.toSet());
+
         model.addAttribute("user", user);
-        return "edit-user";
+        model.addAttribute("availableRoles", availableRoles);
+        model.addAttribute("userAssignedRoles", userAssignedRoleIds);
+
+        return "edit-user-roles";
     }
+
+
+    /**
+     * Update user roles via graph SDK
+     */
+    @PostMapping("/users/edit/{id}/roles")
+    public String updateUserRoles(@PathVariable String id,
+                                  @RequestParam(required = false) List<String> selectedRoles) {
+        userService.updateUserRoles(id, selectedRoles);
+        return "redirect:/users";
+    }
+
 }
