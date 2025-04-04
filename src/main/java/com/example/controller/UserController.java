@@ -1,13 +1,12 @@
 package com.example.controller;
 
+import com.example.service.CreateUserNotificationService;
 import com.example.service.EmailService;
-import com.example.service.GraphApiService;
 import com.example.service.UserService;
 import com.example.utils.RandomPasswordGenerator;
 import com.microsoft.graph.models.Invitation;
 import com.microsoft.graph.models.User;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
  * User Controller
  */
 @Controller
+@RequiredArgsConstructor
 public class UserController {
+
+    private final CreateUserNotificationService createUserNotificationService;
 
     /**
      * Add new user via Microsoft Graph A
@@ -32,8 +34,7 @@ public class UserController {
                                @RequestParam("office") String office) throws Exception {
         String password = RandomPasswordGenerator.generateRandomPassword(8);
         User user = UserService.createUser(username, email, password, application, role, office);
-        String welcomeMsg = EmailService.getWelcomeMessage(username, password);
-        EmailService.sendMail(email, "Welcome", welcomeMsg);
+        createUserNotificationService.notifyCreateUser(username, email, password, user.getId());
         return user;
     }
 
