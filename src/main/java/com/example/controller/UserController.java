@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.service.CreateUserNotificationService;
-import com.example.service.EmailService;
 import com.example.model.PaginatedUsers;
 import com.example.service.UserService;
 import com.example.utils.RandomPasswordGenerator;
@@ -26,6 +25,7 @@ import java.util.Stack;
 public class UserController {
 
     private final CreateUserNotificationService createUserNotificationService;
+    private final UserService userService;
 
     /**
      * Add new user via Microsoft Graph API.
@@ -38,7 +38,7 @@ public class UserController {
                                @RequestParam("role") String role,
                                @RequestParam("office") String office) throws Exception {
         String password = RandomPasswordGenerator.generateRandomPassword(8);
-        User user = UserService.createUser(username, email, password, application, role, office);
+        User user = userService.createUser(username, email, password, application, role, office);
         createUserNotificationService.notifyCreateUser(username, email, password, user.getId());
         return user;
     }

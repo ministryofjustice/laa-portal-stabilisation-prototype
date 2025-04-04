@@ -110,7 +110,7 @@ public class UserService {
      *
      * @return {@code User}
      */
-    public static User createUser(String username, String email, String password, String application, String role, String office) {
+    public User createUser(String username, String email, String password, String application, String role, String office) {
 
         User user = new User();
         user.setAccountEnabled(true);
