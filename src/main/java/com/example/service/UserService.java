@@ -2,7 +2,6 @@ package com.example.service;
 
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
-import com.example.utils.RandomPasswordGenerator;
 import com.microsoft.graph.models.*;
 import com.example.model.PaginatedUsers;
 import com.example.model.UserModel;
