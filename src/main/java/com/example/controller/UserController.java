@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.view.RedirectView;
-import jakarta.servlet.http.HttpSession;
 import com.example.dto.UserData;
 
 import java.util.List;
