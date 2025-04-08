@@ -15,4 +15,5 @@ public class UserRole {
     private String assignmentId;
     private String appRoleName;
     private String appRoleAssignmentId;
+    private boolean selected;
 }

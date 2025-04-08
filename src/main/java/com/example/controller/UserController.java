@@ -1,11 +1,13 @@
 package com.example.controller;
 
+import com.example.model.ServicePrincipalModel;
 import com.example.service.CreateUserNotificationService;
 import com.example.model.PaginatedUsers;
 import com.example.model.UserRole;
 import com.example.service.UserService;
 import com.example.utils.RandomPasswordGenerator;
 import com.microsoft.graph.models.Invitation;
+import com.microsoft.graph.models.ServicePrincipal;
 import com.microsoft.graph.models.User;
 import lombok.RequiredArgsConstructor;
 import jakarta.servlet.http.HttpSession;
@@ -16,9 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +30,127 @@ public class UserController {
 
     private final CreateUserNotificationService createUserNotificationService;
     private final UserService userService;
+
+    @GetMapping("/users/add/step1")
+    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
+    public String addUserOne(Model model,
+                             HttpSession session) throws Exception {
+        User user = (User) session.getAttribute("user");
+        if (Objects.isNull(user)) {
+            user = new User();
+        }
+        model.addAttribute("user", user);
+        return "users/addOne";
+    }
+
+    @PostMapping("/users/add/step1")
+    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
+    public String addUserOne(@RequestParam("username") String username,
+                             @RequestParam("email") String email,
+                             @RequestParam("office") String office,
+                             HttpSession session) throws Exception {
+        User user = (User) session.getAttribute("user");
+        if (Objects.isNull(user)) {
+            user = new User();
+        }
+        user.setDisplayName(username);
+        user.setMail(email);
+        user.setOfficeLocation(office);
+        session.setAttribute("user", user);
+        return "redirect:/users/add/step2";
+    }
+
+    @GetMapping("/users/add/step2")
+    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
+    public String addUserTwo(Model model, HttpSession session) throws Exception {
+        List<ServicePrincipalModel> apps = (List<ServicePrincipalModel>)(List<?>) userService.getServicePrincipals();
+        List<String> selectedApps = (List<String>) session.getAttribute("apps");
+        for (ServicePrincipalModel app : apps) {
+            if (selectedApps.contains(app.getAppId())) {
+                app.setSelected(true);
+            }
+        }
+        model.addAttribute("apps", apps);
+        return "users/addTwo";
+    }
+
+    @PostMapping("/users/add/step2")
+    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
+    public String addUserTwo(@RequestParam("apps") List<String> apps,
+                             HttpSession session) throws Exception {
+        session.setAttribute("apps", apps);
+        return "redirect:/users/add/step3";
+    }
+
+    @GetMapping("/users/add/step3")
+    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
+    public String addUserThree(Model model, HttpSession session) throws Exception {
+        List<String> selectedApps = (List<String>) session.getAttribute("apps");
+        if (Objects.isNull(selectedApps)) {
+            selectedApps = new ArrayList<>();
+        }
+        List<UserRole> roles = userService.getAllAvailableRolesForApps(selectedApps);
+        List<String> selecteRoles = (List<String>) session.getAttribute("roles");
+        for (UserRole role : roles) {
+            if (selecteRoles.contains(role.getAppRoleId())) {
+                role.setSelected(true);
+            }
+        }
+        model.addAttribute("roles", roles);
+        return "users/addThree";
+    }
+
+    @PostMapping("/users/add/step3")
+    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
+    public String addUserThree(@RequestParam("roles") List<String> roles,
+                             HttpSession session) throws Exception {
+        session.setAttribute("roles", roles);
+        return "redirect:/users/add/step4";
+    }
+
+    @GetMapping("/users/add/cya")
+    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
+    public String addUserCya(Model model, HttpSession session) throws Exception {
+        List<String> selectedApps = (List<String>) session.getAttribute("apps");
+        if (Objects.isNull(selectedApps)) {
+            selectedApps = new ArrayList<>();
+        }
+        List<UserRole> roles = userService.getAllAvailableRolesForApps(selectedApps);
+        List<String> selectedRoles = (List<String>) session.getAttribute("roles");
+        List<UserRole> cyaRoles = new ArrayList<>();
+        for (UserRole role : roles) {
+            if (!selectedRoles.contains(role.getAppRoleId())) {
+                cyaRoles.add(role);
+            }
+        }
+        User user = (User) session.getAttribute("user");
+        if (Objects.isNull(user)) {
+            user = new User();
+        }
+        model.addAttribute("roles", cyaRoles);
+        model.addAttribute("user", user);
+        return "users/cya";
+    }
+
+    @PostMapping("/users/add/cya")
+    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
+    public String addUserCya(HttpSession session) throws Exception {
+        String password = RandomPasswordGenerator.generateRandomPassword(8);
+        User user = (User) session.getAttribute("user");
+        List<String> selectedRoles = (List<String>) session.getAttribute("roles");
+        user = userService.createUser(user, password, selectedRoles);
+        createUserNotificationService.notifyCreateUser(user.getDisplayName(), user.getMail(), password, user.getId());
+        session.removeAttribute("roles");
+        return "redirect:/users/add/created";
+    }
+
+    @GetMapping("/users/add/created")
+    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
+    public String addUsercreated(Model model, HttpSession session) throws Exception {
+        User user = (User) session.getAttribute("user");
+        model.addAttribute("user", user);
+        return "/users/add/created";
+    }
 
     /**
      * Add new user via Microsoft Graph API.
