@@ -7,7 +7,6 @@ import com.example.model.UserRole;
 import com.example.service.UserService;
 import com.example.utils.RandomPasswordGenerator;
 import com.microsoft.graph.models.Invitation;
-import com.microsoft.graph.models.ServicePrincipal;
 import com.microsoft.graph.models.User;
 import lombok.RequiredArgsConstructor;
 import jakarta.servlet.http.HttpSession;
@@ -40,7 +39,7 @@ public class UserController {
             user = new User();
         }
         model.addAttribute("user", user);
-        return "users/addOne";
+        return "add-user-detail";
     }
 
     @PostMapping("/users/add/step1")
@@ -63,15 +62,16 @@ public class UserController {
     @GetMapping("/users/add/step2")
     //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
     public String addUserTwo(Model model, HttpSession session) throws Exception {
-        List<ServicePrincipalModel> apps = (List<ServicePrincipalModel>)(List<?>) userService.getServicePrincipals();
+        List<ServicePrincipalModel> apps = userService.getServicePrincipals().stream()
+                .map(x->new ServicePrincipalModel(x, false)).collect(Collectors.toList());
         List<String> selectedApps = (List<String>) session.getAttribute("apps");
         for (ServicePrincipalModel app : apps) {
-            if (selectedApps.contains(app.getAppId())) {
+            if (Objects.nonNull(selectedApps) && selectedApps.contains(app.getServicePrincipal().getAppId())) {
                 app.setSelected(true);
             }
         }
         model.addAttribute("apps", apps);
-        return "users/addTwo";
+        return "add-user-apps";
     }
 
     @PostMapping("/users/add/step2")
@@ -97,7 +97,7 @@ public class UserController {
             }
         }
         model.addAttribute("roles", roles);
-        return "users/addThree";
+        return "add-user-roles";
     }
 
     @PostMapping("/users/add/step3")
@@ -129,7 +129,7 @@ public class UserController {
         }
         model.addAttribute("roles", cyaRoles);
         model.addAttribute("user", user);
-        return "users/cya";
+        return "add-user-cya";
     }
 
     @PostMapping("/users/add/cya")
@@ -149,7 +149,7 @@ public class UserController {
     public String addUsercreated(Model model, HttpSession session) throws Exception {
         User user = (User) session.getAttribute("user");
         model.addAttribute("user", user);
-        return "/users/add/created";
+        return "add-user-created";
     }
 
     /**

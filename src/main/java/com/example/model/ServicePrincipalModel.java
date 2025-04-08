@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServicePrincipalModel extends ServicePrincipal {
+public class ServicePrincipalModel {
+    private ServicePrincipal  servicePrincipal;
     private boolean selected = false;
 }

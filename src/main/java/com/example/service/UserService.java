@@ -203,6 +203,7 @@ public class UserService {
     }
 
     public List<ServicePrincipal> getServicePrincipals() {
+        GraphServiceClient graphClient = getGraphClient();
         return Objects.requireNonNull(graphClient.servicePrincipals().get()).getValue();
     }
 
