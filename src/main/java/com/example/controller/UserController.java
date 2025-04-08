@@ -92,7 +92,7 @@ public class UserController {
         List<UserRole> roles = userService.getAllAvailableRolesForApps(selectedApps);
         List<String> selecteRoles = (List<String>) session.getAttribute("roles");
         for (UserRole role : roles) {
-            if (selecteRoles.contains(role.getAppRoleId())) {
+            if (Objects.nonNull(selecteRoles) && selecteRoles.contains(role.getAppRoleId())) {
                 role.setSelected(true);
             }
         }
