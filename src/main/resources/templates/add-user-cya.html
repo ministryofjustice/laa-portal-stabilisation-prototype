@@ -1,10 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'register'},
+      breadcrumbs=~{::#breadcrumbs})}"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login Page</title>
 </head>
 <body>
+<nav class="govuk-breadcrumbs" aria-label="Breadcrumb" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Home</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Section</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">Subsection</li>
+    </ol>
+</nav>
+<div id="main-content">
+    <h1>Welcome</h1>
+    <p class="govuk-body" th:if="${param.error}" style="color:red;">Invalid username or password</p>
+    <!--    <div sec:authorize="hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')">-->
+    <form th:action="@{/users/add/cya}" th:method="post">
+        <div>
+            <h2>User detail</h2>
+            <ul>
+                <li th:text="${user.displayName}" />
+                <li th:text="${user.mail}" />
+                <li th:text="${user.officeLocation}" />
+            </ul>
+        </div>
+        <div>
+            <h2>Permission</h2>
 
+            <table>
+                <span th:each="appRole : ${roles.values()}">
+                    <p th:text="${appRole[0].appName}"></p>
+                    <td>
+                        <tr th:each="role: ${appRole}">
+                            <p th:text="${role.roleName}"></p>
+                        </tr>
+                    <td>
+                </span>
+            </table>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    <!--    </div>-->
+
+</div>
 </body>
 </html>

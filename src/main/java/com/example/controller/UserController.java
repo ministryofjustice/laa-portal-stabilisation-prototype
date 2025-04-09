@@ -102,10 +102,10 @@ public class UserController {
 
     @PostMapping("/users/add/step3")
     //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
-    public String addUserThree(@RequestParam("roles") List<String> roles,
+    public String addUserThree(@RequestParam("selectedRoles") List<String> roles,
                              HttpSession session) throws Exception {
         session.setAttribute("roles", roles);
-        return "redirect:/users/add/step4";
+        return "redirect:/users/add/cya";
     }
 
     @GetMapping("/users/add/cya")
@@ -115,19 +115,23 @@ public class UserController {
         if (Objects.isNull(selectedApps)) {
             selectedApps = new ArrayList<>();
         }
-        List<UserRole> roles = userService.getAllAvailableRolesForApps(selectedApps);
-        List<String> selectedRoles = (List<String>) session.getAttribute("roles");
-        List<UserRole> cyaRoles = new ArrayList<>();
-        for (UserRole role : roles) {
-            if (!selectedRoles.contains(role.getAppRoleId())) {
-                cyaRoles.add(role);
+        if (!selectedApps.isEmpty()) {
+            List<UserRole> roles = userService.getAllAvailableRolesForApps(selectedApps);
+            List<String> selectedRoles = (List<String>) session.getAttribute("roles");
+            Map<String, List<UserRole>> cyaRoles = new HashMap<>();
+            for (UserRole role : roles) {
+                if (selectedRoles.contains(role.getAppRoleId())) {
+                    List<UserRole> appRoles = cyaRoles.getOrDefault(role.getAppId(), new ArrayList<>());
+                    appRoles.add(role);
+                    cyaRoles.put(role.getAppId(), appRoles);
+                }
             }
+            model.addAttribute("roles", cyaRoles);
         }
         User user = (User) session.getAttribute("user");
         if (Objects.isNull(user)) {
             user = new User();
         }
-        model.addAttribute("roles", cyaRoles);
         model.addAttribute("user", user);
         return "add-user-cya";
     }
