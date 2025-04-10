@@ -168,6 +168,45 @@ public class UserService {
         return user;
     }
 
+    public User createUser(User user, String password, List<String> roles) {
+
+        user.setAccountEnabled(true);
+        ObjectIdentity objectIdentity = new ObjectIdentity();
+        objectIdentity.setSignInType("emailAddress");
+        //read from login user
+        objectIdentity.setIssuer("mojodevlexternal.onmicrosoft.com");
+        //read from login user
+        objectIdentity.setIssuerAssignedId(user.getMail());
+        LinkedList<ObjectIdentity> identities = new LinkedList<ObjectIdentity>();
+        identities.add(objectIdentity);
+        user.setIdentities(identities);
+        PasswordProfile passwordProfile = new PasswordProfile();
+        passwordProfile.setForceChangePasswordNextSignInWithMfa(true);
+        passwordProfile.setPassword(password);
+        user.setPasswordProfile(passwordProfile);
+        GraphServiceClient graphClient = getGraphClient();
+        user = graphClient.users().post(user);
+        
+        ServicePrincipalCollectionResponse principalCollection = graphClient.servicePrincipals().get();
+        String resourceId = null;
+        UUID roleId = null;
+        for (ServicePrincipal servicePrincipal : principalCollection.getValue()) {
+            for (AppRole appRole : servicePrincipal.getAppRoles()) {
+                if (roles.contains(appRole.getId().toString())) {
+                    resourceId = servicePrincipal.getId();
+                    roleId = appRole.getId();
+                    assignAppRoleToUser(user.getId(), resourceId, roleId.toString());
+                }
+            }
+        }
+        return user;
+    }
+
+    public List<ServicePrincipal> getServicePrincipals() {
+        GraphServiceClient graphClient = getGraphClient();
+        return Objects.requireNonNull(graphClient.servicePrincipals().get()).getValue();
+    }
+
     /**
      * Get Authenticated Graph Client for API usage
      *
@@ -391,7 +430,37 @@ public class UserService {
                                 role.getDisplayName(),
                                 null,
                                 role.getDisplayName(),
-                                null
+                                null,
+                                false
+                        );
+                        roles.add(roleInfo);
+                    }
+                }
+            }
+        }
+        return roles;
+    }
+
+    public List<UserRole> getAllAvailableRolesForApps(List<String> selectedApps) {
+        List<ServicePrincipal> servicePrincipals = Objects.requireNonNull(getGraphClient()
+                        .servicePrincipals()
+                        .get())
+                .getValue();
+
+        List<UserRole> roles = new ArrayList<>();
+        if (!ObjectUtils.isEmpty(servicePrincipals)) {
+            for (ServicePrincipal sp : servicePrincipals) {
+                if (selectedApps.contains(sp.getAppId())) {
+                    for (AppRole role : Objects.requireNonNull(sp.getAppRoles())) {
+                        UserRole roleInfo = new UserRole(
+                                sp.getId(),
+                                sp.getDisplayName(),
+                                Objects.requireNonNull(role.getId()).toString(),
+                                role.getDisplayName(),
+                                null,
+                                role.getDisplayName(),
+                                null,
+                                false
                         );
                         roles.add(roleInfo);
                     }
