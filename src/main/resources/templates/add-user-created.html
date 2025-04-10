@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'register'},
+      breadcrumbs=~{::#breadcrumbs})}"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+<nav class="govuk-breadcrumbs" aria-label="Breadcrumb" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Home</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Section</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">Subsection</li>
+    </ol>
+</nav>
+<div id="main-content">
+    <h1>Welcome</h1>
+    <p th:text="${user.displayName} + ' created'"></p>
+
+</div>
+</body>
+</html>
