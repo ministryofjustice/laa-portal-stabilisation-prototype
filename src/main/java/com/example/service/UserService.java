@@ -192,7 +192,7 @@ public class UserService {
         UUID roleId = null;
         for (ServicePrincipal servicePrincipal : principalCollection.getValue()) {
             for (AppRole appRole : servicePrincipal.getAppRoles()) {
-                if (roles.equals(appRole.getId())) {
+                if (roles.contains(appRole.getId().toString())) {
                     resourceId = servicePrincipal.getId();
                     roleId = appRole.getId();
                     assignAppRoleToUser(user.getId(), resourceId, roleId.toString());
