@@ -28,7 +28,7 @@
     <!--    <div sec:authorize="hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')">-->
     <form th:action="@{/users/add/cya}" th:method="post">
         <div>
-            <h2>User detail</h2>
+            <h2>User detail  <a href="/users/add/step1">Change</a></h2>
             <ul>
                 <li th:text="${user.displayName}" />
                 <li th:text="${user.mail}" />
@@ -38,16 +38,15 @@
         <div>
             <h2>Permission</h2>
 
-            <table>
-                <span th:each="appRole : ${roles.values()}">
-                    <p th:text="${appRole[0].appName}"></p>
-                    <td>
-                        <tr th:each="role: ${appRole}">
-                            <p th:text="${role.roleName}"></p>
-                        </tr>
-                    <td>
-                </span>
-            </table>
+            <div th:each="appRole : ${roles.values()}">
+                <ol>
+                    <p th:text="${appRole[0].appName}"></p> <a href="/users/add/step3">Change</a>
+                    <li th:each="role: ${appRole}">
+                        <p th:text="${role.roleName}"></p>
+                    </li>
+                </ol>
+            </div>
+            <p>  <a href="/users/add/step2">Add another application</a></p>
         </div>
         <button type="submit">Submit</button>
     </form>

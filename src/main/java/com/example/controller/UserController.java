@@ -17,7 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
@@ -63,7 +70,7 @@ public class UserController {
     //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
     public String addUserTwo(Model model, HttpSession session) throws Exception {
         List<ServicePrincipalModel> apps = userService.getServicePrincipals().stream()
-                .map(x->new ServicePrincipalModel(x, false)).collect(Collectors.toList());
+                .map(x -> new ServicePrincipalModel(x, false)).collect(Collectors.toList());
         List<String> selectedApps = (List<String>) session.getAttribute("apps");
         for (ServicePrincipalModel app : apps) {
             if (Objects.nonNull(selectedApps) && selectedApps.contains(app.getServicePrincipal().getAppId())) {
@@ -119,11 +126,13 @@ public class UserController {
             List<UserRole> roles = userService.getAllAvailableRolesForApps(selectedApps);
             List<String> selectedRoles = (List<String>) session.getAttribute("roles");
             Map<String, List<UserRole>> cyaRoles = new HashMap<>();
-            for (UserRole role : roles) {
-                if (selectedRoles.contains(role.getAppRoleId())) {
-                    List<UserRole> appRoles = cyaRoles.getOrDefault(role.getAppId(), new ArrayList<>());
-                    appRoles.add(role);
-                    cyaRoles.put(role.getAppId(), appRoles);
+            if (Objects.nonNull(selectedRoles)) {
+                for (UserRole role : roles) {
+                    if (selectedRoles.contains(role.getAppRoleId())) {
+                        List<UserRole> appRoles = cyaRoles.getOrDefault(role.getAppId(), new ArrayList<>());
+                        appRoles.add(role);
+                        cyaRoles.put(role.getAppId(), appRoles);
+                    }
                 }
             }
             model.addAttribute("roles", cyaRoles);
@@ -145,6 +154,7 @@ public class UserController {
         user = userService.createUser(user, password, selectedRoles);
         createUserNotificationService.notifyCreateUser(user.getDisplayName(), user.getMail(), password, user.getId());
         session.removeAttribute("roles");
+        session.removeAttribute("apps");
         return "redirect:/users/add/created";
     }
 
