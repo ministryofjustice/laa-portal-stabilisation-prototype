@@ -5,7 +5,7 @@
       mainContent=~{::#main-content},
       pageCategory=${'invite'},
       breadcrumbs=~{::#breadcrumbs})}"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <title>Login Page</title>
@@ -25,13 +25,18 @@
 <div id="main-content">
     <h1>Welcome</h1>
     <p class="govuk-body" th:if="${param.error}" style="color:red;">Invalid username or password</p>
-    <a th:if="${redeemUrl}" th:href="${redeemUrl}">Click here ...</a>
-    <form th:action="@{/invite}" th:method="post">
-        <label>
-            <input type="text" name="email" placeholder="email">
-        </label>
-        <button type="submit">Submit</button>
-    </form>
+<!--    <div sec:authorize="hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All') and hasAuthority('SCOPE_User.Invite.All')">-->
+        <a th:if="${redeemUrl}" th:href="${redeemUrl}">Click here ...</a>
+        <form th:action="@{/invite}" th:method="post">
+            <label>
+                <input type="text" name="email" placeholder="email">
+                <input type="text" name="application" placeholder="laa-portal-oidc-playground">
+                <input type="text" name="role" placeholder="Developer">
+                <input type="text" name="office" placeholder="office">
+            </label>
+            <button type="submit">Submit</button>
+        </form>
+<!--    </div>-->
 </div>
 </body>
 </html>

@@ -23,8 +23,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        //TODO: remove "/users", "/users/**"
         http.authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/", "/login", "/migrate", "/register", "/invite", "/css/**", "/js/**", "/assets/**")
+                .requestMatchers("/", "/login", "/migrate", "/register", "/invite", "/css/**", "/js/**", "/assets/**", "/users", "/users/**")
                 .permitAll()
                 .anyRequest().authenticated()
         ).oauth2Login(oauth2 -> oauth2

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'register'},
+      breadcrumbs=~{::#breadcrumbs})}"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+<nav class="govuk-breadcrumbs" aria-label="Breadcrumb" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Home</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="#">Section</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">Subsection</li>
+    </ol>
+</nav>
+<div id="main-content">
+    <h1>Welcome</h1>
+    <p class="govuk-body" th:if="${param.error}" style="color:red;">Invalid username or password</p>
+    <!--    <div sec:authorize="hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')">-->
+    <form method="post" th:action="@{/users/add/step3}">
+        <fieldset class="govuk-fieldset">
+            <p class="govuk-hint govuk-!-margin-bottom-3">
+                Select all that apply you will be adding all the roles based off what has been selected
+            </p>
+            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item" th:each="role : ${roles}">
+                    <input class="govuk-checkboxes__input" id="selectedRoles" name="selectedRoles"
+                           th:checked="${role.selected}"
+                           th:value="${role.appRoleId}"
+                           type="checkbox">
+                    <label class="govuk-label govuk-checkboxes__label"
+                           th:for="'role-' + ${role.appRoleId}">
+                        <span th:text="${role.appName}"></span> - <span th:text="${role.roleName}"></span>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+        <button class="govuk-button govuk-!-margin-top-3" data-module="govuk-button" type="submit">
+            Save and continue
+        </button>
+
+        <button class="govuk-button govuk-button--secondary govuk-!-margin-top-3 govuk-!-margin-left-2"
+                data-module="govuk-button"
+                type="submit">
+            Save as draft
+        </button>
+    </form>
+    <!--    </div>-->
+
+</div>
+</body>
+</html>
