@@ -24,7 +24,7 @@ spec:
             runAsNonRoot: true
             allowPrivilegeEscalation: false
             capabilities:
-              drop: ["ALL"]
+              drop: [ "ALL" ]
             seccompProfile:
               type: RuntimeDefault
           ports:
@@ -45,3 +45,8 @@ spec:
                 secretKeyRef:
                   name: laa-portal-stabilisation-prototype-azure-tenant-secret-k8s
                   key: AZURE_TENANT_ID
+            - name: GOV_NOTIFY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: laa-portal-stabilisation-prototype-secret-gov-notify-api-key-k8s
+                  key: GOV_NOTIFY_API_KEY
