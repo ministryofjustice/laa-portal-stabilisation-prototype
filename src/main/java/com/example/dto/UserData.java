@@ -9,9 +9,6 @@ import lombok.Setter;
 public class UserData {
     //Getters and setters
     private String email;
-    private String fullName;
-    private String jobTitle;
-    private Number phone;
-    private String extension;
-
+    private String firstName;
+    private String lastName;
 }

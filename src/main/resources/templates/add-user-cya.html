@@ -11,47 +11,99 @@
     <title>Login Page</title>
 </head>
 <body>
-<nav class="govuk-breadcrumbs" aria-label="Breadcrumb" id="breadcrumbs">
+<nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
         <li class="govuk-breadcrumbs__list-item">
-            <a class="govuk-breadcrumbs__link" href="#">Home</a>
+            <a class="govuk-breadcrumbs__link" href="/user/create/offices">< Back</a>
         </li>
-        <li class="govuk-breadcrumbs__list-item">
-            <a class="govuk-breadcrumbs__link" href="#">Section</a>
-        </li>
-        <li class="govuk-breadcrumbs__list-item" aria-current="page">Subsection</li>
     </ol>
 </nav>
-<div id="main-content">
-    <h1>Welcome</h1>
-    <p class="govuk-body" th:if="${param.error}" style="color:red;">Invalid username or password</p>
-    <!--    <div sec:authorize="hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')">-->
-    <form th:action="@{/users/add/cya}" th:method="post">
-        <div>
-            <h2>User detail  <a href="/users/add/step1">Change</a></h2>
-            <ul>
-                <li th:text="${user.displayName}" />
-                <li th:text="${user.mail}" />
-                <li th:text="${user.officeLocation}" />
-            </ul>
-        </div>
-        <div>
-            <h2>Permission</h2>
+<main class="govuk-main-wrapper" id="main-content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
+            <span class="govuk-caption-l">Firm 1 | 123455</span>
+            <h1 class="govuk-heading-l">
+                Check your answers
+            </h1>
+            <form th:action="@{/users/add/cya}" th:method="post">
+                <div class="govuk-summary-card">
+                    <div class="govuk-summary-card__title-wrapper">
+                        <h2 class="govuk-summary-card__title">
+                            User details
+                        </h2>
+                        <ul class="govuk-summary-card__actions">
+                            <li class="govuk-summary-card__action">
+                                <a class="govuk-link" href="/user/create/details">Change</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="govuk-summary-card__content">
+                        <dl class="govuk-summary-list">
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    Email
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    <span th:text="${user.email}"></span>
+                                </dd>
+                            </div>
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    First Name
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    <span th:text="${user.firstName}"></span>
+                                </dd>
+                            </div>
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    Last name
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    <span th:text="${user.lastName}"></span>
 
-            <div th:each="appRole : ${roles.values()}">
-                <ol>
-                    <p th:text="${appRole[0].appName}"></p> <a href="/users/add/step3">Change</a>
-                    <li th:each="role: ${appRole}">
-                        <p th:text="${role.roleName}"></p>
-                    </li>
-                </ol>
-            </div>
-            <p>  <a href="/users/add/step2">Add another application</a></p>
+                                </dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+                <div class="govuk-summary-card">
+                    <div class="govuk-summary-card__title-wrapper">
+                        <h2 class="govuk-summary-card__title">
+                            Services
+                        </h2>
+                        <ul class="govuk-summary-card__actions">
+                            <li class="govuk-summary-card__action">
+                                <a class="govuk-link" href="/user/create/services">Change</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="govuk-summary-card__content">
+                        <dl class="govuk-summary-list">
+                            <div th:each="appRole : ${roles.values()}">
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">
+                                        <span th:text="${appRole[0].appName}"></span>
+                                    </dt>
+                                    <dd class="govuk-summary-list__value">
+                                        <span th:each="role: ${appRole}">
+                                            <span th:text="${role.roleName}"></span><br />
+                                        </span>
+                                    </dd>
+                                </div>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+                <div class="govuk-button-group">
+                    <button type="submit" class="govuk-button" data-module="govuk-button"
+                            data-govuk-button-init="">
+                        Create user and send invite
+                    </button>
+                </div>
+            </form>
         </div>
-        <button type="submit">Submit</button>
-    </form>
-    <!--    </div>-->
-
-</div>
+    </div>
+</main>
 </body>
 </html>
