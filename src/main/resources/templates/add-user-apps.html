@@ -8,44 +8,42 @@
       xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
-  <title>Login Page</title>
+    <title>Services</title>
 </head>
 <body>
 <nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
-  <ol class="govuk-breadcrumbs__list">
-    <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/user/create/details">< Back</a>
-    </li>
-  </ol>
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="/user/create/details">< Back</a>
+        </li>
+    </ol>
 </nav>
 <div id="main-content">
-  <h1>Welcome</h1>
-  <p class="govuk-body" th:if="${param.error}" style="color:red;">Invalid username or password</p>
-  <!--    <div sec:authorize="hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')">-->
-  <form method="post" th:action="@{/user/create/services}"  th:object="${userData}">
-    <fieldset class="govuk-fieldset">
-      <h1 class="govuk-hint govuk-!-margin-bottom-3">
-        Select the roles required for  <span th:text="${userData.firstName}"></span> <span th:text="${userData.lastName}"></span>
-      </h1>
-      <p>Select all that apply</p>
-      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-        <div class="govuk-checkboxes__item" th:each="app : ${apps}">
-          <input class="govuk-checkboxes__input" id="apps" name="apps"
-                 th:checked="${app.selected}"
-                 th:value="${app.servicePrincipal.appId}"
-                 type="checkbox">
-          <label class="govuk-label govuk-checkboxes__label"
-                 th:for="${app.servicePrincipal.appId}">
-            <span th:text="${app.servicePrincipal.appDisplayName}"></span>
-          </label>
-        </div>
-      </div>
-    </fieldset>
-
-    <button class="govuk-button govuk-!-margin-top-3" data-module="govuk-button" type="submit">
-      Continue
-    </button>
-  </form>
+    <p class="govuk-body" th:if="${param.error}" style="color:red;">Invalid username or password</p>
+    <form method="post" th:action="@{/user/create/services}">
+        <fieldset class="govuk-fieldset">
+            <h1 class="govuk-hint govuk-!-margin-bottom-3">
+                Select the roles required for <span th:text="${user.givenName}"></span> <span
+                    th:text="${user.surname}"></span>
+            </h1>
+            <p class="govuk-body">Select all that apply</p>
+            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item" th:each="app : ${apps}">
+                    <input class="govuk-checkboxes__input" id="apps" name="apps"
+                           th:checked="${app.selected}"
+                           th:value="${app.servicePrincipal.appId}"
+                           type="checkbox">
+                    <label class="govuk-label govuk-checkboxes__label"
+                           th:for="${app.servicePrincipal.appId}">
+                        <span th:text="${app.servicePrincipal.appDisplayName}"></span>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+        <button class="govuk-button govuk-!-margin-top-3" data-module="govuk-button" type="submit">
+            Continue
+        </button>
+    </form>
 </div>
 </body>
 </html>

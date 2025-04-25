@@ -15,33 +15,33 @@
 <nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
         <li class="govuk-breadcrumbs__list-item">
-            <a class="govuk-breadcrumbs__link" href="/">< Back</a>
+            <a class="govuk-breadcrumbs__link" href="/users">< Back</a>
         </li>
     </ol>
 </nav>
 <main class="govuk-main-wrapper" id="main-content">
     <h1 class="govuk-heading-m">User Details</h1>
     <p class="govuk-body">Enter all the details about the user you are creating</p>
-    <form th:action="@{/user/create/details}" th:method="post" th:object="${userData}">
+    <form th:action="@{/user/create/details}" th:method="post">
         <div class="govuk-form-group">
             <label class="govuk-label" for="email">
                 Email Address:
             </label>
-            <input class="govuk-input govuk-input--width-10" name="email" type="email" th:field="*{email}"
+            <input class="govuk-input govuk-input--width-10" name="email" type="email" th:value="*{user.mail}"
                    id="email"/>
         </div>
         <div class="govuk-form-group">
             <label class="govuk-label" for="firstName">
                 First Name:
             </label>
-            <input class="govuk-input govuk-input--width-10" name="firstName" type="text" th:field="*{firstName}"
+            <input class="govuk-input govuk-input--width-10" name="firstName" type="text" th:value="*{user.givenName}"
                    id="firstName"/>
         </div>
         <div class="govuk-form-group">
             <label class="govuk-label" for="lastName">
                 Last Name:
             </label>
-            <input class="govuk-input govuk-input--width-10" name="lastName" type="text" th:field="*{lastName}"
+            <input class="govuk-input govuk-input--width-10" name="lastName" type="text" th:value="*{user.surname}"
                    id="lastName"/>
         </div>
         <button type="submit" class="govuk-button">Continue</button>

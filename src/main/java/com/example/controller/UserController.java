@@ -4,7 +4,6 @@ import com.example.model.ServicePrincipalModel;
 import com.example.service.CreateUserNotificationService;
 import com.example.model.PaginatedUsers;
 import com.example.dto.OfficeData;
-import com.example.dto.PermissionsData;
 import com.example.model.UserRole;
 import com.example.service.UserService;
 import com.example.utils.RandomPasswordGenerator;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-import com.example.dto.UserData;
 
 import java.util.List;
 
@@ -41,24 +39,34 @@ public class UserController {
 
     @GetMapping("/user/create/details")
     public String createUser(HttpSession session, Model model) {
-        UserData storedData = (UserData) session.getAttribute("userData");
-
-        if (storedData == null) {
-            storedData = new UserData();
+        User user = (User) session.getAttribute("user");
+        if (Objects.isNull(user)) {
+            user = new User();
         }
-        model.addAttribute("userData", storedData);
+        model.addAttribute("user", user);
         return "user/user-details";
     }
 
     @PostMapping("/user/create/details")
-    public RedirectView postUser(HttpSession session, @ModelAttribute UserData userData) {
-        session.setAttribute("userData", userData);
+    public RedirectView postUser(@RequestParam("firstName") String firstName,
+                                 @RequestParam("lastName") String lastName,
+                                 @RequestParam("email") String email,
+                                 HttpSession session) throws Exception {
+        User user = (User) session.getAttribute("user");
+        if (Objects.isNull(user)) {
+            user = new User();
+        }
+        user.setGivenName(firstName);
+        user.setSurname(lastName);
+        user.setDisplayName(firstName + " " + lastName);
+        user.setMail(email);
+        session.setAttribute("user", user);
         return new RedirectView("/user/create/services");
     }
 
     @GetMapping("/user/create/services")
     //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
-    public String addUserTwo(Model model, HttpSession session, @ModelAttribute UserData userData) throws Exception {
+    public String addUserTwo(Model model, HttpSession session) throws Exception {
         List<ServicePrincipalModel> apps = userService.getServicePrincipals().stream()
                 .map(x -> new ServicePrincipalModel(x, false)).collect(Collectors.toList());
         List<String> selectedApps = (List<String>) session.getAttribute("apps");
@@ -68,12 +76,12 @@ public class UserController {
             }
         }
         model.addAttribute("apps", apps);
-        UserData storedData = (UserData) session.getAttribute("userData");
+        User user = (User) session.getAttribute("user");
 
-        if (storedData == null) {
-            storedData = new UserData();
+        if (user == null) {
+            user = new User();
         }
-        model.addAttribute("userData", storedData);
+        model.addAttribute("user", user);
         return "add-user-apps";
     }
 
@@ -153,31 +161,35 @@ public class UserController {
             model.addAttribute("roles", cyaRoles);
         }
 
-        UserData storedData = (UserData) session.getAttribute("userData");
-
-        if (storedData == null) {
-            storedData = new UserData();
+        User user = (User) session.getAttribute("user");
+        if (Objects.isNull(user)) {
+            user = new User();
         }
-        model.addAttribute("user", storedData);
+        model.addAttribute("user", user);
 
+        OfficeData officeData = (OfficeData) session.getAttribute("officeData");
+        if (officeData == null) {
+            officeData = new OfficeData();
+        }
+        model.addAttribute("officeData", officeData);
         return "add-user-cya";
     }
 
-    @PostMapping("/users/add/cya")
+    @PostMapping("/user/create/check-answers")
     //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
     public String addUserCya(HttpSession session) throws Exception {
         String password = RandomPasswordGenerator.generateRandomPassword(8);
-        User user = (User) session.getAttribute("userData");
+        User user = (User) session.getAttribute("user");
 
         List<String> selectedRoles = (List<String>) session.getAttribute("roles");
         user = userService.createUser(user, password, selectedRoles);
         createUserNotificationService.notifyCreateUser(user.getDisplayName(), user.getMail(), password, user.getId());
         session.removeAttribute("roles");
         session.removeAttribute("apps");
-        return "redirect:/users/add/created";
+        return "redirect:/users";
     }
 
-    @GetMapping("/users/add/created")
+    @GetMapping("/user/create/confirmation")
     //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
     public String addUsercreated(Model model, HttpSession session) throws Exception {
         User user = (User) session.getAttribute("user");
@@ -227,51 +239,6 @@ public class UserController {
         return "invite";
     }
 
-
-
-
-
-
-    @GetMapping("/permissions")
-    public String permissions(HttpSession session, Model model) {
-        PermissionsData permissionData = (PermissionsData) session.getAttribute("permissionData");
-        if (permissionData == null) {
-            permissionData = new PermissionsData();
-        }
-        model.addAttribute("permissionData", permissionData);
-        return "user/permissions";
-
-    }
-
-    @PostMapping("/permissions")
-    public RedirectView postPermissions(HttpSession session, @RequestParam(value = "permission", required = false) List<String> selectedPermissions) {
-        PermissionsData permissionData = new PermissionsData();
-        permissionData.setSelectedPermissions(selectedPermissions);
-        session.setAttribute("permissionData", permissionData);
-        return new RedirectView("/check-answers");
-    }
-
-
-
-
-    @GetMapping("/check-answers")
-    public String checkAnswers(HttpSession session, Model model) {
-        OfficeData officeData = (OfficeData) session.getAttribute("officeData");
-        PermissionsData permissionData = (PermissionsData) session.getAttribute("permissionData");
-        UserData userData = (UserData) session.getAttribute("userData");
-        model.addAttribute("userData", userData);
-        model.addAttribute("officeData", officeData);
-        model.addAttribute("permissionData", permissionData);
-        return "user/check-answers";
-    }
-
-    @GetMapping("/confirmation")
-    public String confirmation(HttpSession session, Model model) {
-        UserData userData = (UserData) session.getAttribute("userData");
-        model.addAttribute("userData", userData);
-        return "user/confirmation";
-    }
-
     /**
      * Retrieves a list of users from Microsoft Graph API.
      */
@@ -289,7 +256,8 @@ public class UserController {
         model.addAttribute("previousPageLink", paginatedUsers.getPreviousPageLink());
         model.addAttribute("pageSize", size);
         model.addAttribute("pageHistory", pageHistory);
-
+        User user = (User) session.getAttribute("user");
+        model.addAttribute("user", user);
         return "users";
     }
 
@@ -312,7 +280,6 @@ public class UserController {
 
         return "edit-user-roles";
     }
-
 
     /**
      * Update user roles via graph SDK

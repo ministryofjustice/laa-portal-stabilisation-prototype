@@ -25,7 +25,7 @@
             <h1 class="govuk-heading-l">
                 Check your answers
             </h1>
-            <form th:action="@{/users/add/cya}" th:method="post">
+            <form th:action="@{/user/create/check-answers}" th:method="post">
                 <div class="govuk-summary-card">
                     <div class="govuk-summary-card__title-wrapper">
                         <h2 class="govuk-summary-card__title">
@@ -44,7 +44,7 @@
                                     Email
                                 </dt>
                                 <dd class="govuk-summary-list__value">
-                                    <span th:text="${user.email}"></span>
+                                    <span th:text="${user.mail}"></span>
                                 </dd>
                             </div>
                             <div class="govuk-summary-list__row">
@@ -52,7 +52,7 @@
                                     First Name
                                 </dt>
                                 <dd class="govuk-summary-list__value">
-                                    <span th:text="${user.firstName}"></span>
+                                    <span th:text="${user.givenName}"></span>
                                 </dd>
                             </div>
                             <div class="govuk-summary-list__row">
@@ -60,7 +60,7 @@
                                     Last name
                                 </dt>
                                 <dd class="govuk-summary-list__value">
-                                    <span th:text="${user.lastName}"></span>
+                                    <span th:text="${user.surname}"></span>
 
                                 </dd>
                             </div>
@@ -88,6 +88,34 @@
                                     <dd class="govuk-summary-list__value">
                                         <span th:each="role: ${appRole}">
                                             <span th:text="${role.roleName}"></span><br />
+                                        </span>
+                                    </dd>
+                                </div>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+                <div class="govuk-summary-card">
+                    <div class="govuk-summary-card__title-wrapper">
+                        <h2 class="govuk-summary-card__title">
+                            Offices
+                        </h2>
+                        <ul class="govuk-summary-card__actions">
+                            <li class="govuk-summary-card__action">
+                                <a class="govuk-link" href="/user/create/offices">Change</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="govuk-summary-card__content">
+                        <dl class="govuk-summary-list">
+                            <div th:each="office : ${officeData.getSelectedOffices()}">
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">
+                                        <span th:text="${office[0]}"></span>
+                                    </dt>
+                                    <dd class="govuk-summary-list__value">
+                                        <span th:each="role: ${office}">
+                                            <span th:text="${office}"></span><br />
                                         </span>
                                     </dd>
                                 </div>
