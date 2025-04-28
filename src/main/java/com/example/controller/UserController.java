@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -258,6 +259,15 @@ public class UserController {
     public String updateUserRoles(@PathVariable String id,
                                   @RequestParam(required = false) List<String> selectedRoles) {
         userService.updateUserRoles(id, selectedRoles);
+        return "redirect:/users";
+    }
+
+    /**
+     * Disable group of users via graph SDK
+     */
+    @PostMapping("/users/disable")
+    public String disableUsers(@RequestParam List<String> id) throws IOException {
+        userService.disableUsers(id);
         return "redirect:/users";
     }
 
