@@ -2,7 +2,6 @@ package com.example.service;
 
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
-import com.microsoft.graph.models.*;
 import com.example.model.PaginatedUsers;
 import com.example.model.UserModel;
 import com.example.model.UserRole;
@@ -88,9 +87,6 @@ public class UserService {
                         }
                     }
                 }
-                //servicePrincipal.getAppRoles().forEach(role -> {System.out.println("role: " + role.getDisplayName()); System.out.println("id: " + role.getId());});
-                //System.out.println("pName: " + servicePrincipal.getDisplayName());
-                //System.out.println("appId: " + servicePrincipal.getAppId());
             }
             System.out.println("resourceId: " + resourceId);
             System.out.println("roleId: " + roleId);
@@ -150,9 +146,6 @@ public class UserService {
                     }
                 }
             }
-            //servicePrincipal.getAppRoles().forEach(role -> {System.out.println("role: " + role.getDisplayName()); System.out.println("id: " + role.getId());});
-            //System.out.println("pName: " + servicePrincipal.getDisplayName());
-            //System.out.println("appId: " + servicePrincipal.getAppId());
         }
         System.out.println("resourceId: " + resourceId);
         System.out.println("roleId: " + roleId);
