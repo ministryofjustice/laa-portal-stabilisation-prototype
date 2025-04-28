@@ -561,7 +561,7 @@ public class UserService {
     static <T> Collection<List<T>> partitionBasedOnSize(List<T> inputList, int size) {
         final AtomicInteger counter = new AtomicInteger(0);
         return inputList.stream()
-                .collect(Collectors.groupingBy(s -> counter.getAndIncrement()/size))
+                .collect(Collectors.groupingBy(s -> counter.getAndIncrement() / size))
                 .values();
     }
 }
