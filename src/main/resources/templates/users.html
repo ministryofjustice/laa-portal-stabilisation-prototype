@@ -53,7 +53,7 @@
                 </div>
             </div>
         </div>
-
+        <form method="post" th:action="@{/users/disable}">
         <table class="govuk-table">
             <thead>
             <tr>
@@ -67,6 +67,11 @@
             <tbody>
             <tr th:each="user : ${users}">
                 <td class="govuk-table__cell">
+                    <label>
+                        <input type="checkbox" name="id[]" th:value="${user.id}"/>
+                    </label>
+                </td>
+                <td class="govuk-table__cell">
                     <a class="govuk-link"
                        th:href="@{/users/edit/{id}/roles(id=${user.id})}"
                        th:text="${user.fullName}"></a>
@@ -79,7 +84,8 @@
             </tr>
             </tbody>
         </table>
-
+        <button type="submit">Disable selected</button>
+        </form>
         <div aria-label="Pagination" class="govuk-pagination">
             <div class="govuk-pagination__prev" th:if="${previousPageLink}">
                 <a class="govuk-link govuk-pagination__link"
