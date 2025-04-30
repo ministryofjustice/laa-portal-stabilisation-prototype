@@ -23,10 +23,36 @@
         </li>
     </ol>
 </nav>
-
-<main class="govuk-main-wrapper" id="main-content">
+<div id="main-content">
     <div th:if="${#authentication.isAuthenticated()}">
-        <h1 class="govuk-heading-l">User Dashboard</h1>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                <h1 class="govuk-heading-l">User Dashboard</h1>
+            </div>
+            <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+                <a href="/user/create/details" class="govuk-button govuk-!-text-align-right">Create
+                    User</a>
+            </div>
+        </div>
+        <div th:if="${user != null}">
+            <div role="region" class="moj-alert moj-alert--success moj-alert--with-heading"
+                 aria-label="success" data-module="moj-alert"
+                 data-moj-alert-init="">
+                <div>
+                    <svg class="moj-alert__icon" role="presentation" focusable="false"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" height="30"
+                         width="30">
+                        <path d="M11.2869 24.6726L2.00415 15.3899L4.62189 12.7722L11.2869 19.4186L25.3781 5.32739L27.9958 7.96369L11.2869 24.6726Z"
+                              fill="currentColor"></path>
+                    </svg>
+                </div>
+                <div class="moj-alert__content">
+                    <h2 class="moj-alert__heading">Success
+                    </h2>
+                    <p class="govuk-body" th:text="${user.displayName} +  ' has been added as an authorised user.'"></p>
+                </div>
+            </div>
+        </div>
         <form method="post" th:action="@{/users/disable}">
         <table class="govuk-table">
             <thead>
@@ -65,7 +91,8 @@
                 <a class="govuk-link govuk-pagination__link"
                    rel="prev"
                    th:href="@{/users(size=${pageSize}, previousPageLink=${previousPageLink})}">
-                    <svg aria-hidden="true" class="govuk-pagination__icon govuk-pagination__icon--prev"
+                    <svg aria-hidden="true"
+                         class="govuk-pagination__icon govuk-pagination__icon--prev"
                          focusable="false" height="13" viewBox="0 0 15 13" width="15"
                          xmlns="http://www.w3.org/2000/svg">
                         <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
@@ -83,7 +110,8 @@
                     <span class="govuk-pagination__link-title">
                         Next<span class="govuk-visually-hidden"> page</span>
                     </span>
-                    <svg aria-hidden="true" class="govuk-pagination__icon govuk-pagination__icon--next"
+                    <svg aria-hidden="true"
+                         class="govuk-pagination__icon govuk-pagination__icon--next"
                          focusable="false" height="13" viewBox="0 0 15 13" width="15"
                          xmlns="http://www.w3.org/2000/svg">
                         <path d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
@@ -92,6 +120,6 @@
             </div>
         </div>
     </div>
-</main>
+</div>
 </body>
 </html>

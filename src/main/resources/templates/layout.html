@@ -6,11 +6,22 @@
 <body class="govuk-template__body">
 <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
 
-<a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
+<a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main
+    content</a>
 
 <th:block th:replace="~{partials/header :: header}"></th:block>
 
 <div class="govuk-width-container">
+    <div class="govuk-phase-banner">
+        <p class="govuk-phase-banner__content">
+            <strong class="govuk-tag govuk-phase-banner__content__tag">
+                Beta
+            </strong>
+            <span class="govuk-phase-banner__text">
+      This is a new service. Help us improve it and <a class="govuk-link" href="#">give your feedback (opens in new tab)</a>.
+    </span>
+        </p>
+    </div>
     <div th:if="${breadcrumbs != null}" th:replace="${breadcrumbs}"></div>
     <main class="govuk-main-wrapper" id="main-content" role="main" style="padding-top: 0;">
         <th:block th:replace="${mainContent}">Default Main Content</th:block>

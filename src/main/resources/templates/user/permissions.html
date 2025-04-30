@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'login'},
+      breadcrumbs=~{::#breadcrumbs})}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>Offices</title>
+</head>
+<body>
+<script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+<nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="/offices">< Back</a>
+        </li>
+    </ol>
+</nav>
+<main class="govuk-main-wrapper" id="main-content">
+    <h1 class="govuk-heading-m">Permissions</h1>
+    <p class="govuk-body">Which application systems will they have access to?</p>
+    <form th:action="@{/permissions}" th:method="post" th:object="${permissionData}">
+    <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="cwa" name="permission" type="checkbox" th:checked="${permissionData.selectedPermissions != null && permissionData.selectedPermissions.contains('cwa')}"
+                   value="cwa">
+            <label class="govuk-label govuk-checkboxes__label" for="cwa">
+                CWA
+            </label>
+
+        </div>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="civil_aid" name="permission" type="checkbox" th:checked="${permissionData.selectedPermissions != null && permissionData.selectedPermissions.contains('civil_aid')}"
+                   value="civil_aid">
+            <label class="govuk-label govuk-checkboxes__label" for="civil_aid">
+                Civil legal aid
+            </label>
+        </div>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="ccms" name="permissions" type="checkbox" th:checked="${permissionData.selectedPermissions != null && permissionData.selectedPermissions.contains('ccms')}"
+                   value="ccms">
+            <label class="govuk-label govuk-checkboxes__label" for="ccms">
+                CCMS
+            </label>
+        </div>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="criminal_aid" name="permission" type="checkbox" th:checked="${permissionData.selectedPermissions != null && permissionData.selectedPermissions.contains('criminal_aid')}"
+                   value="criminal_aid">
+            <label class="govuk-label govuk-checkboxes__label" for="criminal_aid">
+                Criminal legal aid
+            </label>
+        </div>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="eForms" name="permission" type="checkbox" th:checked="${permissionData.selectedPermissions != null && permissionData.selectedPermissions.contains('eForms')}"
+                   value="eForms">
+            <label class="govuk-label govuk-checkboxes__label" for="eForms">
+                eForms
+            </label>
+        </div>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="crime_form" name="permission" type="checkbox" th:checked="${permissionData.selectedPermissions != null && permissionData.selectedPermissions.contains('crime_form')}"
+                   value="crime_form">
+            <label class="govuk-label govuk-checkboxes__label" for="crime_form">
+                Submit a crime form
+            </label>
+        </div>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="apply_service" name="permission" type="checkbox" th:checked="${permissionData.selectedPermissions != null && permissionData.selectedPermissions.contains('apply_service')}"
+                   value="apply_service">
+            <label class="govuk-label govuk-checkboxes__label" for="apply_service">
+                Apply service
+            </label>
+        </div>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="portal" name="permission" type="checkbox" th:checked="${permissionData.selectedPermissions != null && permissionData.selectedPermissions.contains('portal')}"
+                   value="portal">
+            <label class="govuk-label govuk-checkboxes__label" for="portal">
+                LAA Online portal
+            </label>
+        </div>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="oracle" name="permission" type="checkbox" th:checked="${permissionData.selectedPermissions != null && permissionData.selectedPermissions.contains('oracle')}"
+                   value="oracle">
+            <label class="govuk-label govuk-checkboxes__label" for="oracle">
+                Oracle Business Enterprise Edition
+            </label>
+        </div>        <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="litigate_fee" name="permission" type="checkbox" th:checked="${permissionData.selectedPermissions != null && permissionData.selectedPermissions.contains('litigate_fee')}"
+               value="litigate_fee">
+        <label class="govuk-label govuk-checkboxes__label" for="litigate_fee">
+            Crown Court litigate fee
+        </label>
+    </div>
+
+        <button type="submit" class="govuk-button">Save and continue</button>
+    </form>
+</main>
+</body>
+</html>

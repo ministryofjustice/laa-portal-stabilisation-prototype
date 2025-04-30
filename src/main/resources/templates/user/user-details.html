@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'login'},
+      breadcrumbs=~{::#breadcrumbs})}"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>User Details</title>
+</head>
+<body>
+<script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+<nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="/users">< Back</a>
+        </li>
+    </ol>
+</nav>
+<main class="govuk-main-wrapper" id="main-content">
+    <h1 class="govuk-heading-m">User Details</h1>
+    <form th:action="@{/user/create/details}" th:method="post">
+        <div class="govuk-form-group">
+            <label class="govuk-label govuk-!-font-weight-bold" for="firstName">
+                First Name
+            </label>
+            <input class="govuk-input govuk-input--width-10" name="firstName" type="text"
+                   th:value="*{user.givenName}"
+                   id="firstName"/>
+        </div>
+        <div class="govuk-form-group">
+            <label class="govuk-label govuk-!-font-weight-bold" for="lastName">
+                Last Name
+            </label>
+            <input class="govuk-input govuk-input--width-10" name="lastName" type="text"
+                   th:value="*{user.surname}"
+                   id="lastName"/>
+        </div>
+        <div class="govuk-form-group">
+            <label class="govuk-label govuk-!-font-weight-bold" for="email">
+                Email Address
+
+            </label>
+            <p class="govuk-body">This will be their username</p>
+                <input class="govuk-input govuk-input--width-10" name="email" type="email"
+                       th:value="*{user.mail}"
+                       id="email"/>
+        </div>
+        <button type="submit" class="govuk-button">Continue</button>
+    </form>
+</main>
+</body>
+</html>

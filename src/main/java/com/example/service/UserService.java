@@ -95,9 +95,6 @@ public class UserService {
                         }
                     }
                 }
-                //servicePrincipal.getAppRoles().forEach(role -> {System.out.println("role: " + role.getDisplayName()); System.out.println("id: " + role.getId());});
-                //System.out.println("pName: " + servicePrincipal.getDisplayName());
-                //System.out.println("appId: " + servicePrincipal.getAppId());
             }
             System.out.println("resourceId: " + resourceId);
             System.out.println("roleId: " + roleId);
@@ -157,9 +154,6 @@ public class UserService {
                     }
                 }
             }
-            //servicePrincipal.getAppRoles().forEach(role -> {System.out.println("role: " + role.getDisplayName()); System.out.println("id: " + role.getId());});
-            //System.out.println("pName: " + servicePrincipal.getDisplayName());
-            //System.out.println("appId: " + servicePrincipal.getAppId());
         }
         System.out.println("resourceId: " + resourceId);
         System.out.println("roleId: " + roleId);
@@ -194,7 +188,7 @@ public class UserService {
         user.setPasswordProfile(passwordProfile);
         GraphServiceClient graphClient = getGraphClient();
         user = graphClient.users().post(user);
-        
+
         ServicePrincipalCollectionResponse principalCollection = graphClient.servicePrincipals().get();
         String resourceId = null;
         UUID roleId = null;

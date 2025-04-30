@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{layout :: layout(
+      title=~{::title},
+      mainContent=~{::#main-content},
+      pageCategory=${'login'},
+      breadcrumbs=~{::#breadcrumbs})}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>Offices</title>
+</head>
+<body>
+<script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+<nav aria-label="Breadcrumb" class="govuk-breadcrumbs" id="breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="/user/create/roles">< Back</a>
+        </li>
+    </ol>
+</nav>
+<main class="govuk-main-wrapper" id="main-content">
+    <h1 class="govuk-heading-m">Offices</h1>
+    <p class="govuk-body">Which of these offices will they have access to?</p>
+    <form th:action="@{/user/create/offices}" th:method="post"  th:object="${officeData}">
+
+    <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="office" name="office" type="checkbox" th:checked="${officeData.selectedOffices != null && officeData.selectedOffices.contains('office')}"
+                   value="all">
+            <label class="govuk-label govuk-checkboxes__label" for="office">
+                All Offices
+            </label>
+
+        </div>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="office1" name="office" type="checkbox" th:checked="${officeData.selectedOffices != null && officeData.selectedOffices.contains('office1')}"
+                   value="office1">
+            <label class="govuk-label govuk-checkboxes__label" for="office1">
+                Office 1
+            </label>
+        </div>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="office2" name="office" type="checkbox" th:checked="${officeData.selectedOffices != null && officeData.selectedOffices.contains('office2')}"
+                   value="office2">
+            <label class="govuk-label govuk-checkboxes__label" for="office2">
+                Office 2
+            </label>
+        </div>
+        <div class="govuk-form-group">
+        <button type="submit" class="govuk-button">Continue</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>
