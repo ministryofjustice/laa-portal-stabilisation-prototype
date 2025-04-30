@@ -49,8 +49,7 @@
                 <div class="moj-alert__content">
                     <h2 class="moj-alert__heading">Success
                     </h2>
-                    <p class="govuk-body" th:text="${user.displayName}"><span> has been added as an
-                        authorised user.</span></p>
+                    <p class="govuk-body" th:text="${user.displayName} +  ' has been added as an authorised user.'"></p>
                 </div>
             </div>
         </div>

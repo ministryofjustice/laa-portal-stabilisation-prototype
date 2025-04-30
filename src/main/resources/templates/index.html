@@ -46,18 +46,6 @@
             <!--                </a>.</p>-->
             <!--            </div>-->
             <form th:action="@{/login}" th:method="post">
-                <div class="govuk-form-group">
-
-                    <div th:if="${errorMessage != null}">
-                        <p th:text="${errorMessage}" class="error-message govuk-body"></p>
-                    </div>
-                     <label class="govuk-label" for="email">
-                    Username:
-                </label>
-                    <input class="govuk-input govuk-input--width-10" name="email" type="email"
-                           id="email">
-                </div>
-
                 <button class="govuk-button govuk-button--start" data-govuk-button-init=""
                         data-module="govuk-button"
                         draggable="false"

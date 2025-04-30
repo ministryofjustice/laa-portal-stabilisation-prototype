@@ -110,9 +110,6 @@
                         <dl class="govuk-summary-list">
                             <div th:each="office : ${officeData.getSelectedOffices()}">
                                 <div class="govuk-summary-list__row">
-                                    <dt class="govuk-summary-list__key">
-                                        <span th:text="${office[0]}"></span>
-                                    </dt>
                                     <dd class="govuk-summary-list__value">
                                         <span th:each="role: ${office}">
                                             <span th:text="${office}"></span><br />
