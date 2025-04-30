@@ -5,6 +5,8 @@ import com.azure.identity.ClientSecretCredentialBuilder;
 import com.example.model.PaginatedUsers;
 import com.example.model.UserModel;
 import com.example.model.UserRole;
+import com.microsoft.graph.core.content.BatchRequestContent;
+import com.microsoft.graph.core.content.BatchResponseContent;
 import com.microsoft.graph.models.AppRole;
 import com.microsoft.graph.models.AppRoleAssignment;
 import com.microsoft.graph.models.DirectoryRole;
@@ -18,15 +20,19 @@ import com.microsoft.graph.models.User;
 import com.microsoft.graph.models.UserCollectionResponse;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import com.microsoft.kiota.ApiException;
+import com.microsoft.kiota.RequestInformation;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -36,6 +42,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.UUID;
 
@@ -49,6 +56,7 @@ public class UserService {
     private static final String AZURE_TENANT_ID = System.getenv("AZURE_TENANT_ID");
     private static final String AZURE_CLIENT_SECRET = System.getenv("AZURE_CLIENT_SECRET");
     private static final String APPLICATION_ID = "0ca5b38b-6c4f-404e-b1d0-d0e8d4e0bfd5";
+    private static final int BATCH_SIZE = 20;
     private static GraphServiceClient graphClient;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -532,5 +540,28 @@ public class UserService {
         paginatedUsers.setTotalUsers(totalUsers);
 
         return paginatedUsers;
+    }
+
+    @Async
+    public void disableUsers(List<String> ids) throws IOException {
+        GraphServiceClient graphClient = getGraphClient();
+        Collection<List<String>> batchIds = partitionBasedOnSize(ids, BATCH_SIZE);
+        for (List<String> batch : batchIds) {
+            BatchRequestContent batchRequestContent = new BatchRequestContent(graphClient);
+            for (String id : batch) {
+                User user = new User();
+                user.setAccountEnabled(false);
+                RequestInformation patchMessage = graphClient.users().byUserId(id).toPatchRequestInformation(user);
+                batchRequestContent.addBatchRequestStep(patchMessage);
+            }
+            BatchResponseContent responseContent = graphClient.getBatchRequestBuilder().post(batchRequestContent, null);
+        }
+    }
+
+    static <T> Collection<List<T>> partitionBasedOnSize(List<T> inputList, int size) {
+        final AtomicInteger counter = new AtomicInteger(0);
+        return inputList.stream()
+                .collect(Collectors.groupingBy(s -> counter.getAndIncrement() / size))
+                .values();
     }
 }

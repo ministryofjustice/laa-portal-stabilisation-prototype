@@ -10,6 +10,7 @@ import com.microsoft.graph.models.Invitation;
 import com.microsoft.graph.models.User;
 import lombok.RequiredArgsConstructor;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -258,6 +260,16 @@ public class UserController {
     public String updateUserRoles(@PathVariable String id,
                                   @RequestParam(required = false) List<String> selectedRoles) {
         userService.updateUserRoles(id, selectedRoles);
+        return "redirect:/users";
+    }
+
+    /**
+     * Disable group of users via graph SDK
+     */
+    @PostMapping("/users/disable")
+    @PreAuthorize("hasAuthority('SCOPE_User.EnableDisableAccount.All')")
+    public String disableUsers(@RequestParam List<String> id) throws IOException {
+        userService.disableUsers(id);
         return "redirect:/users";
     }
 
