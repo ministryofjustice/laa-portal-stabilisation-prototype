@@ -68,7 +68,6 @@ public class UserController {
     }
 
     @GetMapping("/user/create/services")
-    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
     public String addUserTwo(Model model, HttpSession session) throws Exception {
         List<ServicePrincipalModel> apps = userService.getServicePrincipals().stream()
                 .map(x -> new ServicePrincipalModel(x, false)).collect(Collectors.toList());
@@ -89,7 +88,6 @@ public class UserController {
     }
 
     @PostMapping("/user/create/services")
-    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
     public String addUserTwo(@RequestParam("apps") List<String> apps,
                              HttpSession session) throws Exception {
         session.setAttribute("apps", apps);
@@ -98,7 +96,6 @@ public class UserController {
     }
 
     @GetMapping("/user/create/roles")
-    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
     public String addUserThree(Model model, HttpSession session) throws Exception {
         List<String> selectedApps = (List<String>) session.getAttribute("apps");
         if (Objects.isNull(selectedApps)) {
@@ -116,7 +113,6 @@ public class UserController {
     }
 
     @PostMapping("/user/create/roles")
-    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
     public String addUserThree(@RequestParam("selectedRoles") List<String> roles,
                              HttpSession session) throws Exception {
         session.setAttribute("roles", roles);
@@ -142,7 +138,6 @@ public class UserController {
     }
 
     @GetMapping("/user/create/check-answers")
-    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
     public String addUserCya(Model model, HttpSession session) throws Exception {
         List<String> selectedApps = (List<String>) session.getAttribute("apps");
         if (Objects.isNull(selectedApps)) {
@@ -193,7 +188,6 @@ public class UserController {
     }
 
     @GetMapping("/user/create/confirmation")
-    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All')")
     public String addUsercreated(Model model, HttpSession session) throws Exception {
         User user = (User) session.getAttribute("user");
         model.addAttribute("user", user);
@@ -227,7 +221,6 @@ public class UserController {
      * invite new user via Microsoft Graph API.
      */
     @PostMapping("/invite")
-    //@PreAuthorize("hasAuthority('SCOPE_User.ReadWrite.All') and hasAuthority('SCOPE_Directory.ReadWrite.All') and hasAuthority('SCOPE_User.Invite.All')")
     public Invitation invite(@RequestParam("email") String email, String application, String role, String office, Model model) throws Exception {
         Invitation result = UserService.inviteUser(email, application, role, office);
         model.addAttribute("redeemUrl", result.getInviteRedeemUrl());
